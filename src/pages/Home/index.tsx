@@ -5,12 +5,14 @@ import FavoriteIntro from '@/components/feature/home/Favorite';
 import StoryIntro from '@/components/feature/home/Story';
 import Footer from '@/components/feature/home/Footer';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
+import { useAuth } from '@/provider/Auth';
+
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 
 const Homepage = () => {
-  const [isLogin, setLogin] = useState(false);
+  const { isLogin, setLogin } = useAuth();
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code');
@@ -20,7 +22,7 @@ const Homepage = () => {
       })
         .then(response => {
           localStorage.setItem('jwt_token', JSON.stringify(response.data.token));
-          window.location.href = '/';
+          // window.location.href = '/';
           console.log(response.data);
           setLogin(true);
           console.log('api 요청');
@@ -29,11 +31,11 @@ const Homepage = () => {
             console.error('로그인 실패:', error);
           });
     }
-  }, [isLogin]);
+  }, [isLogin, setLogin]);
 
   return (
     <Wrapper>
-      <Welcome />
+      <Welcome/>
       <StoryIntro />
       <ChalleneIntro />
       <FavoriteIntro />
