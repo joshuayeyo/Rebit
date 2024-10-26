@@ -32,7 +32,7 @@ const PostFeedsButton = ({isDropdownVisible, setIsDropdownVisible, handleModalCl
 
     return (
         <Flex position="fixed" bottom="30px" right="3vw">
-            <Button onMouseEnter={handleMouseEnter} isHovered={isHovered}>
+            <Button onMouseEnter={handleMouseEnter} onMouseLeave={() => {setIsHovered(false)}} isHovered={isHovered}>
                 + 포스트 작성
             </Button>
             {isDropdownVisible && (
