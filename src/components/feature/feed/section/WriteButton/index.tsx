@@ -1,4 +1,3 @@
-import CommonModal from "@/components/common/Modal";
 import PostStoryModal from "@/components/feature/modals/stories/PostStory";
 import { Flex } from "@chakra-ui/react";
 import styled from '@emotion/styled';
