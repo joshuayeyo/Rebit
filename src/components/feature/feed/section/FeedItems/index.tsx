@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Skeleton } from '@chakra-ui/react';
 import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail';
 import FeedCard from '@/components/feature/feed/post/Card';
-// import PostStoryModal from '@/components/modals/stories/PostStory';
+import PostFeedsButton from '../WriteButton';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const FeedItemSection = () => {
@@ -14,6 +14,12 @@ const FeedItemSection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedType, setSelectedType] = useState<'S' | 'FB' | 'M' | null>(null);
+
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const handleDropdownOpen = () => setIsDropdownVisible(true);
+  const handleDropdownClose = () => setIsDropdownVisible(false);
+
 
   useEffect(() => {
     async function getFeedData() {
@@ -63,6 +69,9 @@ const FeedItemSection = () => {
               </ItemWrapper>
             ))}
         </CommonGrid>
+        <ButtonWrapper onMouseEnter={handleDropdownOpen} onMouseLeave={handleDropdownClose}>
+          <PostFeedsButton isDropdownVisible={isDropdownVisible} setIsDropdownVisible={setIsDropdownVisible} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} handleModalClose={handleModalClose} />
+        </ButtonWrapper>
         {isModalOpen && selectedId !== null &&  selectedType !== null && (
           <>
             {selectedType === 'S' && (
@@ -112,3 +121,8 @@ const ItemWrapper = styled.button`
   width: 18vw;
   min-width: 10vw;
 `;
+
+const ButtonWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`
