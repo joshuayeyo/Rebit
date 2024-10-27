@@ -8,12 +8,15 @@ import FeedCard from '@/components/feature/feed/post/Card';
 import PostFeedsButton from '../WriteButton';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+type selectedType = "S" | "FB" | "M" | null;
+
 const FeedItemSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedType, setSelectedType] = useState<'S' | 'FB' | 'M' | null>(null);
+  const [selectedType, setSelectedType] = useState<selectedType>(null);
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -43,10 +46,16 @@ const FeedItemSection = () => {
     setSelectedType(type)
   }
 
+  // Detail Modal과 Post 모달을 분리한다.
+  const handlePostModalClose = () => {
+    setIsPostModalOpen(false);
+    setSelectedType(null)
+  }
+
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setSelectedId(null)
-    setSelectedType(null)
+    setSelectedId(null);
+    setSelectedType(null);
   };
 
   // 모달 열려있을 때, 스크롤 금지, 닫았을 때 다시 스크롤
@@ -69,9 +78,6 @@ const FeedItemSection = () => {
               </ItemWrapper>
             ))}
         </CommonGrid>
-        <ButtonWrapper onMouseEnter={handleDropdownOpen} onMouseLeave={handleDropdownClose}>
-          <PostFeedsButton isDropdownVisible={isDropdownVisible} setIsDropdownVisible={setIsDropdownVisible} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} handleModalClose={handleModalClose} />
-        </ButtonWrapper>
         {isModalOpen && selectedId !== null &&  selectedType !== null && (
           <>
             {selectedType === 'S' && (
@@ -101,6 +107,17 @@ const FeedItemSection = () => {
           </>
         )}
       </Skeleton>
+      <ButtonWrapper onMouseEnter={handleDropdownOpen} onMouseLeave={handleDropdownClose}>
+          <PostFeedsButton 
+            isDropdownVisible={isDropdownVisible} 
+            setIsDropdownVisible={setIsDropdownVisible} 
+            isModalOpen={isPostModalOpen} 
+            setIsModalOpen={setIsPostModalOpen} 
+            handleModalClose={handlePostModalClose} 
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+          />
+      </ButtonWrapper>
     </Wrapper>
   );
 };

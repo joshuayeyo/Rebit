@@ -3,20 +3,25 @@ import { Flex } from "@chakra-ui/react";
 import styled from '@emotion/styled';
 import { useState } from "react";
 
+type SelectedType = "S" | "FB" | "M" | null;
+
 type Props = {
     isDropdownVisible: boolean;
     setIsDropdownVisible: React.Dispatch<React.SetStateAction<boolean>>; 
     handleModalClose: () => void;
     isModalOpen: boolean;
     setIsModalOpen: (visible: boolean) => void;
+    selectedType: SelectedType;
+    setSelectedType: React.Dispatch<React.SetStateAction<SelectedType>>;
 }
 
-const PostFeedsButton = ({isDropdownVisible, setIsDropdownVisible, handleModalClose, isModalOpen, setIsModalOpen}: Props) => { 
+const PostFeedsButton = ({isDropdownVisible, setIsDropdownVisible, handleModalClose, isModalOpen, setIsModalOpen, selectedType, setSelectedType}: Props) => { 
     const [isHovered, setIsHovered] = useState(false);
 
     const handlePostStoryButton = () => {
         setIsDropdownVisible(false);
         setIsModalOpen(true);
+        setSelectedType("S");
     }
 
     const handleMouseEnter = () => {
@@ -40,8 +45,14 @@ const PostFeedsButton = ({isDropdownVisible, setIsDropdownVisible, handleModalCl
                     <DropdownItem>인생책 작성</DropdownItem>
                 </Dropdown>
             )}
-            {isModalOpen && (
-                <PostStoryModal isModalOpen={isModalOpen} handleModalClose={handleModalClose} />
+            {isModalOpen && selectedType === "S" && (
+                <PostStoryModal 
+                    isModalOpen={isModalOpen} 
+                    handleModalClose={() => {
+                        handleModalClose();
+                        setSelectedType(null);
+                    }}
+                />
             )}
         </Flex>
     );
@@ -60,7 +71,6 @@ const commonStyle = `
     text-align: center;
     min-width: 150px;
 `
-
 
 const Button = styled.button<{ isHovered: boolean }>`
     ${commonStyle}
