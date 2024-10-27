@@ -122,7 +122,7 @@ const ImageContainer = styled.img`
   height: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  margin-top: -3rem;
+  margin-top: -5rem;
 `;
 
 const ProfileSection = styled.section`
