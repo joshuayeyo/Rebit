@@ -56,7 +56,9 @@ function Sidebar({ isOpen, setIsOpen}: { isOpen: boolean; setIsOpen: any}) {
             <Link to="/challenge">Challenge</Link>
             </StyledButton><br/>
           <StyledButton>Diary</StyledButton><br/>
-          <StyledButton>MyPage</StyledButton><br/>
+          <StyledButton>
+            <Link to="/mypage/:userId">MyPage</Link>
+          </StyledButton><br/>
 
         <Box display="flex" justifyContent="center" marginTop="auto">
         <LoginButton onClick={isLogin ? handleLogout : () => navigate('/login')}>
