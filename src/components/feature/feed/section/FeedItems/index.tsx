@@ -7,6 +7,7 @@ import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail'
 import FeedCard from '@/components/feature/feed/post/Card';
 import PostFeedsButton from '../WriteButton';
 import useFilter from '@/util/hooks/useFilter';
+import { motion, AnimatePresence } from 'framer-motion';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 type selectedType = 'S' | 'FB' | 'M' | null;
@@ -76,15 +77,27 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     <Wrapper>
       <Skeleton isLoaded={!isLoading}>
         <CommonGrid columns={4} gap={50}>
-          {Array.isArray(filteredData) &&
-            filteredData.map((data) => (
-              <ItemWrapper
-                key={data.id}
-                onClick={() => handleCardClick(data.id, data.type)}
-              >
-                <FeedCard imageUrl={data.presignedUrl} title={data.content} />
-              </ItemWrapper>
-            ))}
+          <AnimatePresence>
+            {Array.isArray(filteredData) &&
+              filteredData.map((data) => (
+                <motion.div
+                  key={data.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ItemWrapper
+                    onClick={() => handleCardClick(data.id, data.type)}
+                  >
+                    <FeedCard
+                      imageUrl={data.presignedUrl}
+                      title={data.content}
+                    />
+                  </ItemWrapper>
+                </motion.div>
+              ))}
+          </AnimatePresence>
         </CommonGrid>
         {isModalOpen && selectedId !== null && selectedType !== null && (
           <>
