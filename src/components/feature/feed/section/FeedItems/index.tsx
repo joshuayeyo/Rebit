@@ -6,11 +6,13 @@ import { Skeleton } from '@chakra-ui/react';
 import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail';
 import FeedCard from '@/components/feature/feed/post/Card';
 import PostFeedsButton from '../WriteButton';
+import useFilter from '@/util/hooks/useFilter';
+import { SiMetafilter } from 'react-icons/si';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-type selectedType = "S" | "FB" | "M" | null;
+type selectedType = 'S' | 'FB' | 'M' | null;
 
-const FeedItemSection = () => {
+const FeedItemSection = ({ filter }: { filter: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [data, setData] = useState<any[]>([]);
@@ -22,7 +24,6 @@ const FeedItemSection = () => {
 
   const handleDropdownOpen = () => setIsDropdownVisible(true);
   const handleDropdownClose = () => setIsDropdownVisible(false);
-
 
   useEffect(() => {
     async function getFeedData() {
@@ -42,15 +43,15 @@ const FeedItemSection = () => {
 
   const handleCardClick = (id: number, type: 'S' | 'FB' | 'M') => {
     setSelectedId(id);
-    setIsModalOpen(true)
-    setSelectedType(type)
-  }
+    setIsModalOpen(true);
+    setSelectedType(type);
+  };
 
   // Detail Modal과 Post 모달을 분리한다.
   const handlePostModalClose = () => {
     setIsPostModalOpen(false);
-    setSelectedType(null)
-  }
+    setSelectedType(null);
+  };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -64,21 +65,29 @@ const FeedItemSection = () => {
   } else {
     document.body.style.overflow = 'auto';
   }
-  
+
   if (!data) return <></>;
+  const { filteredData, setFilter } = useFilter(data, 'type', filter);
+
+  useEffect(() => {
+    setFilter(filter);
+  }, [filter, filteredData, setFilter]);
 
   return (
     <Wrapper>
       <Skeleton isLoaded={!isLoading}>
         <CommonGrid columns={4} gap={50}>
-          {Array.isArray(data) &&
-            data.map((data) => (
-              <ItemWrapper key={data.id} onClick={() => handleCardClick(data.id, data.type)}>
+          {Array.isArray(filteredData) &&
+            filteredData.map((data) => (
+              <ItemWrapper
+                key={data.id}
+                onClick={() => handleCardClick(data.id, data.type)}
+              >
                 <FeedCard imageUrl={data.presignedUrl} title={data.content} />
               </ItemWrapper>
             ))}
         </CommonGrid>
-        {isModalOpen && selectedId !== null &&  selectedType !== null && (
+        {isModalOpen && selectedId !== null && selectedType !== null && (
           <>
             {selectedType === 'S' && (
               <StoryDetailModal
@@ -107,16 +116,19 @@ const FeedItemSection = () => {
           </>
         )}
       </Skeleton>
-      <ButtonWrapper onMouseEnter={handleDropdownOpen} onMouseLeave={handleDropdownClose}>
-          <PostFeedsButton 
-            isDropdownVisible={isDropdownVisible} 
-            setIsDropdownVisible={setIsDropdownVisible} 
-            isModalOpen={isPostModalOpen} 
-            setIsModalOpen={setIsPostModalOpen} 
-            handleModalClose={handlePostModalClose} 
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-          />
+      <ButtonWrapper
+        onMouseEnter={handleDropdownOpen}
+        onMouseLeave={handleDropdownClose}
+      >
+        <PostFeedsButton
+          isDropdownVisible={isDropdownVisible}
+          setIsDropdownVisible={setIsDropdownVisible}
+          isModalOpen={isPostModalOpen}
+          setIsModalOpen={setIsPostModalOpen}
+          handleModalClose={handlePostModalClose}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+        />
       </ButtonWrapper>
     </Wrapper>
   );
@@ -142,4 +154,4 @@ const ItemWrapper = styled.button`
 const ButtonWrapper = styled.div`
   position: relative;
   display: inline-block;
-`
+`;
