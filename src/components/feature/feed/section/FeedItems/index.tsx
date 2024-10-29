@@ -7,7 +7,6 @@ import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail'
 import FeedCard from '@/components/feature/feed/post/Card';
 import PostFeedsButton from '../WriteButton';
 import useFilter from '@/util/hooks/useFilter';
-import { SiMetafilter } from 'react-icons/si';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 type selectedType = 'S' | 'FB' | 'M' | null;
