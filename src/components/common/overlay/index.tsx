@@ -11,14 +11,14 @@ const OverlayWrapper = styled.div<OverlayProps>`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 5;
+  z-index: 500;
   visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.isOpen ? 0.5 : 0)};
   transition: opacity 0.3s ease;
 `;
 
 const Overlay = ({ isOpen }: OverlayProps) => {
-  return <OverlayWrapper isOpen={isOpen}/>;
+  return <OverlayWrapper isOpen={isOpen} />;
 };
 
 export default Overlay;

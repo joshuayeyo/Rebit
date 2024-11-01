@@ -4,7 +4,7 @@ import LoginPage from "@/pages/Login";
 import BookSearchPage from "@/pages/BookSearch";
 import FeedPage from "@/pages/Feed";
 import ChallengePage from "@/pages/Challenge";
-
+import MyPage from "@/pages/MyPage";
 
 
 
@@ -46,6 +46,10 @@ const router = createBrowserRouter([
     {
         path: RouterPath.bookSearch,
         element: <BookSearchPage />,
+    },
+    {
+        path: RouterPath.myPage,
+        element: <MyPage />
     },
 ]);
 
