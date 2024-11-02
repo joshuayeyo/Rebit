@@ -1,15 +1,17 @@
-import CommonHeader from "@/components/common/Header";
-import FeedItemSection from "@/components/feature/feed/section/FeedItems";
-import Navbar from "@/components/feature/feed/section/Navbar"
-const FeedPage = () =>{
+import CommonHeader from '@/components/common/Header';
+import FeedItemSection from '@/components/feature/feed/section/FeedItems';
+import Navbar from '@/components/feature/feed/section/Navbar';
+import { useState } from 'react';
+const FeedPage = () => {
+  const [filter, setFilter] = useState<string>('ALL');
 
-  return(
+  return (
     <>
       <CommonHeader />
-      <Navbar/>
-      <FeedItemSection />
+      <Navbar setFilter={setFilter} />
+      <FeedItemSection filter={filter} />
     </>
-  )
-}
+  );
+};
 
 export default FeedPage;
