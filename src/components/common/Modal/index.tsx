@@ -38,6 +38,10 @@ const ModalContainer = styled.div`
   top: 20%;
   right: 20%;
   border-radius: 10px;
+  overflow: auto;
+    &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ButtonContainer = styled.div`
