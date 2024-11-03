@@ -27,6 +27,9 @@ const Left = styled.div`
 const Right = styled.div`
   width: 50vw;
   display: flex;
+  padding: 50px;
+  align-items: center;
+  justify-contents: center;
 `;
 
 export default StoryIntro;
