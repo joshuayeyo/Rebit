@@ -4,9 +4,6 @@ import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
 import { useState } from 'react';
 import instance from '@/api/instance';
-// import CommonForm from '@/components/common/Form';
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 type Props = {
   isModalOpen: boolean;
@@ -33,7 +30,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
         await instance
           .post(`api/feeds`, {
             type: 'S',
-            bookId: 1,
+            bookId: 1, // 현재 bookId가 없으면 400 에러가 발생하여 임시로 해둔 값. Story에서는 bookId가 없어야 함.
             imageKey: imageKey,
             content: storyContent,
           })
@@ -74,7 +71,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
                 <TextForm
                   value={storyContent}
                   onChange={(e) => setStoryContent(e.target.value)}
-                  placeholder="인생책을 작성하세요..."
+                  placeholder="당신의 Story를 작성하세요..."
                 />{' '}
               </FormContainer>
             </Right>
