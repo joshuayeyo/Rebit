@@ -39,6 +39,9 @@ const ImageContainer = styled.div`
     display: flex;
     flex-direction: column;
     pointer-events: none;
+    align-items: flex-end;
+    text-align: right;
+    margin-right: 1rem;
   }
 
   &:hover .summary {
