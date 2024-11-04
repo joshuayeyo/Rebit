@@ -8,12 +8,13 @@ import { ko } from 'date-fns/locale';
 
 type Props = {
   imageKey: string;
+  setIsModalOpen: (visible: boolean) => void;
 };
 
 const tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
 
-const ChallengeForm = ({imageKey}:Props) => {
+const ChallengeForm = ({imageKey, setIsModalOpen}:Props) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -63,9 +64,13 @@ const ChallengeForm = ({imageKey}:Props) => {
       console.log('Response:',formattedData);
       const response = await instance.post('/api/challenges', formattedData);
       console.log('Response:', response.data);
+      setIsModalOpen(false);
+      alert('챌린지가 생성되었습니다.')
 
     } catch (error) {
       console.error('Error sending form data:', error.response ? error.response.data : error.message);
+      alert('챌린지가 생성 실패.')
+
     }
   };
 

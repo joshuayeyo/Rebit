@@ -30,6 +30,7 @@ const WriteButton = ({ handleModalClose, isModalOpen, setIsModalOpen }: Props) =
       {isModalOpen &&(
         <PostChallengyModal
           isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
           handleModalClose={handleModalClose}
         />
       )}

@@ -7,9 +7,10 @@ import ChallengeForm from '@/components/feature/challenge/section/ChallengeForm'
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
 };
 
-const PostChallengyModal = ({ isModalOpen, handleModalClose}: Props) => {
+const PostChallengyModal = ({ isModalOpen, handleModalClose, setIsModalOpen}: Props) => {
   const jwtToken = localStorage.getItem('jwt_token');
   const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
   const accessToken = parsedToken?.accessToken;
@@ -26,10 +27,11 @@ const PostChallengyModal = ({ isModalOpen, handleModalClose}: Props) => {
               <UploadImage
                 accessToken={accessToken}
                 setImageKey={setImageKey}
+                type='CHALLENGE'
               />
             </ImageContainer>
             <FormContainer>
-              <ChallengeForm imageKey={imageKey}/>
+              <ChallengeForm imageKey={imageKey} setIsModalOpen={setIsModalOpen}/>
             </FormContainer>
           </Container>
       </CommonModal>
