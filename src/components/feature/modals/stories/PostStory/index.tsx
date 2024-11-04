@@ -54,6 +54,8 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           });
       } catch (e) {
         console.log(e);
+      } finally {
+        window.location.reload(); // Posting 후 페이지 새로고침
       }
     }
     postFeedData();
