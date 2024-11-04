@@ -22,9 +22,23 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   const accessToken = parsedToken?.accessToken;
   const [imageKey, setImageKey] = useState('');
   const [storyContent, setStoryContent] = useState('');
+  const [placeholder, setPlaceholder] = useState(
+    '당신의 Story를 작성하세요...',
+  ); // placeholder를 동적으로 사용
+  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); // 입력된 텍스트가 없을 경우, placeholder를 빨갛게 바꿉니다.
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    if (!storyContent) {
+      setPlaceholder('내용을 입력해야 합니다!');
+      setIsPlaceholderRed(true);
+      return;
+    }
+    if (imageKey == '') {
+      alert('이미지가 없습니다!');
+      return;
+    }
+
     async function postFeedData() {
       try {
         await instance
@@ -43,6 +57,14 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
       }
     }
     postFeedData();
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setStoryContent(e.target.value);
+    if (e.target.value) {
+      setPlaceholder('당신의 Story를 작성하세요...'); // 내용이 입력되면 placeholder 초기화
+      setIsPlaceholderRed(false);
+    }
   };
 
   return (
@@ -70,8 +92,9 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
               <FormContainer>
                 <TextForm
                   value={storyContent}
-                  onChange={(e) => setStoryContent(e.target.value)}
-                  placeholder="당신의 Story를 작성하세요..."
+                  onChange={handleContentChange}
+                  placeholder={placeholder}
+                  isPlaceholderRed={isPlaceholoerRed}
                 />{' '}
               </FormContainer>
             </Right>
@@ -91,7 +114,9 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     </>
   );
 };
+
 export default PostStoryModal;
+
 const HeaderBox = styled.section`
   height: auto;
   width: auto;
@@ -149,7 +174,7 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
-const TextForm = styled.textarea`
+const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
   width: 90%;
   height: 80%;
   padding: 1rem;
@@ -157,9 +182,14 @@ const TextForm = styled.textarea`
   border-radius: 8px;
   font-size: 1rem;
   resize: none;
+  color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : 'inherit')};
   &:focus {
     outline: none;
     border-color: #a451f7;
+  }
+  ::placeholder {
+    color: ${(props) =>
+      props.isPlaceholderRed ? '#ff0000' : '#999'}; // placeholder 빨간색
   }
 `;
 
