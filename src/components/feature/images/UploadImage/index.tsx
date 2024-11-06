@@ -3,7 +3,7 @@ import CommonImage from '@/components/common/Image';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
-import input_image from '@/assets/imput_image.png';
+import defaultImage from '@/assets/defaultImage.png'
 
 type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
 
@@ -16,7 +16,7 @@ type Props = {
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UploadImage = ({ accessToken, setImageKey, type}: Props) => {
-  const [preview, setPreview] = useState<string>(input_image);
+  const [preview, setPreview] = useState<string>(defaultImage);
   const uploadImage = useRef<HTMLInputElement | null>(null);
   const [presignedUrl, setPresignedUrl] = useState('');
   const [file, setFile] = useState([]);
