@@ -74,7 +74,7 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) =>{
                           imageUrl={data.presignedUrl}
                           title={data.content}
                           author={data.creator.nickname}
-                          profile={data.creator.prsignedUrl}
+                          profilePics={data.creator.prsignedUrl}
                         />
                       </ItemWrapper>
                     </Link>

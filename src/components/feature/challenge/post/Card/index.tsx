@@ -4,10 +4,10 @@ type Props = {
   imageUrl: string;
   title: string;
   author: string;
-  profile: string;
+  profilePics: string;
 };
 
-const ChallengeCard = ({ imageUrl, title, author, profile}: Props) => {
+const ChallengeCard = ({ imageUrl, title, author, profilePics}: Props) => {
   return (
     <Wrapper>
       <ImageContainer>
@@ -16,7 +16,7 @@ const ChallengeCard = ({ imageUrl, title, author, profile}: Props) => {
       </ImageContainer>
       <PosterContiner>
         <Author>{author}</Author>
-        <Profile src={profile}/>
+        <Profile src={profilePics}/>
       </PosterContiner>
     </Wrapper>
   );
