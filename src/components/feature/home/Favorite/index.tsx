@@ -25,9 +25,12 @@ const Left = styled.div`
   width: 50vw;
 `;
 const Right = styled.div`
-  width: 50vw;
   background-color: #89ff56;
+  width: 50vw;
   display: flex;
+  padding: 50px;
+  align-items: center;
+  justify-contents: center;
 `;
 
 export default FavoriteIntro;

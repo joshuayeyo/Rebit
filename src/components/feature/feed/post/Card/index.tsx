@@ -2,17 +2,18 @@ import styled from '@emotion/styled';
 
 type Props = {
   imageUrl: string;
-  title: string;
+  content: string;
 };
 
-const FeedCard = ({ imageUrl, title }: Props) => {
-
+const FeedCard = ({ imageUrl, content }: Props) => {
+  const trimmedContent =
+    content.length > 100 ? `${content.substring(0, 100)}...` : content;
   return (
     <Wrapper>
       <ImageContainer>
         <PostImage src={imageUrl} />
         <div className="summary">
-          <Title>{title}</Title>
+          <Title>{trimmedContent}</Title>
         </div>
       </ImageContainer>
     </Wrapper>
@@ -21,43 +22,45 @@ const FeedCard = ({ imageUrl, title }: Props) => {
 export default FeedCard;
 
 const Wrapper = styled.div`
-    border-radius: 10px;
+  border-radius: 10px;
 `;
 
 const ImageContainer = styled.div`
   border-radius: 10%;
-    position: relative;
-    
-    .summary{
-        position: absolute;
-        top: 50%;
-        left: 35%;
-        z-index: 1;
-        color: white;
-        opacity: 0;
-        display: flex;
-        flex-direction: column;
-    }
+  position: relative;
 
+  .summary {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    z-index: 1;
+    color: white;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    align-items: flex-end;
+    text-align: right;
+    margin-right: 1rem;
+  }
 
-
-    &:hover .summary {
-        transition: 1s ease 0.3s;
-        opacity: 1;
-    }
+  &:hover .summary {
+    transition: 1s ease 0.3s;
+    opacity: 1;
+  }
 `;
 
 const Title = styled.text`
-    font-size: 1.5rem;
-`
+  font-size: 1.5rem;
+`;
 
 const PostImage = styled.img`
-    width: 100%;
-    border-radius: 10%;
-    aspect-ratio: 1/1.2;
-    object-fit: fill;
-    &:hover{
-        filter: brightness(0.5);
-        transition: 0.5s ease-in-out;
-    }
+  width: 100%;
+  border-radius: 10%;
+  aspect-ratio: 1/1.2;
+  object-fit: fill;
+  &:hover {
+    filter: brightness(0.5);
+    transition: 0.5s ease-in-out;
+  }
 `;
