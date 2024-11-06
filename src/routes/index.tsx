@@ -5,7 +5,7 @@ import BookSearchPage from "@/pages/BookSearch";
 import FeedPage from "@/pages/Feed";
 import ChallengePage from "@/pages/Challenge";
 import MyPage from "@/pages/MyPage";
-
+import ChallengDetailPage from "@/pages/ChallengeDetail";
 
 
 // import LoginPage from "@/pages/Login";
@@ -42,6 +42,10 @@ const router = createBrowserRouter([
     {
         path: RouterPath.challenge,
         element: <ChallengePage />,
+    },
+    {
+        path: RouterPath.challengeDetail,
+        element: <ChallengDetailPage />,
     },
     {
         path: RouterPath.bookSearch,
