@@ -32,7 +32,7 @@ const CommonHeader = () => {
 const Wrapper = styled.header`
     width: 100%;
     max-width: 100vw;
-    height: 2.5vh;
+    height: 3.5vw;
     display: flex;
 `;
 
@@ -41,6 +41,8 @@ const Text = styled.text`
     cursor: pointer;
     font-family: 'Pretendard-Regular';
     font-weight: 900;
+    padding:0;
+    margin:0;
 `
 
 const Left = styled.div`
