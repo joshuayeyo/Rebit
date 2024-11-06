@@ -7,10 +7,8 @@ import ChallengePage from "@/pages/Challenge";
 import MyPage from "@/pages/MyPage";
 import ChallengDetailPage from "@/pages/ChallengeDetail";
 
-
-// import LoginPage from "@/pages/Login";
-
-import { RouterPath } from "./path";
+import { RouterPath } from './path';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
     {
@@ -58,5 +56,5 @@ const router = createBrowserRouter([
 ]);
 
 export const Routes = () => {
-    return<RouterProvider router={router} />
-}
+  return <RouterProvider router={router} />;
+};

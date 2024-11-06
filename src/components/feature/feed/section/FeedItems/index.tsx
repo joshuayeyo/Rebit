@@ -92,7 +92,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                   >
                     <FeedCard
                       imageUrl={data.presignedUrl}
-                      title={data.content}
+                      content={data.content}
                     />
                   </ItemWrapper>
                 </motion.div>
