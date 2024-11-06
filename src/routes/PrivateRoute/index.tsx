@@ -1,5 +1,5 @@
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/provider/Auth';
+import { Navigate } from 'react-router-dom';
 interface PrivateRouteProps {
   element: JSX.Element; // element의 타입을 JSX.Element로 지정
 }
