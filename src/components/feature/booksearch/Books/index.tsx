@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import BookCard from '@/components/feature/booksearch/BookCard';
 import CommonGrid from '@/components/common/Grid';
 import SearchBox from '@/components/feature/booksearch/SearchBox';
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text } from '@chakra-ui/react';
 import instance from '@/api/instance';
 import { useInView } from 'react-intersection-observer';
 
@@ -10,7 +10,7 @@ const Books: React.FC = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true); 
+  const [hasMore, setHasMore] = useState(true);
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -27,7 +27,7 @@ const Books: React.FC = () => {
       const fetchBookInfo = async () => {
         try {
           const response = await instance.get(`/api/books/search`, {
-            params: { 
+            params: {
               title: searchQuery,
               page: page,
             },
@@ -36,7 +36,7 @@ const Books: React.FC = () => {
           console.log(page);
 
           if (response.data.content.length > 0) {
-            setBooks(prevBooks => [...prevBooks, ...response.data.content]);
+            setBooks((prevBooks) => [...prevBooks, ...response.data.content]);
           } else {
             setHasMore(false);
           }
@@ -50,14 +50,13 @@ const Books: React.FC = () => {
   }, [searchQuery, page]);
 
   useEffect(() => {
-    console.log("inview", inView);
-    console.log("hasMore", hasMore);
+    console.log('inview', inView);
+    console.log('hasMore', hasMore);
 
     if (inView && hasMore) {
-      setPage(page => page + 1);
+      setPage((page) => page + 1);
     }
   }, [inView, hasMore]);
-
 
   return (
     <Box>
@@ -71,7 +70,7 @@ const Books: React.FC = () => {
               title={book.title}
               author={book.author}
               date={book.date}
-              ref={index === books.length - 1 ? ref : null} 
+              ref={index === books.length - 1 ? ref : null}
             />
           ))}
         </CommonGrid>
@@ -80,11 +79,12 @@ const Books: React.FC = () => {
           책 제목을 입력해 검색해 주세요.
         </Text>
       )}
-      {inView && !hasMore && (  // hasMore가 false일 때만 메시지를 표시
-        <Text textAlign="center" mt="4">
-          더 이상 검색 결과가 없습니다.
-        </Text>
-      )}
+      {inView &&
+        !hasMore && ( // hasMore가 false일 때만 메시지를 표시
+          <Text textAlign="center" mt="4">
+            더 이상 검색 결과가 없습니다.
+          </Text>
+        )}
     </Box>
   );
 };

@@ -33,7 +33,7 @@ const Intro = ({ data, filter }: ChallengeIntroProps) => {
         </motion.div>
       </Skeleton>
       <Right>
-        <Contents data={data} filter={filter}/>
+        <Contents data={data} filter={filter} />
       </Right>
     </Wrapper>
   );
@@ -59,7 +59,6 @@ const Right = styled.div`
   padding: 50px;
   align-items: center;
   justify-content: center;
-
 `;
 
 export default Intro;

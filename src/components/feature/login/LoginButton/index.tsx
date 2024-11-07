@@ -1,5 +1,5 @@
 import { Image } from '@chakra-ui/react';
-import kakao_login from '@/assets/kakao_login.png'
+import kakao_login from '@/assets/kakao_login.png';
 const REST_API_KEY = import.meta.env.VITE_KAKAO_JS_KEY;
 const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT;
 
@@ -12,7 +12,13 @@ const LoginButton = () => {
 
   return (
     <>
-      <Image onClick={handleLogin} src={kakao_login} width="400px" margin="30px" cursor="pointer"/>
+      <Image
+        onClick={handleLogin}
+        src={kakao_login}
+        width="400px"
+        margin="30px"
+        cursor="pointer"
+      />
     </>
   );
 };

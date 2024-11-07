@@ -10,38 +10,42 @@ type Props = {
   setIsModalOpen: (visible: boolean) => void;
 };
 
-const PostChallengyModal = ({ isModalOpen, handleModalClose, setIsModalOpen}: Props) => {
+const PostChallengyModal = ({
+  isModalOpen,
+  handleModalClose,
+  setIsModalOpen,
+}: Props) => {
   const jwtToken = localStorage.getItem('jwt_token');
   const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
   const accessToken = parsedToken?.accessToken;
   const [imageKey, setImageKey] = useState('');
 
   return (
-      <CommonModal
-        isModalOpen={isModalOpen}
-        handleModalClose={handleModalClose}
-        title='챌린지 생성하기'
-      >
-          <Container>
-            <ImageContainer>
-              <UploadImage
-                accessToken={accessToken}
-                setImageKey={setImageKey}
-                type='CHALLENGE'
-              />
-            </ImageContainer>
-            <FormContainer>
-              <ChallengeForm imageKey={imageKey} setIsModalOpen={setIsModalOpen}/>
-            </FormContainer>
-          </Container>
-      </CommonModal>
+    <CommonModal
+      isModalOpen={isModalOpen}
+      handleModalClose={handleModalClose}
+      title="챌린지 생성하기"
+    >
+      <Container>
+        <ImageContainer>
+          <UploadImage
+            accessToken={accessToken}
+            setImageKey={setImageKey}
+            type="CHALLENGE"
+          />
+        </ImageContainer>
+        <FormContainer>
+          <ChallengeForm imageKey={imageKey} setIsModalOpen={setIsModalOpen} />
+        </FormContainer>
+      </Container>
+    </CommonModal>
   );
 };
 
 export default PostChallengyModal;
 
 const Container = styled.div`
-  border-top: 1px solid #000; 
+  border-top: 1px solid #000;
   display: flex;
   flex-direction: column;
   width: 100%;

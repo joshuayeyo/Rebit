@@ -9,7 +9,12 @@ type Props = {
   title?: string;
 };
 
-const CommonModal = ({ title, children, isModalOpen, handleModalClose }: Props) => {
+const CommonModal = ({
+  title,
+  children,
+  isModalOpen,
+  handleModalClose,
+}: Props) => {
   return (
     <>
       <Overlay isOpen={isModalOpen} />
@@ -41,7 +46,7 @@ const ModalContainer = styled.div`
   right: 20%;
   border-radius: 10px;
   overflow: auto;
-    &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
   }
 `;
