@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ChallengeData } from '@/types';
 import instance from '@/api/instance';
-import CommonHeader from "@/components/common/Header";
-const ChallengDetailPage = () =>{
+import CommonHeader from '@/components/common/Header';
+import Verification from '@/components/feature/challegeDetail/Verification';
 
+const ChallengDetailPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const id = Number(queryParams.get('id'));
@@ -29,13 +30,13 @@ const ChallengDetailPage = () =>{
     getChallengeDetailData();
   }, [setData]);
 
-
   return (
     <>
-    <CommonHeader />
-    <Intro data={data} filter={filter}/>
+      <CommonHeader />
+      <Intro data={data} filter={filter} />
+      {filter === 'IN_PROGRESS' && <Verification />}
     </>
-  )
-}
+  );
+};
 
 export default ChallengDetailPage;
