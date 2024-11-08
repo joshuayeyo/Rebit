@@ -78,7 +78,7 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
                     <ItemWrapper>
                       <ChallengeCard
                         imageUrl={data.presignedUrl}
-                        title={data.content}
+                        title={data.title}
                         author={data.creator.nickname}
                         profilePics={data.creator.prsignedUrl}
                       />
