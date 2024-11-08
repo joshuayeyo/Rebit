@@ -6,14 +6,16 @@ type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   children?: React.ReactNode;
+  title?: string;
 };
 
-const CommonModal = ({ children, isModalOpen, handleModalClose }: Props) => {
+const CommonModal = ({ title, children, isModalOpen, handleModalClose }: Props) => {
   return (
     <>
       <Overlay isOpen={isModalOpen} />
       <ModalContainer>
         <ButtonContainer>
+          {title && <Title>{title}</Title>}
           <Button onClick={handleModalClose} theme="outline" size="medium">
             {' '}
             X
@@ -38,14 +40,24 @@ const ModalContainer = styled.div`
   top: 20%;
   right: 20%;
   border-radius: 10px;
+  overflow: auto;
+    &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ButtonContainer = styled.div`
   width: 100%;
-  height: 2rem;
+  height: 3rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 2rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
 `;
 
 const ContentSection = styled.section`

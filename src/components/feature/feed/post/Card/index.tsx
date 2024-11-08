@@ -2,16 +2,18 @@ import styled from '@emotion/styled';
 
 type Props = {
   imageUrl: string;
-  title: string;
+  content: string;
 };
 
-const FeedCard = ({ imageUrl, title }: Props) => {
+const FeedCard = ({ imageUrl, content }: Props) => {
+  const trimmedContent =
+    content.length > 100 ? `${content.substring(0, 100)}...` : content;
   return (
     <Wrapper>
       <ImageContainer>
         <PostImage src={imageUrl} />
         <div className="summary">
-          <Title>{title}</Title>
+          <Title>{trimmedContent}</Title>
         </div>
       </ImageContainer>
     </Wrapper>
@@ -37,6 +39,9 @@ const ImageContainer = styled.div`
     display: flex;
     flex-direction: column;
     pointer-events: none;
+    align-items: flex-end;
+    text-align: right;
+    margin-right: 1rem;
   }
 
   &:hover .summary {
