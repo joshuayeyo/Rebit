@@ -5,12 +5,12 @@ import instance from '@/api/instance';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-type ChallengeIntroProps = {
+type ChallengeProps = {
   data: ChallengeData | null;
   filter: string | null;
 };
 
-const Contents = ({ data, filter }: ChallengeIntroProps) => {
+const Contents = ({ data, filter }: ChallengeProps) => {
   const { isLogin } = useAuth();
   const [entryFee, setEntryFee] = useState<number>(0);
   const [userpoint, setuserPoint] = useState<number | null>(null);
