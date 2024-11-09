@@ -3,18 +3,21 @@ import CommonImage from '@/components/common/Image';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
+import defaultImage from '@/assets/defaultImage.png';
+
+type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
 
 type Props = {
   accessToken: string;
   setImageKey: React.Dispatch<React.SetStateAction<string>>;
+  type: UploadType;
 };
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const UploadImage = ({ accessToken, setImageKey }: Props) => {
-  const [preview, setPreview] = useState(Object);
+const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
+  const [preview, setPreview] = useState<string>(defaultImage);
   const uploadImage = useRef<HTMLInputElement | null>(null);
-  // const [presignedUrl, setPresignedUrl] = useState([]);
   const [presignedUrl, setPresignedUrl] = useState('');
   const [file, setFile] = useState([]);
 
@@ -56,7 +59,7 @@ const UploadImage = ({ accessToken, setImageKey }: Props) => {
     async function getS3() {
       try {
         const res = await axios.get(
-          `${BASE_URL}/api/s3/urls/upload?type=FEED&filename=${fileName}`,
+          `${BASE_URL}/api/s3/urls/upload?type=${type}&filename=${fileName}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -74,7 +77,7 @@ const UploadImage = ({ accessToken, setImageKey }: Props) => {
   };
 
   const handleDelete = () => {
-    setPreview('');
+    setPreview(defaultImage);
   };
 
   return (
@@ -84,8 +87,9 @@ const UploadImage = ({ accessToken, setImageKey }: Props) => {
           src={preview}
           ratio="square"
           style={{
-            border: '1px solid',
+            border: 'none',
             objectFit: 'cover',
+            borderRadius: '5px',
             width: '100%',
             maxWidth: '100%',
           }}
@@ -102,18 +106,16 @@ const UploadImage = ({ accessToken, setImageKey }: Props) => {
         <Button
           onClick={handleUpload}
           size={'medium'}
-          theme={'lightgray'}
+          theme={'outline'}
           style={{ width: '150px' }}
-          type="button"
         >
           이미지 업로드
         </Button>
         <Button
           onClick={handleDelete}
           size={'medium'}
-          theme={'lightgray'}
+          theme={'outline'}
           style={{ width: '150px' }}
-          type="button"
         >
           이미지 삭제
         </Button>
@@ -121,10 +123,8 @@ const UploadImage = ({ accessToken, setImageKey }: Props) => {
     </Wrapper>
   );
 };
-
 const Wrapper = styled.div`
   display: flex;
-  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -132,7 +132,6 @@ const Wrapper = styled.div`
 
 const ImageContainer = styled.section`
   width: 100%;
-  height: 100%;
   object-fit: fill;
 `;
 
@@ -141,5 +140,4 @@ const ButtonContainer = styled.div`
   align-items: center;
   margin: 2rem;
 `;
-
 export default UploadImage;

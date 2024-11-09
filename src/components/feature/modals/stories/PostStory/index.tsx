@@ -87,6 +87,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
                 <UploadImage
                   accessToken={accessToken}
                   setImageKey={setImageKey}
+                  type="FEED"
                 />
               </ImageContainer>
             </Left>
