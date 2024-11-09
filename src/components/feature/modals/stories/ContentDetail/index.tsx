@@ -31,7 +31,6 @@ type FeedData = {
   likes: number;
 };
 
-
 const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const jwtToken = localStorage.getItem('jwt_token');
@@ -41,16 +40,16 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
 
   useEffect(() => {
     async function getContentDetails() {
-      if(!id || !accessToken) return;
+      if (!id || !accessToken) return;
 
       try {
-        const res = await axios.get(`${BASE_URL}/api/feeds/${id}`,
-          { headers: { Authorization: `Bearer ${accessToken}` }, }
-        );
+        const res = await axios.get(`${BASE_URL}/api/feeds/${id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
         console.log(res);
         const result = await res;
         setData(result.data);
-        console.log(import.meta.env)
+        console.log(import.meta.env);
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
@@ -59,17 +58,17 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id, setData])
+  }, [id, setData]);
 
   if (isLoading) {
-    return (<Spinner />);
+    return <Spinner />;
   }
 
-  console.log(data)
+  console.log(data);
 
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
-      { data ?
+      {data ? (
         <CommonContainer maxWidth="100%" flexDirection="row">
           <Left>
             <ImageContainer src={data?.presignedUrl}></ImageContainer>
@@ -77,7 +76,11 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
           <Right>
             <CommonContainer flexDirection="column">
               <ProfileSection>
-                <CommonAvatar username={data.author.nickname} imageURL={data.author.nickname} size="md" />
+                <CommonAvatar
+                  username={data.author.nickname}
+                  imageURL={data.author.nickname}
+                  size="md"
+                />
                 <Divider
                   mt="0.8rem"
                   mb="0.8rem"
@@ -100,7 +103,9 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
             </CommonContainer>
           </Right>
         </CommonContainer>
-        : <Spinner />}
+      ) : (
+        <Spinner />
+      )}
     </CommonModal>
   );
 };

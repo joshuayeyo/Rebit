@@ -6,7 +6,6 @@ import FeedPage from '@/pages/Feed';
 import ChallengePage from '@/pages/Challenge';
 import MyPage from '@/pages/MyPage';
 import ChallengDetailPage from '@/pages/ChallengeDetail';
-
 import { RouterPath } from './path';
 import PrivateRoute from './PrivateRoute';
 

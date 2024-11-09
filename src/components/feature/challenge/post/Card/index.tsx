@@ -7,7 +7,7 @@ type Props = {
   profilePics: string;
 };
 
-const ChallengeCard = ({ imageUrl, title, author, profilePics}: Props) => {
+const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
   return (
     <Wrapper>
       <ImageContainer>
@@ -16,7 +16,7 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics}: Props) => {
       </ImageContainer>
       <PosterContiner>
         <Author>{author}</Author>
-        <Profile src={profilePics}/>
+        <Profile src={profilePics} />
       </PosterContiner>
     </Wrapper>
   );
@@ -30,24 +30,24 @@ const ImageContainer = styled.div`
 `;
 
 const Title = styled.text`
-font-size: 1rem;
-font-weight: bold;
-display: block;
-max-width: 100%;
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const PostImage = styled.img`
-width: 100%;
-aspect-ratio: 1/1.2;
-object-fit: fill;
-&:hover {
-  filter: brightness(0.5);
-  transition: 0.5s ease-in-out;
+  width: 100%;
+  aspect-ratio: 1/1.2;
+  object-fit: fill;
+  &:hover {
+    filter: brightness(0.5);
+    transition: 0.5s ease-in-out;
   }
-  `;
+`;
 
 const PosterContiner = styled.div`
   display: flex;
@@ -55,15 +55,14 @@ const PosterContiner = styled.div`
   justify-content: end;
   flex-direction: row;
 `;
-  
+
 const Author = styled.text`
   font-size: 1rem;
-  margin-right: 1rem; 
+  margin-right: 1rem;
 `;
 const Profile = styled.img`
-  border-radius: 50%; 
+  border-radius: 50%;
   width: 10%;
   aspect-ratio: 1/1.2;
   object-fit: cover;
 `;
-

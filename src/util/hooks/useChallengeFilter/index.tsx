@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 
-type FilterType = 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL';
+type FilterType =
+  | 'RECRUITING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'UPCOMING'
+  | 'ALL';
 
 interface ChallengeWithDates {
   recruitmentStartDate: string;
@@ -11,7 +16,7 @@ interface ChallengeWithDates {
 
 function useChallengeFilter<T extends ChallengeWithDates>(
   challenges: T[],
-  initialFilter: FilterType = 'ALL'
+  initialFilter: FilterType = 'ALL',
 ) {
   const [filter, setFilter] = useState<FilterType>(initialFilter);
   const [filteredData, setFilteredData] = useState<T[]>(challenges);
@@ -25,11 +30,12 @@ function useChallengeFilter<T extends ChallengeWithDates>(
         const recruitmentEnd = new Date(challenge.recruitmentEndDate);
         const challengeStart = new Date(challenge.challengeStartDate);
         const challengeEnd = new Date(challenge.challengeEndDate);
-        if (filter === 'UPCOMING'){
-          return currentDate < recruitmentStart
-        }
-        else if (filter === 'RECRUITING') {
-          return currentDate >= recruitmentStart && currentDate <= recruitmentEnd;
+        if (filter === 'UPCOMING') {
+          return currentDate < recruitmentStart;
+        } else if (filter === 'RECRUITING') {
+          return (
+            currentDate >= recruitmentStart && currentDate <= recruitmentEnd
+          );
         } else if (filter === 'IN_PROGRESS') {
           return currentDate >= challengeStart && currentDate <= challengeEnd;
         } else if (filter === 'COMPLETED') {
