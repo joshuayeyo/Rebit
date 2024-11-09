@@ -1,88 +1,86 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { selectBook } from '@/store/bookSlice';
 import { Box, Image, Text, Button } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import { useState } from 'react';
 
 type BookProps = {
-  image: string;
+  id: number;
+  isbn: string;
+  cover: string;
   title: string;
   author: string;
-  date: string;
+  pubDate: string;
+  link: string;
 };
 
 const BookCard = forwardRef<HTMLDivElement, BookProps>(
-  ({ image, title, author, date }, ref) => {
+  ({ id, isbn, cover, title, author, pubDate, link }, ref) => {
+    const dispatch = useDispatch();
+
+    const handleSelectBook = () => {
+      const selectedBook = { id, isbn, cover, title, author, pubDate, link };
+      dispatch(selectBook(selectedBook));
+      console.log('선택한 책:', selectedBook);
+
+      setTimeout(() => {
+        console.log('Redux 상태:', selectedBook);
+      }, 1000);
+    };
+
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-      <Wrapper
+      <Box
         ref={ref}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        borderRadius="10px"
+        overflow="hidden"
+        position="relative"
+        width="100%"
+        maxWidth="18vw"
+        margin="0 auto"
+        marginBottom="20px"
       >
-        <StyledImage src={image} alt={title} />
-        <TextContainer>
+        <Image
+          src={cover}
+          alt={title}
+          width="100%"
+          objectFit="cover"
+          aspectRatio="1/1.2"
+        />
+        <Box padding="10px 0">
           <Text
             fontSize="lg"
             fontWeight="bold"
             color="gray.800"
-            noOfLines={1}
             textAlign="center"
           >
             {title}
           </Text>
-          <Text
-            color="gray.500"
-            my="2"
-            fontSize="sm"
-            noOfLines={1}
-            textAlign="center"
-          >
+          <Text color="gray.500" my="2" fontSize="sm" textAlign="center">
             {author}
           </Text>
           <Text fontSize="xs" color="gray.400" textAlign="center">
-            {date}
+            {pubDate}
           </Text>
-        </TextContainer>
+        </Box>
         {isHovered && (
-          <ButtonContainer>
-            <Button size="sm">책 선택하기</Button>
-          </ButtonContainer>
+          <Box
+            position="absolute"
+            bottom="30vh"
+            left="50%"
+            transform="translateX(-50%)"
+          >
+            <Button onClick={handleSelectBook} size="sm">
+              책 선택하기
+            </Button>
+          </Box>
         )}
-      </Wrapper>
+      </Box>
     );
   },
 );
 
 export default BookCard;
-
-const Wrapper = styled(Box)`
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  max-width: 18vw;
-  margin: 0 auto;
-  margin-bottom: 20px;
-`;
-
-const StyledImage = styled(Image)`
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 1 / 1.2;
-
-  &:hover {
-    filter: brightness(0.6);
-    transition: 0.5s ease-in-out;
-  }
-`;
-
-const TextContainer = styled(Box)`
-  padding: 10px 0;
-`;
-
-const ButtonContainer = styled(Box)`
-  position: absolute;
-  bottom: 30vh;
-  left: 50%;
-  transform: translateX(-50%);
-`;
