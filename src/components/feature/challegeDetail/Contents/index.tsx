@@ -1,48 +1,20 @@
 import styled from '@emotion/styled';
-import { ChallengeData } from '@/types';
+import { ChallengeData, UserData } from '@/types';
 import { useAuth } from '@/provider/Auth';
 import instance from '@/api/instance';
 import { useState } from 'react';
-import { useEffect } from 'react';
+import axios from 'axios';
 
 type ChallengeProps = {
-  data: ChallengeData | null;
+  challengeData: ChallengeData | null;
+  userData: UserData | null;
   filter: string | null;
 };
 
-const Contents = ({ data, filter }: ChallengeProps) => {
+const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const { isLogin } = useAuth();
   const [entryFee, setEntryFee] = useState<number>(0);
-  const [userpoint, setuserPoint] = useState<number | null>(null);
-
-  async function point() {
-    try {
-      const response = await instance.get('/api/members/me');
-      setuserPoint(response.data.point);
-      console.log(userpoint);
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-      alert('사용자 정보를 가져오는 데 실패했습니다.');
-    }
-  }
-
-  useEffect(() => {
-    point();
-    async function getUserInfo() {
-      try {
-        const response = await instance.get('/api/members/me');
-        console.log(response.data);
-
-        setuserPoint(response.data.point);
-        console.log(userpoint);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-        alert('사용자 정보를 가져오는 데 실패했습니다.');
-      }
-    }
-
-    getUserInfo();
-  }, []);
+  const userPoint = userData?.point !== undefined ? userData.point : 0;
 
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
@@ -51,13 +23,13 @@ const Contents = ({ data, filter }: ChallengeProps) => {
     return dateObject.toISOString().split('T')[0].replace(/-/g, '/');
   }
 
-  const recruitmentStartDate = formatDate(data?.recruitmentStartDate);
-  const recruitmentEndDate = formatDate(data?.recruitmentEndDate);
-  const challengeStartDate = formatDate(data?.challengeStartDate);
-  const challengeEndDate = formatDate(data?.challengeEndDate);
+  const recruitmentStartDate = formatDate(challengeData?.recruitmentStartDate);
+  const recruitmentEndDate = formatDate(challengeData?.recruitmentEndDate);
+  const challengeStartDate = formatDate(challengeData?.challengeStartDate);
+  const challengeEndDate = formatDate(challengeData?.challengeEndDate);
 
   const isValidEntryFee = (fee: number): boolean => {
-    return fee > 0 && fee <= 1000000 && userpoint !== null && fee <= userpoint;
+    return fee > 0 && fee <= 1000000 && userPoint !== null && fee <= userPoint;
   };
 
   const handleSubmit = () => {
@@ -67,7 +39,7 @@ const Contents = ({ data, filter }: ChallengeProps) => {
       );
       return;
     }
-
+  
     if (filter === 'UPCOMING') {
       alert('아직 모집기간이 아닙니다.');
     } else if (filter === 'RECRUITING') {
@@ -77,30 +49,33 @@ const Contents = ({ data, filter }: ChallengeProps) => {
         async function getFeedData() {
           try {
             const res = await instance.post(
-              `/api/challenges/${data?.id}/participations`,
+              `/api/challenges/${challengeData?.id}/participations`,
               {
                 entryFee: entryFee,
               },
             );
             console.log(res);
             alert('참가 신청이 완료되었습니다.');
-          } catch (e) {
-            console.log(e);
-            alert('Error: 데이터를 불러올 수 없습니다.');
+          } catch (error) {
+            if (axios.isAxiosError(error)) {
+              const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+              console.error('Error message:', errorMessage);
+              alert(errorMessage);
+            }
           }
         }
         getFeedData();
       }
     }
   };
-
+  
   return (
     <Wrapper>
       <TagWrapper>
         <TiTleTag>Challenge</TiTleTag>
-        <TiTleTag>#{data?.type}</TiTleTag>
+        <TiTleTag>#{challengeData?.type}</TiTleTag>
       </TagWrapper>
-      <Title>{data?.title}</Title>
+      <Title>{challengeData?.title}</Title>
       <TagWrapper>
         <DateTag>recruitment : </DateTag>
         <DateTag>
@@ -114,9 +89,9 @@ const Contents = ({ data, filter }: ChallengeProps) => {
         </DateTag>
       </TagWrapper>
       <DesCriptWrapper>
-        <Content>{data?.content}</Content>
+        <Content>{challengeData?.content}</Content>
         <ContentDetail>
-          ✓최소 참여비는 {data?.minimumEntryFee}원입니다
+          ✓최소 참여비는 {challengeData?.minimumEntryFee}원입니다
           <br />
           ✓챌린지 진행 일자부터 매일 인증글을 올리는 방식으로, 챌린지를 성공한
           참여자에게는
