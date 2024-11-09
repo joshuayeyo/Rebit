@@ -8,6 +8,7 @@ import { Skeleton } from '@chakra-ui/react';
 import ChallengeCard from '../../post/Card';
 import useChallengeFilter from '@/util/hooks/useChallengeFilter';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 type FilterType =
   | 'RECRUITING'
@@ -36,9 +37,12 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
         console.log(result.content);
         setData(result.content);
         setIsLoading(false);
-      } catch (e) {
-        console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          console.error('Error message:', errorMessage);
+          alert(errorMessage);
+        }
       }
     }
     getFeedData();
