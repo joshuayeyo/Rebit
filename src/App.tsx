@@ -4,7 +4,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/store/store';
 import { AuthProvider } from './provider/Auth';
 import { Routes } from '@/routes';
-
 function App() {
   return (
     <ChakraProvider>

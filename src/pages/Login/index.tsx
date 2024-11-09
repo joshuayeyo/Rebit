@@ -1,23 +1,21 @@
 import styled from '@emotion/styled';
-import  Logo  from '@/assets/Rebit.svg?react';
+import Logo from '@/assets/Rebit.svg?react';
 import LoginButton from '@/components/feature/login/LoginButton';
 import { Flex } from '@chakra-ui/react';
 
 const LoginPage = () => {
   return (
     <Flex
-    height="100vh"          
-    justifyContent="center"  
-    alignItems="center"      
-    flexDirection="column"   
-    textAlign="center"
+      height="100vh"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column"
+      textAlign="center"
     >
       <Logo />
-      <Content>
-        당신의 독서 습관 플랫폼 Rebit
-      </Content>
+      <Content>당신의 독서 습관 플랫폼 Rebit</Content>
       <LoginButton />
-    </Flex> 
+    </Flex>
   );
 };
 
@@ -28,4 +26,4 @@ const Content = styled.p`
   font-weight: bold;
   color: #000000;
   margin-top: 20px;
-`
+`;

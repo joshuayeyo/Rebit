@@ -1,21 +1,42 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import PostChallengyModal from '@/components/feature/modals/challenges/PostChallenge';
+import { useAuth } from '@/provider/Auth';
 
+type Props = {
+  handleModalClose: () => void;
+  isModalOpen: boolean;
+  setIsModalOpen: (visible: boolean) => void;
+};
 
-const WriteButton = () => { 
-  const handleClick =() => {
-    alert("챌린지 생성")
+const WriteButton = ({
+  handleModalClose,
+  isModalOpen,
+  setIsModalOpen,
+}: Props) => {
+  const { isLogin } = useAuth();
+  const handleClick = () => {
+    if (!isLogin) {
+      alert('로그인이 필요합니다.');
+      return;
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   return (
     <Flex position="fixed" bottom="30px" right="3vw">
-      <Button onClick={handleClick}>
-        + 챌린지 생성
-      </Button>
+      <Button onClick={handleClick}>+ 챌린지 생성</Button>
+      {isModalOpen && (
+        <PostChallengyModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
     </Flex>
   );
-
-}
+};
 
 export default WriteButton;
 
@@ -29,4 +50,4 @@ const Button = styled.button`
   &:hover {
     opacity: 1;
   }
-  `
+`;

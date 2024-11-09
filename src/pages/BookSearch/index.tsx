@@ -1,15 +1,13 @@
-import Books from "@/components/feature/booksearch/Books"
-import CommonHeader from "@/components/common/Header";
+import Books from '@/components/feature/booksearch/Books';
+import CommonHeader from '@/components/common/Header';
 
-
-const BookSearchPage = () =>{
+const BookSearchPage = () => {
   return (
     <>
       <CommonHeader />
-      <Books/>
+      <Books />
     </>
-  )
-
-}
+  );
+};
 
 export default BookSearchPage;
