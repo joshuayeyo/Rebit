@@ -87,6 +87,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
                 <UploadImage
                   accessToken={accessToken}
                   setImageKey={setImageKey}
+                  type="FEED"
                 />
               </ImageContainer>
             </Left>
@@ -116,9 +117,9 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     </>
   );
 };
-    
+
 export default PostStoryModal;
-    
+
 const HeaderBox = styled.section`
   height: auto;
   width: auto;
