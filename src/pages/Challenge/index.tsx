@@ -1,16 +1,24 @@
-import CommonHeader from "@/components/common/Header";
-import Navbar from "@/components/feature/challenge/section/NavBar/";
-import WriteButton
- from "@/components/feature/challenge/section/WriteButton";
-const ChallengePage = () =>{
+import { useState } from 'react';
+import CommonHeader from '@/components/common/Header';
+import Navbar from '@/components/feature/challenge/section/NavBar/';
+import ChallegeItemSection from '@/components/feature/challenge/section/ChallengeItems';
 
-  return(
+type FilterType =
+  | 'RECRUITING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'UPCOMING'
+  | 'ALL';
+
+const ChallengePage = () => {
+  const [filterType, setFilterType] = useState<FilterType>('UPCOMING');
+  return (
     <>
       <CommonHeader />
-      <Navbar/>
-      <WriteButton/>
+      <Navbar setFilterType={setFilterType} />
+      <ChallegeItemSection filterType={filterType} />
     </>
-  )
-}
+  );
+};
 
 export default ChallengePage;

@@ -79,11 +79,12 @@ const Books: React.FC = () => {
           책 제목을 입력해 검색해 주세요.
         </Text>
       )}
-      {inView && !hasMore && (
-        <Text textAlign="center" mt="4">
-          더 이상 검색 결과가 없습니다.
-        </Text>
-      )}
+      {inView &&
+        !hasMore && ( // hasMore가 false일 때만 메시지를 표시
+          <Text textAlign="center" mt="4">
+            더 이상 검색 결과가 없습니다.
+          </Text>
+        )}
     </Box>
   );
 };

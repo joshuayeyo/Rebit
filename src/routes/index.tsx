@@ -6,30 +6,15 @@ import FeedPage from '@/pages/Feed';
 import ChallengePage from '@/pages/Challenge';
 import MyPage from '@/pages/MyPage';
 import BookDetailPage from '@/pages/BookDetail';
-
-// import LoginPage from "@/pages/Login";
-
 import { RouterPath } from './path';
+import ChallengDetailPage from '@/pages/ChallengeDetail';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
   {
     path: RouterPath.home,
     element: <HomePage />,
   },
-  // {
-  //     path: RouterPath.layout,
-  //     element: <Layout />,
-  //     children: [
-  //         {
-  //             path: RouterPath.myPage,
-  //             element: <MyPage />
-  //         },
-  //         {
-  //             path: RouterPath.challenge,
-  //             element: <ChallengeFeedPage />
-  //         }
-  //     ]
-  // },
   {
     path: RouterPath.login,
     element: <LoginPage />,
@@ -43,16 +28,20 @@ const router = createBrowserRouter([
     element: <ChallengePage />,
   },
   {
+    path: RouterPath.bookdetails,
+    element: <BookDetailPage />,
+   },
+   {
+    path: RouterPath.challengeDetail,
+    element: <ChallengDetailPage />,
+  },
+  {
     path: RouterPath.bookSearch,
     element: <BookSearchPage />,
   },
-  // {
-  //     path: RouterPath.myPage,
-  //     element: <MyPage />
-  // },
   {
-    path: RouterPath.bookdetails,
-    element: <BookDetailPage />,
+    path: RouterPath.myPage,
+    element: <PrivateRoute element={<MyPage />} />,
   },
 ]);
 
