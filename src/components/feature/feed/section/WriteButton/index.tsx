@@ -1,4 +1,6 @@
+import PostFavbookModal from '@/components/feature/modals/favbooks/PostFavbook';
 import PostStoryModal from '@/components/feature/modals/stories/PostStory';
+import { useAuth } from '@/provider/Auth';
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useState } from 'react';
@@ -24,12 +26,27 @@ const PostFeedsButton = ({
   selectedType,
   setSelectedType,
 }: Props) => {
+  const { isLogin } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
 
   const handlePostStoryButton = () => {
+    if (!isLogin) {
+      window.location.href = '/login';
+      return;
+    }
     setIsDropdownVisible(false);
     setIsModalOpen(true);
     setSelectedType('S');
+  };
+
+  const handlePostFavBookButton = () => {
+    if (!isLogin) {
+      window.location.href = '/login';
+      return;
+    }
+    setIsDropdownVisible(false);
+    setIsModalOpen(true);
+    setSelectedType('FB');
   };
 
   const handleMouseEnter = () => {
@@ -63,11 +80,22 @@ const PostFeedsButton = ({
           <DropdownItem onClick={handlePostStoryButton}>
             스토리 작성
           </DropdownItem>
-          <DropdownItem>인생책 작성</DropdownItem>
+          <DropdownItem onClick={handlePostFavBookButton}>
+            인생책 작성
+          </DropdownItem>
         </Dropdown>
       )}
       {isModalOpen && selectedType === 'S' && (
         <PostStoryModal
+          isModalOpen={isModalOpen}
+          handleModalClose={() => {
+            handleModalClose();
+            setSelectedType(null);
+          }}
+        />
+      )}
+      {isModalOpen && selectedType === 'FB' && (
+        <PostFavbookModal
           isModalOpen={isModalOpen}
           handleModalClose={() => {
             handleModalClose();

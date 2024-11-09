@@ -50,9 +50,6 @@ const Books: React.FC = () => {
   }, [searchQuery, page]);
 
   useEffect(() => {
-    console.log('inview', inView);
-    console.log('hasMore', hasMore);
-
     if (inView && hasMore) {
       setPage((page) => page + 1);
     }
@@ -66,10 +63,13 @@ const Books: React.FC = () => {
           {books.map((book, index) => (
             <BookCard
               key={index}
-              image={book.cover}
+              id={book.id}
+              isbn={book.isbn}
+              cover={book.cover}
               title={book.title}
               author={book.author}
-              date={book.date}
+              pubDate={book.date}
+              link={book.link}
               ref={index === books.length - 1 ? ref : null}
             />
           ))}
