@@ -9,6 +9,18 @@ export type BookData = {
   pubDate: string;
 };
 
+export type UserData = {
+  id: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  bio: string;
+  email: string;
+  role: "ROLE_USER";
+  point: number;
+};
+
+
 export type ChallengeData = {
   id: number;
   creator: {
