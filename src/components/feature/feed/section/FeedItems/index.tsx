@@ -142,7 +142,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="S"
             />
           )}
           {selectedType === 'FB' && (
@@ -150,7 +149,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="FB"
             />
           )}
           {/*{selectedType === 'M' && (*/}
@@ -158,7 +156,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           {/*    isModalOpen={isModalOpen}*/}
           {/*    handleModalClose={handleModalClose}*/}
           {/*    id={selectedId}*/}
-          {/*    type="M"*/}
           {/*  />*/}
           {/*)}*/}
         </>
