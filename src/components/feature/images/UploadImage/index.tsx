@@ -19,11 +19,11 @@ const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
   const [preview, setPreview] = useState<string>(defaultImage);
   const uploadImage = useRef<HTMLInputElement | null>(null);
   const [presignedUrl, setPresignedUrl] = useState('');
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (presignedUrl && file) {
-      const extension = file.name.split('.').pop().toLowerCase();
+      const extension = file.name.split('.').pop()?.toLowerCase();
       async function putS3() {
         try {
           await axios
