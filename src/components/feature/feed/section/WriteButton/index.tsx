@@ -1,4 +1,4 @@
-import PostFavbookModal from '@/components/feature/modals/favbooks/PostFavbook';
+import PostFavbookModal from '@/components/feature/modals/favbooks/PostFavBook';
 import PostStoryModal from '@/components/feature/modals/stories/PostStory';
 import { useAuth } from '@/provider/Auth';
 import { Flex } from '@chakra-ui/react';
