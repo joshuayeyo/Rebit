@@ -17,9 +17,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     month: today.getMonth() + 1, // 리액트의 Month는 0~11월이다.
     date: today.getDate(),
   };
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [imageKey, setImageKey] = useState('');
   const [storyContent, setStoryContent] = useState('');
   const [placeholder, setPlaceholder] = useState(
@@ -84,7 +81,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
             <Left>
               <ImageContainer>
                 <UploadImage
-                  accessToken={accessToken}
                   setImageKey={setImageKey}
                   type="FEED"
                 />
