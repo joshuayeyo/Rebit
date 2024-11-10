@@ -35,7 +35,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     async function getFeedData() {
       if (!hasMore) return;
       try {
-        setIsLoading(true);
         const res = await instance.get(`/api/feeds`, {
           params: { page: page },
         });
@@ -110,7 +109,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
         loader={<></>} 
         endMessage={<></>}
       >
-        <CommonGrid columns={4} gap={50}>
+        <CommonGrid columns={4} gap={50} style={{ overflow: 'hidden' }}>
           <AnimatePresence>
             {Array.isArray(filteredData) &&
               filteredData.map((data, index) => (
