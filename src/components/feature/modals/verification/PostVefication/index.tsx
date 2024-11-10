@@ -152,17 +152,17 @@ const Right = styled.section`
   margin-left: 2rem;
 `;
 
-const FormContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border: 1px solid;
-  display: flex;
-  flex-direction: column;
+// const FormContainer = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   border: 1px solid;
+//   display: flex;
+//   flex-direction: column;
 
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-`;
+//   gap: 1rem;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
 const StyledForm = styled.form`
   display: flex;
