@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { useState, useRef, useEffect } from 'react';
 import defaultImage from '@/assets/defaultImage.png';
 import instance from '@/api/instance';
+import axios from 'axios';
 
 type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
 
@@ -23,7 +24,7 @@ const UploadImage = ({ setImageKey, type }: Props) => {
       const extension = file.name.split('.').pop()?.toLowerCase();
       async function putS3() {
         try {
-          await instance
+          await axios
             .put(presignedUrl, file, {
               headers: {
                 'Content-Type': `image/${extension}`,
@@ -99,6 +100,7 @@ const UploadImage = ({ setImageKey, type }: Props) => {
           size={'medium'}
           theme={'outline'}
           style={{ width: '150px' }}
+          type="button"
         >
           이미지 업로드
         </Button>
@@ -107,6 +109,7 @@ const UploadImage = ({ setImageKey, type }: Props) => {
           size={'medium'}
           theme={'outline'}
           style={{ width: '150px' }}
+          type="button"
         >
           이미지 삭제
         </Button>
