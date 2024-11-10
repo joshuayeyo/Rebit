@@ -35,7 +35,7 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
 
   const challengeStartDate = formatDate(data?.challengeStartDate);
   const challengeEndDate = formatDate(data?.challengeEndDate);
-  const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;
+  // const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;  // 현재 할당되지 않았음. 추후 주석처리 해제 후 사용.
   const todayIndex = differenceInDays(new Date(), challengeStartDate) + 1;
 
   const highlightedDates = eachDayOfInterval({ start: challengeStartDate, end: challengeEndDate });
