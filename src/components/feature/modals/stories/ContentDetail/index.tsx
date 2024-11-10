@@ -46,12 +46,9 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
         const res = await axios.get(`${BASE_URL}/api/feeds/${id}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        console.log(res);
         const result = await res;
         setData(result.data);
-        console.log(import.meta.env);
       } catch (e) {
-        console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
       } finally {
         setIsLoading(false);
@@ -64,7 +61,6 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
     return <Spinner />;
   }
 
-  console.log(data);
 
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>

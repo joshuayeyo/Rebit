@@ -40,13 +40,10 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       try {
         const res = await instance.get(`api/feeds/${id}`);
         setData(res.data);
-        console.log(res);
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        console.log(data);
-      }
+      } 
     }
     getContentDetails();
   }, [id]);

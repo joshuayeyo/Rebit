@@ -45,8 +45,6 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
     };
   }, []);
 
-  console.log(selectedBook);
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
