@@ -7,6 +7,30 @@ export type BookData = {
   description: string;
   publisher: string;
   pubDate: string;
+  link: string;
+  topFullReview: string;
+};
+
+export type ReviewData = {
+  briefReviewAuthorImage: string;
+  briefReviewAuthor: string;
+  briefReview: string;
+};
+
+export type FeedData = {
+  presignedUrl: string;
+  author: AuthorData;
+  content: string;
+  book: BookData;
+  briefReview: string;
+  fullReview: string;
+  likes: number;
+  isLiked: boolean;
+};
+
+export type AuthorData = {
+  nickname: string;
+  presignedUrl: string;
 };
 
 export type UserData = {
@@ -19,7 +43,6 @@ export type UserData = {
   role: "ROLE_USER";
   point: number;
 };
-
 
 export type ChallengeData = {
   id: number;
