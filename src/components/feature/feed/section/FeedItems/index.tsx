@@ -105,10 +105,10 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     <Wrapper>
       <InfiniteScroll
         dataLength={filteredData.length}
-        next={fetchData} // 새로운 데이터를 불러오는 함수
-        hasMore={hasMore} // 더 불러올 데이터가 있는지 여부
-        loader={<></>} // 로딩 중 표시할 내용
-        endMessage={<></>} // 더 이상 데이터가 없을 때 메시지
+        next={fetchData}
+        hasMore={hasMore} 
+        loader={<></>} 
+        endMessage={<></>}
       >
         <CommonGrid columns={4} gap={50}>
           <AnimatePresence>
