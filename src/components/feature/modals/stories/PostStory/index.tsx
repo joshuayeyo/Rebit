@@ -50,7 +50,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           })
           .then((response) => {
             alert('데이터가 성공적으로 들어갔습니다.');
-            console.log(response.data);
           });
       } catch (e) {
         console.log(e);
