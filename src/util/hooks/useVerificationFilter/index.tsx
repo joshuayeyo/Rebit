@@ -17,7 +17,7 @@ function useChallengeVerification<T extends ChallengeWithCreator>( challenges: T
 
   useEffect(() => {
     const updateFilteredData = () => {
-      if (!challenges || !Array.isArray(challenges)) { // null 또는 배열이 아닌 경우 종료
+      if (!challenges || !Array.isArray(challenges)) {
         console.log("challenges가 배열이 아닙니다.");
         return;
       }
@@ -25,7 +25,7 @@ function useChallengeVerification<T extends ChallengeWithCreator>( challenges: T
         if (filter === 'MY_VERIFICATION') {
           return challenge.author.id === userId;
         }
-        return true; // 'ALL' 필터에서는 모든 챌린지를 보여줍니다.
+        return true;
       });
       setFilteredData(filtered);
     };
@@ -34,7 +34,6 @@ function useChallengeVerification<T extends ChallengeWithCreator>( challenges: T
   }, [challenges, filter, userId]);
 
   useEffect(() => {
-    // console.log(`Filtered data for filter type "${filter}":`, filteredData);
   }, [filter, filteredData]);
 
   return { filteredData, setFilter };

@@ -34,8 +34,6 @@ const ChallengDetailPage = () => {
       try {
         const response = await instance.get('/api/members/me');
         setUserData(response.data);
-        console.log("참가자 정보",response.data);
-
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
@@ -47,7 +45,6 @@ const ChallengDetailPage = () => {
       async function postVerificationData() {
         try {
           const response = await instance.get(`/api/challenges/${id}/verifications`);
-          console.log("챌린지 참여자 인증글 정보",response.data.content);
           setVerificationData(response.data.content);
         } catch (error) {
           if (axios.isAxiosError(error)) {
@@ -70,11 +67,9 @@ const ChallengDetailPage = () => {
       async function Data() {
         try {
           const response = await instance.get(`/api/challenges/${id}/participations`);
-          console.log("참가자!!!!!!!!!!!!!! 정보",response.data.content);
           const isUserParticipating = response.data.content.some(
             (participant:Participant) => participant.memberId === userData?.id
           );
-          console.log('참여자가 맞나요?',isUserParticipating);
           setIsParticipating(isUserParticipating);
         } catch (e) {
           console.log(e);

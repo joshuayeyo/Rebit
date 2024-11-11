@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import instance from '@/api/instance';
 
 type Props = {
@@ -151,17 +150,7 @@ const Right = styled.section`
   margin-left: 2rem;
 `;
 
-const FormContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border: 1px solid;
-  display: flex;
-  flex-direction: column;
 
-  gap: 1rem;
-  align-items: center;
-  justify-content: center;
-`;
 
 const StyledForm = styled.form`
   display: flex;
@@ -218,17 +207,3 @@ const SubmitButton = styled.div`
   height: 100%;
   justify-content: flex-end;
 `;
-// const InputField = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   label {
-//     font-weight: bold;
-//     margin-right: 2rem;
-//   }
-//   input {
-//     width: 80%;
-//   }
-//   textarea {
-//     width: 80%;
-//   }
-// `;

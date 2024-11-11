@@ -24,7 +24,6 @@ const VerificationDetailModal = ({isModalOpen,handleModalClose,challengeId, veri
     async function getContentDetails() {
       try {
         const res = await instance.get(`/api/challenges/${challengeId}/verifications/${verificationId}`);
-        console.log("데이터 가져왔어",res.data);
         const result = await res;
         setData(result.data);
       } catch (e) {

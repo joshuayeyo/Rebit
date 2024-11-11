@@ -8,7 +8,6 @@ import { ChallengeData, UserData, VerificationData } from '@/types';
 import { FaMedal } from 'react-icons/fa';
 import Navbar from '../Section/Navbar';
 import VerificationSection from '../Section/DetailItems';
-import { filter } from '@chakra-ui/react';
 import useChallengeVerification from '@/util/hooks/useVerificationFilter';
 
 

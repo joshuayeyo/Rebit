@@ -66,7 +66,7 @@ export type Participant = {
   nickname: string;
   imageKey: string;
   presignedUrl: string;
-  participatedAt: string; // ISO 날짜 형식이므로 string으로 지정
+  participatedAt: string;
   entryFee: number;
 }
 
