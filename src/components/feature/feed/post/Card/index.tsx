@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 type Props = {
   imageUrl: string;
-  content?: string; // content를 선택적 프로퍼티로 변경
+  content?: string;
   onLoad?: () => void;
 };
 
