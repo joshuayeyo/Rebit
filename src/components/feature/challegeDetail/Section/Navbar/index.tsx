@@ -3,30 +3,30 @@ import { Flex, Box } from '@chakra-ui/react';
 import { TbPencilPlus } from "react-icons/tb";
 import { useAuth } from '@/provider/Auth';
 import PostVerificationModal from '@/components/feature/modals/verification/PostVefication';
+
 type NavbarProps = {
   setFilterType: (
-    filterType: 'TODAY' | 'ALL',
+    filterType: 'MY_VERIFICATION' | 'ALL',
   ) => void;
   handleModalClose: () => void;
   isModalOpen: boolean;
   setIsModalOpen: (visible: boolean) => void;
   challengeId: Number | null;
-
+  isParticipating: boolean;
 };
 
-const Navbar = ({ 
-  setFilterType,
-  handleModalClose,
-  isModalOpen,
-  setIsModalOpen,
-  challengeId }: NavbarProps) => {
+const Navbar = ({ setFilterType, handleModalClose, isModalOpen, setIsModalOpen, challengeId,isParticipating}: NavbarProps) => {
   
   const { isLogin } = useAuth();
   const handleClick = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
       return;
-    } else {
+    } else if (!isParticipating){
+      alert('챌린지 참가자만 인증글 작성이 가능합니다.');
+      return;
+    }
+    else {
       setIsModalOpen(true);
     }
   };
@@ -34,10 +34,10 @@ const Navbar = ({
   return (
     <Flex direction="row" justifyContent="space-between" mt={5} padding='0.5rem 6rem'>
       <Box display="flex">
-        <StyledButton onClick={() => setFilterType('TODAY')}>
+        <StyledButton onClick={() => setFilterType('ALL')}>
           #오늘의 인증글
         </StyledButton>
-        <StyledButton onClick={() => setFilterType('ALL')}>
+        <StyledButton onClick={() => setFilterType('MY_VERIFICATION')}>
           #내 인증글
         </StyledButton>
       </Box>
