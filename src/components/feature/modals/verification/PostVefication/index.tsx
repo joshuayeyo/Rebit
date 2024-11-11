@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
 import { useState, useEffect } from 'react';
-
+import axios from 'axios';
 import instance from '@/api/instance';
 
 type Props = {
@@ -52,7 +52,6 @@ const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, 
       try {
         const response = await instance.post(`/api/challenges/${challengeId}/verifications`, formData);
         alert('데이터가 성공적으로 들어갔습니다.');
-        console.log(response.data);
         setIsModalOpen(false);
       } catch (e) {
         console.log(e);
