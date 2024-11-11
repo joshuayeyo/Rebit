@@ -20,6 +20,7 @@ function useChallengeFilter<T extends ChallengeWithDates>(
 ) {
   const [filter, setFilter] = useState<FilterType>(initialFilter);
   const [filteredData, setFilteredData] = useState<T[]>(challenges);
+
   useEffect(() => {
     const updateFilteredData = () => {
       const currentDate = new Date();
@@ -48,9 +49,6 @@ function useChallengeFilter<T extends ChallengeWithDates>(
     updateFilteredData();
   }, [challenges, filter]);
 
-  useEffect(() => {
-    console.log(`Filtered data for filter type "${filter}":`, filteredData);
-  }, [filter]);
 
   return { filteredData, setFilter };
 }

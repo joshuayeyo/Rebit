@@ -34,7 +34,6 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
       try {
         const res = await instance.get(`/api/challenges`);
         const result = await res.data;
-        console.log(result.content);
         setData(result.content);
         setIsLoading(false);
       } catch (error) {
