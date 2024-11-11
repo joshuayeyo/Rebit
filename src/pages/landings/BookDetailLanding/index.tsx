@@ -134,7 +134,7 @@ const BookDescription = styled.div`
 
 const BookAuthor = styled.div`
   position: absolute;
-  bottom: 7%;
+  bottom: 9%;
   font-size: 2rem;
   font-weight: bold;
   color: white;
@@ -142,6 +142,7 @@ const BookAuthor = styled.div`
 
 const PubInfo = styled.div`
   position: absolute;
+  margin-top: 1rem;
   bottom: 5%;
   font-size: 1.5rem;
   font-weight: lighter;
