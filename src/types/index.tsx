@@ -44,6 +44,32 @@ export type ChallengeData = {
   createdAt: string;
 };
 
+export type VerificationData = {
+  id: number;
+  participationId: number;
+  author: {
+    id: number;
+    nickname: string;
+    imageKey: string;
+    presignedUrl: string;
+  };
+  title: string;
+  imageKey: string;
+  presignedUrl: string;
+  content: string;
+  createdAt: string;
+}
+
+export type Participant = {
+  participationId: number;
+  memberId: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  participatedAt: string; // ISO 날짜 형식이므로 string으로 지정
+  entryFee: number;
+}
+
 export type FilterType =
   | 'RECRUITING'
   | 'IN_PROGRESS'
