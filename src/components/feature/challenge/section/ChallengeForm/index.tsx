@@ -117,8 +117,8 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
           >
             <option value="">챌린지 유형을 선택하세요.</option>
             <option value="DAILY_READING">매일매일 책 읽기</option>
-            <option value="DAILY_WRITING">좋은 글쓰기</option>
-            <option value="CHALLENGE3">기타</option>
+            <option value="RELAY_NOVEL">릴레이 소설</option>
+            <option value="SITUATIONAL_SENTENCE">기타</option>
           </select>
         </InputField>
         <InputField>
