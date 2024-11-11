@@ -4,27 +4,35 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import { eachDayOfInterval, isWithinInterval, differenceInDays} from 'date-fns';
 import styled from '@emotion/styled';
-import { ChallengeData, UserData } from '@/types';
+import { ChallengeData, UserData, VerificationData } from '@/types';
 import { FaMedal } from 'react-icons/fa';
 import Navbar from '../Section/Navbar';
-import instance from '@/api/instance';
+import VerificationSection from '../Section/DetailItems';
+import { filter } from '@chakra-ui/react';
+import useChallengeVerification from '@/util/hooks/useVerificationFilter';
+
 
 type ChallengeProps = {
   data: ChallengeData | null;
   userData: UserData | null;
-  challengeId: Number | null;
+  challengeId: number | null;
+  verificationData: VerificationData[] | null;
+  isParticipating: boolean;
 };
 
-type FilterType = 'TODAY' | 'ALL';
+type FilterType = 'MY_VERIFICATION' | 'ALL';
 
 
-const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
+const Verification = ({ data, userData, challengeId, verificationData,isParticipating }: ChallengeProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isInRange, setIsInRange] = useState<boolean>(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-
   const [filterType, setFilterType] = useState<FilterType>('ALL');
-  
+  const { filteredData } = useChallengeVerification(verificationData || [], userData?.id || 0, 'MY_VERIFICATION');
+  const [filteredDataCount, setFilteredDataCount] = useState(0);
+
+  console.log("참여여부",isParticipating);
+
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
     const dateObject = new Date(date);
@@ -38,10 +46,11 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
   const challengeEndDate = formatDate(data?.challengeEndDate);
   const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;
   const todayIndex = differenceInDays(new Date(), challengeStartDate) + 1;
-
   const highlightedDates = eachDayOfInterval({ start: challengeStartDate, end: challengeEndDate });
+  const progressPercentage = (filteredDataCount / totalDays) * 100;
 
   useEffect(() => {
+    setFilteredDataCount(filteredData.length);
     if (selectedDate) {
       setIsInRange(
         isWithinInterval(selectedDate, { start: challengeStartDate, end: challengeEndDate })
@@ -49,7 +58,7 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
     } else {
       setIsInRange(false);
     }
-  }, [selectedDate]);
+  }, [selectedDate, filteredData]);
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -59,7 +68,7 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
   return (
     <Wrapper>
       <HeaderWrapper>
-      <ProfileContainer>
+      <ProfileContainer isVisible={isParticipating}>
         <ProfileWrapper>
           <Profile src={userData?.presignedUrl} alt="프로필 사진" />  
           <AuthorInfo>
@@ -70,8 +79,8 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
         <MedalWrapper>
           <FaMedalStyled size={36} />
           <ProgerssWrapper>
-            <span>5/14</span>
-            <ProgressBar />
+            <span>{filteredDataCount}/{totalDays}</span>
+            <ProgressBar progress={progressPercentage} />
           </ProgerssWrapper>
         </MedalWrapper>
       </ProfileContainer>
@@ -91,12 +100,14 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
         </DatePickerWrapper>
       </HeaderWrapper>
       <Navbar 
-      setFilterType={setFilterType}
-      isModalOpen={isPostModalOpen}
-      setIsModalOpen={setIsPostModalOpen}
-      handleModalClose={handlePostModalClose}
-      challengeId={challengeId}
+        setFilterType={setFilterType}
+        isModalOpen={isPostModalOpen}
+        setIsModalOpen={setIsPostModalOpen}
+        handleModalClose={handlePostModalClose}
+        challengeId={challengeId}
+        isParticipating={isParticipating}
         />
+      <VerificationSection filterType={filterType} verificationData={verificationData || []} userId={userData?.id ?? 0} challengeId={challengeId}></VerificationSection>
     </Wrapper>
   );
 
@@ -112,15 +123,17 @@ const Wrapper = styled.section`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  padding: 1rem 7rem; 
+  padding: 5rem 7rem; 
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 `;
 
-const ProfileContainer = styled.div`
+const ProfileContainer = styled.div<{ isVisible: boolean }>`
   display: flex;
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
   align-items: center;
   flex-direction: column;
   width: 25%;
@@ -188,7 +201,7 @@ const FaMedalStyled = styled(FaMedal)`
   margin-right: 0.5rem;
 `;
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div<{ progress: number }>`
   width: 100%;
   height: 12px;
   background-color: #e0e0e0;
@@ -200,17 +213,22 @@ const ProgressBar = styled.div`
     content: "";
     display: block;
     height: 100%;
-    width: 50%; /* 달성 비율에 따라 조정 */
+    width: ${(props) => props.progress}%; /* 달성 비율에 따라 조정 */
     background-color: #f5af19;
+    transition: width 0.3s ease; /* 애니메이션 효과 추가 */
   }
 `;
+;
 
 const TitleWrapper = styled.div`
-  width: 60%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
+  text-align: center;
 
 `;
 
