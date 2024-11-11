@@ -125,7 +125,10 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                   >
                     <Skeleton isLoaded={!isLoading}>
                       <FeedCard
-                        imageUrl={data.presignedUrl}
+                        imageUrl={
+                          data.type === 'S' || data.type === 'M'
+                          ? data.presignedUrl
+                          : data.book?.cover}
                         content={data.content}
                       />
                     </Skeleton>
