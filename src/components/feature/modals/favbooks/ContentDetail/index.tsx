@@ -40,7 +40,10 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       try {
         const res = await instance.get(`api/feeds/${id}`);
         setData(res.data);
-        console.log(res);
+        console.log(res.data);
+        console.log(id);
+
+        console.log("잘된다");
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
@@ -49,7 +52,22 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id]);
+  // }, [id]);
+
+  async function test() {
+    try {
+      const res = await instance.get(`api/books/detail/8937460033`);
+      console.log("책 조회 결과", res.data);
+    } catch (e) {
+      console.log(e);
+      alert('Error: 데이터를 불러올 수 없습니다.');
+    } finally {
+      console.log(data);
+    }
+  }
+  test();
+}, [id]);
+
 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
