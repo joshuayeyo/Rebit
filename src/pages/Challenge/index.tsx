@@ -11,7 +11,7 @@ type FilterType =
   | 'ALL';
 
 const ChallengePage = () => {
-  const [filterType, setFilterType] = useState<FilterType>('UPCOMING');
+  const [filterType, setFilterType] = useState<FilterType>('RECRUITING');
   return (
     <>
       <CommonHeader />
