@@ -1,11 +1,12 @@
 import Intro from '@/components/feature/challegeDetail/Intro';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ChallengeData, UserData } from '@/types';
+import { ChallengeData, UserData, VerificationData, Participant } from '@/types';
 import instance from '@/api/instance';
 import CommonHeader from '@/components/common/Header';
 import Verification from '@/components/feature/challegeDetail/Verification';
 import axios from 'axios';
+
 
 const ChallengDetailPage = () => {
   const location = useLocation();
@@ -14,6 +15,8 @@ const ChallengDetailPage = () => {
   const filter = queryParams.get('filter');
   const [challengeData, setChallengeData] = useState<ChallengeData | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [verificationData, setVerificationData] = useState<VerificationData[]| null>([]);
+  const [isParticipating, setIsParticipating] = useState(false);
 
   useEffect(() => {
     async function getChallengeDetailData() {
@@ -26,10 +29,13 @@ const ChallengDetailPage = () => {
         alert('Error: 데이터를 불러올 수 없습니다.');
       }
     }
+
     async function getUserInfo() {
       try {
         const response = await instance.get('/api/members/me');
         setUserData(response.data);
+        console.log("참가자 정보",response.data);
+
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
@@ -37,45 +43,63 @@ const ChallengDetailPage = () => {
           alert(errorMessage);
         }
     }}
+    const VerificationData = () => {
+      async function postVerificationData() {
+        try {
+          const response = await instance.get(`/api/challenges/${id}/verifications`);
+          console.log("챌린지 참여자 인증글 정보",response.data.content);
+          setVerificationData(response.data.content);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+            console.error('Error message:', errorMessage);
+            alert(errorMessage);
+          }
+        }
+      }
+      postVerificationData();
+    };
 
-    // const Verification = () => {
-    //   async function postVerificationData() {
-    //     try {
-    //       const response = await instance.get(`/api/challenges/${id}/participations`);
-    //       console.log(response.data);
-    //     } catch (e) {
-    //       console.log(e);
-    //       alert('챌린지 정보를 가져오는 데 실패했습니다.');
-    //     }
-    //   }
-    //   postVerificationData();
-    // };
-
-    // const Verificationpost = () => {
-    //   async function postVerificationData() {
-    //     try {
-    //       const response = await instance.get(`/api/challenges/${id}/verification`);
-    //       console.log(response.data);
-    //     } catch (e) {
-    //       console.log(e);
-    //       alert('챌린지 정보를 가져오는 데 실패했습니다.');
-    //     }
-    //   }
-    //   postVerificationData();
-    // };
-
-    // Verificationpost();
-    // Verification();  
-    
+    VerificationData();
     getChallengeDetailData();
     getUserInfo();
   }, [setChallengeData]);
+  
+  useEffect(() => {
+    const Participations = () => {
+      async function Data() {
+        try {
+          const response = await instance.get(`/api/challenges/${id}/participations`);
+          console.log("참가자!!!!!!!!!!!!!! 정보",response.data.content);
+          const isUserParticipating = response.data.content.some(
+            (participant:Participant) => participant.memberId === userData?.id
+          );
+          console.log('참여자가 맞나요?',isUserParticipating);
+          setIsParticipating(isUserParticipating);
+        } catch (e) {
+          console.log(e);
+          alert('챌린지 정보를 가져오는 데 실패했습니다.');
+        }
+      }
+      Data();
+    };
+    
+    Participations();
+
+  }, [userData, id]);
 
   return (
     <>
       <CommonHeader />
       <Intro challengeData={challengeData} userData={userData} filter={filter} />
-      {filter === 'IN_PROGRESS' && <Verification data={challengeData} userData={userData} challengeId={id}/>}
+      {filter === 'IN_PROGRESS' && 
+      <Verification 
+      data={challengeData} 
+      userData={userData} 
+      challengeId={id} 
+      verificationData={verificationData}
+      isParticipating={isParticipating
+      }/>}
     </>
   );
 };
