@@ -5,10 +5,10 @@ import { Divider } from '@chakra-ui/react';
 import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
 import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoBookmarkOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner } from '@/components/common/Spinner';
+import useLiked from '@/util/hooks/useLiked';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -29,6 +29,8 @@ type FeedData = {
   author: Author;
   content: string;
   likes: number;
+  isLiked: boolean;
+
 };
 
 const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
@@ -37,6 +39,12 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
   const accessToken = parsedToken?.accessToken;
   const [isLoading, setIsLoading] = useState(true);
+
+  const { isLiked, likes, setLikes, toggleLiked } = useLiked({
+    feedId: id,
+    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLikes: data ? data.likes : 0,
+  });
 
   useEffect(() => {
     async function getContentDetails() {
@@ -48,6 +56,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
         });
         const result = await res;
         setData(result.data);
+        setLikes(res.data.likes);
       } catch (e) {
         alert('Error: 데이터를 불러올 수 없습니다.');
       } finally {
@@ -55,7 +64,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id, setData]);
+  }, [id, setLikes]);
 
   if (isLoading) {
     return <Spinner />;
@@ -88,13 +97,14 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                 <StoryContentDetail content={data.content} />
               </ContentSection>
               <ReactSection>
-                <IconLeft>
-                  <IoIosHeartEmpty size="2rem" />
+              <IconLeft onClick={toggleLiked}>
+                  {isLiked ? (
+                    <IoIosHeartEmpty size="2rem" color="red" />
+                  ) : (
+                    <IoIosHeartEmpty size="2rem" />
+                  )}
                 </IconLeft>
-                <Text>{data?.likes} Likes</Text>
-                <IconRight>
-                  <IoBookmarkOutline size="2rem" />
-                </IconRight>
+                <Text>{likes} Likes</Text>
               </ReactSection>
             </CommonContainer>
           </Right>
