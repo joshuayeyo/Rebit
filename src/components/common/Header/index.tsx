@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Sidebar from '@/components/common/Sidebar';
 import OverlayWrapper from '@/components/common/overlay';
 import { Link } from 'react-router-dom';
-import Homepage from '@/pages/Home';
 
 const CommonHeader = () => {
   const [isOpen, setIsOpen] = useState(false);

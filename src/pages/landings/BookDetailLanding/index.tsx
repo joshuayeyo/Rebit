@@ -62,17 +62,27 @@ export const BookDetailLanding = ({ book }: BookProps) => {
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const Left = styled.div`
-  width: 50%;
-  height: 100%;
-  align-item: center;
-  justify-contents: center;
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    width: 50%;
+    height: 100%;
+  }
 `;
 
 const BookCover = styled.img`
@@ -82,31 +92,59 @@ const BookCover = styled.img`
 `;
 
 const Right = styled.div`
-  width: 50%;
+  width: 100%;
   height: 100%;
-  align-item: center;
-  justify-contents: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    width: 50%;
+    height: 100%;
+  }
 `;
 
 const BookDescriptionWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
   height: 100%;
   background-color: black;
   padding: 3rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    padding: 5rem;
+  }
 `;
 
 const BookTitle = styled.div`
-  margin-top: 5%;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
 `;
 
 const BookDescription = styled.div`
-  margin-top: 3%;
+  font-size: 1.5rem;
+  font-weight: lighter;
+  color: white;
 `;
 
 const BookAuthor = styled.div`
-  margin-top: 70%;
+  position: absolute;
+  bottom: 9%;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
 `;
 
 const PubInfo = styled.div`
-  margin-top: 1%;
+  position: absolute;
+  margin-top: 1rem;
+  bottom: 5%;
+  font-size: 1.5rem;
+  font-weight: lighter;
+  color: white;
 `;

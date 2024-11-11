@@ -6,38 +6,19 @@ import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Spinner } from '@/components/common/Spinner';
 import useLiked from '@/util/hooks/useLiked';
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import instance from '@/api/instance';
+import { FeedData } from '@/types';
 
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   id: number;
-  isLogin: boolean;
-};
-
-type Author = {
-  nickname: string;
-  imageUrl?: string;
-};
-
-type FeedData = {
-  presignedUrl: string;
-  author: Author;
-  content: string;
-  likes: number;
-  isLiked: boolean;
-
 };
 
 const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [isLoading, setIsLoading] = useState(true);
 
   const { isLiked, likes, setLikes, toggleLiked } = useLiked({
@@ -48,17 +29,13 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
 
   useEffect(() => {
     async function getContentDetails() {
-      if (!id || !accessToken) return;
-
       try {
-        const res = await axios.get(`${BASE_URL}/api/feeds/${id}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const res = await instance.get(`/api/feeds/${id}`);
         const result = await res;
         setData(result.data);
         setLikes(res.data.likes);
       } catch (e) {
-        alert('Error: 데이터를 불러올 수 없습니다.');
+        console.log(e)
       } finally {
         setIsLoading(false);
       }
@@ -83,7 +60,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
               <ProfileSection>
                 <CommonAvatar
                   username={data.author.nickname}
-                  imageURL={data.author.nickname}
+                  imageURL={data.author.presignedUrl}
                   size="md"
                 />
                 <Divider
@@ -159,11 +136,6 @@ const IconLeft = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-`;
-const IconRight = styled.button`
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
 `;
 
 const Text = styled.text`

@@ -125,7 +125,10 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                   >
                     <Skeleton isLoaded={!isLoading}>
                       <FeedCard
-                        imageUrl={data.presignedUrl}
+                        imageUrl={
+                          data.type === 'S' || data.type === 'M'
+                          ? data.presignedUrl
+                          : data.book?.cover}
                         content={data.content}
                       />
                     </Skeleton>
@@ -142,7 +145,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="S"
             />
           )}
           {selectedType === 'FB' && (
@@ -150,7 +152,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="FB"
             />
           )}
           {/*{selectedType === 'M' && (*/}
@@ -158,7 +159,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           {/*    isModalOpen={isModalOpen}*/}
           {/*    handleModalClose={handleModalClose}*/}
           {/*    id={selectedId}*/}
-          {/*    type="M"*/}
           {/*  />*/}
           {/*)}*/}
         </>

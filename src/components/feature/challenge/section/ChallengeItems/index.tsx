@@ -23,7 +23,7 @@ type ChallegeItemSectionProps = {
 
 const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen] = useState(false);
 
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

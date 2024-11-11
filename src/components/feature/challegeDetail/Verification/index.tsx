@@ -7,12 +7,11 @@ import styled from '@emotion/styled';
 import { ChallengeData, UserData } from '@/types';
 import { FaMedal } from 'react-icons/fa';
 import Navbar from '../Section/Navbar';
-import instance from '@/api/instance';
 
 type ChallengeProps = {
   data: ChallengeData | null;
   userData: UserData | null;
-  challengeId: Number | null;
+  challengeId: number | null;
 };
 
 type FilterType = 'TODAY' | 'ALL';
@@ -23,7 +22,7 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
   const [isInRange, setIsInRange] = useState<boolean>(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
-  const [filterType, setFilterType] = useState<FilterType>('ALL');
+  const [, setFilterType] = useState<FilterType>('ALL');
   
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
@@ -36,7 +35,7 @@ const Verification = ({ data, userData, challengeId }: ChallengeProps) => {
 
   const challengeStartDate = formatDate(data?.challengeStartDate);
   const challengeEndDate = formatDate(data?.challengeEndDate);
-  const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;
+  // const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;  // 현재 할당되지 않았음. 추후 주석처리 해제 후 사용.
   const todayIndex = differenceInDays(new Date(), challengeStartDate) + 1;
 
   const highlightedDates = eachDayOfInterval({ start: challengeStartDate, end: challengeEndDate });
