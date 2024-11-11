@@ -3,7 +3,7 @@ import { Skeleton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { ChallengeData, UserData } from '@/types';
-import Contents from '../Contents';
+import Contents from '../Section/IntroContents';
 
 type ChallengeIntroProps = {
   challengeData: ChallengeData | null;
