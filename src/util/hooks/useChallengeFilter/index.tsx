@@ -40,6 +40,8 @@ function useChallengeFilter<T extends ChallengeWithDates>(
           return currentDate >= challengeStart && currentDate <= challengeEnd;
         } else if (filter === 'COMPLETED') {
           return currentDate > challengeEnd;
+        } else{
+          return true;
         }
       });
 
