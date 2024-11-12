@@ -40,6 +40,8 @@ function useChallengeFilter<T extends ChallengeWithDates>(
           return currentDate >= challengeStart && currentDate <= challengeEnd;
         } else if (filter === 'COMPLETED') {
           return currentDate > challengeEnd;
+        } else{
+          return true;
         }
       });
 
@@ -49,9 +51,6 @@ function useChallengeFilter<T extends ChallengeWithDates>(
     updateFilteredData();
   }, [challenges, filter]);
 
-  useEffect(() => {
-    console.log(`Filtered data for filter type "${filter}":`, filteredData);
-  }, [filter]);
 
   return { filteredData, setFilter };
 }

@@ -67,6 +67,32 @@ export type ChallengeData = {
   createdAt: string;
 };
 
+export type VerificationData = {
+  id: number;
+  participationId: number;
+  author: {
+    id: number;
+    nickname: string;
+    imageKey: string;
+    presignedUrl: string;
+  };
+  title: string;
+  imageKey: string;
+  presignedUrl: string;
+  content: string;
+  createdAt: string;
+}
+
+export type Participant = {
+  participationId: number;
+  memberId: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  participatedAt: string;
+  entryFee: number;
+}
+
 export type FilterType =
   | 'RECRUITING'
   | 'IN_PROGRESS'
