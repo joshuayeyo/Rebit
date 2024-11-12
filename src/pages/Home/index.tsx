@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Welcome from '@/components/feature/home/Welcome';
-import ChalleneIntro from '@/components/feature/home/Challege';
+import ChallengeIntro from '@/components/feature/home/Challenge';
 import FavoriteIntro from '@/components/feature/home/Favorite';
 import StoryIntro from '@/components/feature/home/Story';
 import Footer from '@/components/feature/home/Footer';
@@ -40,7 +40,7 @@ const Homepage = () => {
     <Wrapper>
       <Welcome />
       <StoryIntro />
-      <ChalleneIntro />
+      <ChallengeIntro />
       <FavoriteIntro />
       <Footer />
     </Wrapper>
