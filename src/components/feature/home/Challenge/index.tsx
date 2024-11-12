@@ -1,23 +1,20 @@
 import styled from '@emotion/styled';
-
-import StorySample from '@/assets/Main/Story.svg?react';
+import ChallengeSample from '@/assets/Main/Challenge.svg?react';
 import LandingItems from '../Section/Landing-items';
-import { useEffect, useState } from 'react';
-import { FeedData } from '@/types';
 import instance from '@/api/instance';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { ChallengeData } from '@/types';
 
-const StoryIntro = () => {
-
-  const [data, setData] = useState<FeedData[]>([]);
+const ChallengeIntro = () => {
+  const [data, setData] = useState<ChallengeData[]>([]);
 
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/feeds`);
+        const res = await instance.get(`/api/challenges` );
         const result = await res.data;
-        const filteredData = result.content.filter((item: FeedData) => item.type === 'S').slice(0, 4);
-        setData(filteredData)
+        setData(result.content.slice(0, 4))
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -30,13 +27,14 @@ const StoryIntro = () => {
       getFeedData();  
   }, []);
 
+
   return (
     <Wrapper>
       <Left>
-        <StorySample />
+        <LandingItems data={data} />
       </Left>
       <Right>
-        <LandingItems data={data} />
+        <ChallengeSample />
       </Right>
     </Wrapper>
   );
@@ -49,13 +47,13 @@ const Wrapper = styled.section`
 `;
 const Left = styled.div`
   width: 50vw;
+  display: flex;
+  align-items: center;
+  justify-contents: center;
+  padding: 50px;
 `;
 const Right = styled.div`
   width: 50vw;
-  display: flex;
-  padding: 50px;
-  align-items: center;
-  justify-contents: center;
+  height: 100vh;
 `;
-
-export default StoryIntro;
+export default ChallengeIntro;
