@@ -2,6 +2,8 @@ import CommonImage from '@/components/common/Image';
 import CommonContainer from '@/components/common/layouts/Container';
 import styled from '@emotion/styled';
 import PointLogo from '@/assets/Mypage/point.svg?react';
+import { useState } from 'react';
+import EditProfileModal from '@/components/feature/modals/users/EditProfile';
 
 type Props = {
   nickname: string;
@@ -11,8 +13,21 @@ type Props = {
 };
 
 const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  // 모달 열려있을 때, 스크롤 금지, 닫았을 때 다시 스크롤
+  if (isEditModalOpen ) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+
   const handleEditProfileButton = () => {
-    alert('프로필을 수정합니다!');
+    setIsEditModalOpen(true);
   };
 
   const handleReloadPoints = () => {
@@ -87,6 +102,9 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
           </UnknownSection>
         </CommonContainer>
       </CommonContainer>
+    {isEditModalOpen && (
+      <EditProfileModal isModalOpen={isEditModalOpen} handleModalClose={handleEditModalClose} />
+    )}
     </Wrapper>
   );
 };
