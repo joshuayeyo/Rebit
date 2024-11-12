@@ -53,7 +53,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
         setIsLoading(false);
       }
     }
-    // 데이터가 비어있거나, 페이지 번호가 바뀔 때만 데이터 불러오기
     if (hasMore && page >= 0) {
       getFeedData();
     }
