@@ -23,9 +23,20 @@ type VerificationSectionProps = {
   setHasMore: (hasMore: boolean) => void;
 };
 
-const VerificationSection = ({ filterType, verificationData, userId, challengeId, page, setPage, hasMore }: VerificationSectionProps) => {
+const VerificationSection = ({
+  filterType,
+  verificationData,
+  userId,
+  challengeId,
+  page,
+  setPage,
+  hasMore,
+}: VerificationSectionProps) => {
   const { isLogin } = useAuth();
-  const { filteredData, setFilter } = useChallengeVerification(verificationData || [], userId || 0);
+  const { filteredData, setFilter } = useChallengeVerification(
+    verificationData || [],
+    userId || 0,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 1.0 }); // Intersection Observer 설정

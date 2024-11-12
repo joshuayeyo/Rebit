@@ -11,7 +11,7 @@ type ChallengeIntroProps = {
   filter: string | null;
 };
 
-const Intro = ({ challengeData, filter, userData}: ChallengeIntroProps) => {
+const Intro = ({ challengeData, filter, userData }: ChallengeIntroProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -34,7 +34,11 @@ const Intro = ({ challengeData, filter, userData}: ChallengeIntroProps) => {
         </motion.div>
       </Skeleton>
       <Right>
-        <Contents challengeData={challengeData} filter={filter} userData={userData}/>
+        <Contents
+          challengeData={challengeData}
+          filter={filter}
+          userData={userData}
+        />
       </Right>
     </Wrapper>
   );

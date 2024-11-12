@@ -40,7 +40,7 @@ export type UserData = {
   presignedUrl: string;
   bio: string;
   email: string;
-  role: "ROLE_USER";
+  role: 'ROLE_USER';
   point: number;
 };
 
@@ -81,7 +81,7 @@ export type VerificationData = {
   presignedUrl: string;
   content: string;
   createdAt: string;
-}
+};
 
 export type Participant = {
   participationId: number;
@@ -91,7 +91,7 @@ export type Participant = {
   presignedUrl: string;
   participatedAt: string;
   entryFee: number;
-}
+};
 
 export type FilterType =
   | 'RECRUITING'

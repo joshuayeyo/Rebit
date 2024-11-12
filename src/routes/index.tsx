@@ -30,8 +30,8 @@ const router = createBrowserRouter([
   {
     path: RouterPath.bookdetails,
     element: <BookDetailPage />,
-   },
-   {
+  },
+  {
     path: RouterPath.challengeDetail,
     element: <ChallengDetailPage />,
   },

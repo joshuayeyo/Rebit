@@ -39,7 +39,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       );
       return;
     }
-  
+
     if (filter === 'UPCOMING') {
       alert('아직 모집기간이 아닙니다.');
     } else if (filter === 'RECRUITING') {
@@ -58,7 +58,9 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
             alert('참가 신청이 완료되었습니다.');
           } catch (error) {
             if (axios.isAxiosError(error)) {
-              const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+              const errorMessage =
+                error.response?.data?.message ||
+                '알 수 없는 오류가 발생했습니다.';
               console.error('Error message:', errorMessage);
               alert(errorMessage);
             }
@@ -68,7 +70,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       }
     }
   };
-  
+
   return (
     <Wrapper>
       <TagWrapper>

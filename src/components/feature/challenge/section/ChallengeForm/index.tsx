@@ -62,19 +62,19 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
         ...formData,
         challengeStartDate: format(
           formData.challengeStartDate,
-          "yyyy-MM-dd'T'00:00:00"
+          "yyyy-MM-dd'T'00:00:00",
         ),
         challengeEndDate: format(
           formData.challengeEndDate,
-          "yyyy-MM-dd'T'23:59:59"
+          "yyyy-MM-dd'T'23:59:59",
         ),
         recruitmentStartDate: format(
           formData.recruitmentStartDate,
-          "yyyy-MM-dd'T'00:00:00"
+          "yyyy-MM-dd'T'00:00:00",
         ),
         recruitmentEndDate: format(
           formData.recruitmentEndDate,
-          "yyyy-MM-dd'T'23:59:59"
+          "yyyy-MM-dd'T'23:59:59",
         ),
       };
       console.log('Response:', formattedData);
@@ -86,13 +86,11 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
       if (axios.isAxiosError(error)) {
         console.error(
           'Error sending form data:',
-          error.response ? error.response.data : error.message
+          error.response ? error.response.data : error.message,
         );
       }
     }
   };
-  
-
 
   return (
     <StyledFormContainer>

@@ -40,11 +40,11 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
         const res = await instance.get(`/api/challenges`, {
           params: { page: page },
         });
-        
+
         const result = await res.data;
         console.log(result);
 
-        if (result.content && result.content.length > 0){
+        if (result.content && result.content.length > 0) {
           setData((prevData) => [...prevData, ...result.content]);
         } else {
           setHasMore(false);
@@ -53,7 +53,8 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
         setIsLoading(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          const errorMessage =
+            error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
           console.error('Error message:', errorMessage);
           alert(errorMessage);
         }

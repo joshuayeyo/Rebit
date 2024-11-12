@@ -10,15 +10,20 @@ interface ChallengeWithCreator {
   author: author;
 }
 
-
-function useChallengeVerification<T extends ChallengeWithCreator>( challenges: T[] | null, userId: number, initialFilter: VerificationFilterType = 'ALL') {
+function useChallengeVerification<T extends ChallengeWithCreator>(
+  challenges: T[] | null,
+  userId: number,
+  initialFilter: VerificationFilterType = 'ALL',
+) {
   const [filter, setFilter] = useState<VerificationFilterType>(initialFilter);
-  const [filteredData, setFilteredData] = useState<T[]>(Array.isArray(challenges) ? challenges : []);
+  const [filteredData, setFilteredData] = useState<T[]>(
+    Array.isArray(challenges) ? challenges : [],
+  );
 
   useEffect(() => {
     const updateFilteredData = () => {
       if (!challenges || !Array.isArray(challenges)) {
-        console.log("challenges가 배열이 아닙니다.");
+        console.log('challenges가 배열이 아닙니다.');
         return;
       }
       const filtered = challenges.filter((challenge) => {
@@ -33,11 +38,9 @@ function useChallengeVerification<T extends ChallengeWithCreator>( challenges: T
     updateFilteredData();
   }, [challenges, filter, userId]);
 
-  useEffect(() => {
-  }, [filter, filteredData]);
+  useEffect(() => {}, [filter, filteredData]);
 
   return { filteredData, setFilter };
 }
-
 
 export default useChallengeVerification;

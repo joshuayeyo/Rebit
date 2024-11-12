@@ -40,7 +40,7 @@ export type UserData = {
   presignedUrl: string;
   bio: string;
   email: string;
-  role: "ROLE_USER";
+  role: 'ROLE_USER';
   point: number;
 };
 

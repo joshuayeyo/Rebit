@@ -53,14 +53,14 @@ const Tagline = styled.div`
   position: absolute;
   top: 6%;
   right: 0%;
-  background-color: #FF0080;
+  background-color: #ff0080;
   color: white;
   padding: 5px 10px;
   font-size: 1.4vw;
   border-radius: 5px;
   font-weight: bold;
   pointer-events: none;
-  user-select: none; 
+  user-select: none;
 `;
 
 const Letter = styled(motion.div)<{ custom: number }>`
@@ -80,8 +80,19 @@ const letterVariants = {
 };
 
 // MotionLetter 컴포넌트 정의
-const MotionLetter = ({ custom, children }: { custom: number; children: React.ReactNode }) => (
-  <Letter variants={letterVariants} initial="hidden" animate="visible" custom={custom}>
+const MotionLetter = ({
+  custom,
+  children,
+}: {
+  custom: number;
+  children: React.ReactNode;
+}) => (
+  <Letter
+    variants={letterVariants}
+    initial="hidden"
+    animate="visible"
+    custom={custom}
+  >
     {children}
   </Letter>
 );

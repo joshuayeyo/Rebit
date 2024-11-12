@@ -6,7 +6,7 @@ type Props = {
   verificationData: VerificationData | null;
 };
 
-const VerificaitionCard = ({verificationData}: Props) => {
+const VerificaitionCard = ({ verificationData }: Props) => {
   return (
     <Wrapper>
       <ImageContainer>
