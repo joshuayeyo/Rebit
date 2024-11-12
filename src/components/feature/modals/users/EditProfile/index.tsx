@@ -37,7 +37,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     width: 100%;
     height: calc(100% - 2rem);
-    margin-top: 20px;
 `;
 
 const ImageContainer = styled.div`
