@@ -26,6 +26,7 @@ export type FeedData = {
   fullReview: string;
   likes: number;
   isLiked: boolean;
+  type: string;
 };
 
 export type AuthorData = {
