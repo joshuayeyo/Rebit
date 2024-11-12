@@ -9,7 +9,7 @@ type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   setIsModalOpen: (visible: boolean) => void;
-  challengeId: Number | null;
+  challengeId: number | null;
 };
 
 const PostVerificationModal = ({
@@ -53,7 +53,7 @@ const PostVerificationModal = ({
     e.preventDefault();
     async function postVerificationData() {
       try {
-        const response = await instance.post(
+        await instance.post(
           `/api/challenges/${challengeId}/verifications`,
           formData,
         );

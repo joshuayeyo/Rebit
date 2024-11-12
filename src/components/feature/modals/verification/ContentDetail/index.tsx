@@ -137,8 +137,4 @@ const IconRight = styled.button`
   margin-left: auto;
 `;
 
-const Text = styled.text`
-  font-size: 1rem;
-  margin-left: 0.5rem;
-`;
 export default VerificationDetailModal;
