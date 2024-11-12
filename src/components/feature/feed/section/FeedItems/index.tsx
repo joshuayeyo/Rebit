@@ -131,10 +131,10 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                         }
                         content={
                           data.type === 'S'
-                          ? data.content
-                          : data.type === 'FB'
-                          ? data.briefReview
-                          : ''
+                            ? data.content
+                            : data.type === 'FB'
+                              ? data.briefReview
+                              : ''
                         }
                       />
                     </Skeleton>
