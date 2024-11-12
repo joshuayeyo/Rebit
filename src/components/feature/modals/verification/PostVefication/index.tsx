@@ -18,9 +18,6 @@ const PostVerificationModal = ({
   setIsModalOpen,
   challengeId,
 }: Props) => {
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [imageKey, setImageKey] = useState('');
 
   const [formData, setFormData] = useState({
@@ -77,7 +74,6 @@ const PostVerificationModal = ({
             <Left>
               <ImageContainer>
                 <UploadImage
-                  accessToken={accessToken}
                   setImageKey={setImageKey}
                   type="CHALLENGE_VERIFICATION"
                 />
