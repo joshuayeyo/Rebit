@@ -12,9 +12,9 @@ const ChallengeIntro = () => {
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/challenges` );
+        const res = await instance.get(`/api/challenges`);
         const result = await res.data;
-        setData(result.content.slice(0, 4))
+        setData(result.content.slice(0, 4));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -24,9 +24,8 @@ const ChallengeIntro = () => {
         }
       }
     }
-      getFeedData();  
+    getFeedData();
   }, []);
-
 
   return (
     <Wrapper>

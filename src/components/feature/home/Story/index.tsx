@@ -8,7 +8,6 @@ import instance from '@/api/instance';
 import axios from 'axios';
 
 const StoryIntro = () => {
-
   const [data, setData] = useState<FeedData[]>([]);
 
   useEffect(() => {
@@ -16,8 +15,10 @@ const StoryIntro = () => {
       try {
         const res = await instance.get(`/api/feeds`);
         const result = await res.data;
-        const filteredData = result.content.filter((item: FeedData) => item.type === 'S').slice(0, 4);
-        setData(filteredData)
+        const filteredData = result.content
+          .filter((item: FeedData) => item.type === 'S')
+          .slice(0, 4);
+        setData(filteredData);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -27,7 +28,7 @@ const StoryIntro = () => {
         }
       }
     }
-      getFeedData();  
+    getFeedData();
   }, []);
 
   return (

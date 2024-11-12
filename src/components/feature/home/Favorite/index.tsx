@@ -15,8 +15,10 @@ const FavoriteIntro = () => {
       try {
         const res = await instance.get(`/api/feeds`);
         const result = await res.data;
-        const filteredData = result.content.filter((item: FeedData) => item.type === 'FB').slice(0, 4);
-        setData(filteredData)
+        const filteredData = result.content
+          .filter((item: FeedData) => item.type === 'FB')
+          .slice(0, 4);
+        setData(filteredData);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -26,7 +28,7 @@ const FavoriteIntro = () => {
         }
       }
     }
-      getFeedData();  
+    getFeedData();
   }, []);
 
   return (
