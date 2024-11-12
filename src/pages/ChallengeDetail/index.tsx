@@ -18,6 +18,9 @@ const ChallengDetailPage = () => {
   const [verificationData, setVerificationData] = useState<VerificationData[]| null>([]);
   const [isParticipating, setIsParticipating] = useState(false);
 
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     async function getChallengeDetailData() {
       try {
@@ -41,11 +44,20 @@ const ChallengDetailPage = () => {
           alert(errorMessage);
         }
     }}
+
     const VerificationData = () => {
+      if (!hasMore) return;
       async function postVerificationData() {
         try {
-          const response = await instance.get(`/api/challenges/${id}/verifications`);
-          setVerificationData(response.data.content);
+          const response = await instance.get(`/api/challenges/${id}/verifications`,{
+            params: { page: page },
+          });
+          const result = await response.data;
+          if(result.content && result.content.length > 0) {
+            setVerificationData((prevData) => [...(prevData || []), ...result.content]);
+          } else {
+            setHasMore(false);
+          }
         } catch (error) {
           if (axios.isAxiosError(error)) {
             const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
@@ -54,13 +66,15 @@ const ChallengDetailPage = () => {
           }
         }
       }
-      postVerificationData();
-    };
+      if (hasMore && page >= 0) {
+        postVerificationData();
+      }
+    }
 
     VerificationData();
     getChallengeDetailData();
     getUserInfo();
-  }, [setChallengeData]);
+  }, [page, hasMore, id]);
   
   useEffect(() => {
     const Participations = () => {
@@ -93,8 +107,12 @@ const ChallengDetailPage = () => {
       userData={userData} 
       challengeId={id} 
       verificationData={verificationData}
-      isParticipating={isParticipating
-      }/>}
+      isParticipating={isParticipating}
+      page={page}
+      setPage={setPage}
+      hasMore={hasMore}
+      setHasMore={setHasMore}
+      />}
     </>
   );
 };
