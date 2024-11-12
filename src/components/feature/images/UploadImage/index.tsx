@@ -1,29 +1,27 @@
 import { Button } from '@/components/common/Button';
 import CommonImage from '@/components/common/Image';
 import styled from '@emotion/styled';
-import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 import defaultImage from '@/assets/defaultImage.png';
+import instance from '@/api/instance';
+import axios from 'axios';
 
 type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
 
 type Props = {
-  accessToken: string;
   setImageKey: React.Dispatch<React.SetStateAction<string>>;
   type: UploadType;
 };
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
-const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
+const UploadImage = ({ setImageKey, type }: Props) => {
   const [preview, setPreview] = useState<string>(defaultImage);
   const uploadImage = useRef<HTMLInputElement | null>(null);
   const [presignedUrl, setPresignedUrl] = useState('');
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (presignedUrl && file) {
-      const extension = file.name.split('.').pop().toLowerCase();
+      const extension = file.name.split('.').pop()?.toLowerCase();
       async function putS3() {
         try {
           await axios
@@ -58,14 +56,8 @@ const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
 
     async function getS3() {
       try {
-        const res = await axios.get(
-          `${BASE_URL}/api/s3/urls/upload?type=${type}&filename=${fileName}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
+        const res = await instance.get(
+          `api/s3/urls/upload?type=${type}&filename=${fileName}`);
         const result = await res.data;
         setPresignedUrl(result.presignedUrl);
         setImageKey(result.key);
@@ -108,6 +100,7 @@ const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
           size={'medium'}
           theme={'outline'}
           style={{ width: '150px' }}
+          type="button"
         >
           이미지 업로드
         </Button>
@@ -116,6 +109,7 @@ const UploadImage = ({ accessToken, setImageKey, type }: Props) => {
           size={'medium'}
           theme={'outline'}
           style={{ width: '150px' }}
+          type="button"
         >
           이미지 삭제
         </Button>

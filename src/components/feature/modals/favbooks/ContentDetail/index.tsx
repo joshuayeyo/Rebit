@@ -6,29 +6,12 @@ import { Divider } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
-import { BookData } from '@/types';
+import { FeedData } from '@/types';
 
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   id: number;
-  type: string;
-};
-
-type Author = {
-  nickname: string;
-  imageUrl?: string;
-  presignedUrl: string;
-};
-
-type FeedData = {
-  presignedUrl: string;
-  author: Author;
-  book: BookData;
-  briefReview: string;
-  fullReview: string;
-  likes: number;
-  liked: boolean;
 };
 
 const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
@@ -40,16 +23,9 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       try {
         const res = await instance.get(`api/feeds/${id}`);
         setData(res.data);
-        console.log(res.data);
-        console.log(id);
-
-        console.log("잘된다");
       } catch (e) {
         console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        console.log(data);
-      }
+      } 
     }
     getContentDetails();
   // }, [id]);

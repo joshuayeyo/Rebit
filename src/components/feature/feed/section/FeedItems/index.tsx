@@ -35,7 +35,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     async function getFeedData() {
       if (!hasMore) return;
       try {
-        setIsLoading(true);
         const res = await instance.get(`/api/feeds`, {
           params: { page: page },
         });
@@ -104,12 +103,12 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     <Wrapper>
       <InfiniteScroll
         dataLength={filteredData.length}
-        next={fetchData} // 새로운 데이터를 불러오는 함수
-        hasMore={hasMore} // 더 불러올 데이터가 있는지 여부
-        loader={<></>} // 로딩 중 표시할 내용
-        endMessage={<></>} // 더 이상 데이터가 없을 때 메시지
+        next={fetchData}
+        hasMore={hasMore} 
+        loader={<></>} 
+        endMessage={<></>}
       >
-        <CommonGrid columns={4} gap={50}>
+        <CommonGrid columns={4} gap={50} style={{ overflow: 'hidden' }}>
           <AnimatePresence>
             {Array.isArray(filteredData) &&
               filteredData.map((data, index) => (
@@ -125,7 +124,10 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                   >
                     <Skeleton isLoaded={!isLoading}>
                       <FeedCard
-                        imageUrl={data.presignedUrl}
+                        imageUrl={
+                          data.type === 'S' || data.type === 'M'
+                          ? data.presignedUrl
+                          : data.book?.cover}
                         content={data.content}
                       />
                     </Skeleton>
@@ -142,7 +144,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="S"
             />
           )}
           {selectedType === 'FB' && (
@@ -150,7 +151,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
-              type="FB"
             />
           )}
           {/*{selectedType === 'M' && (*/}
@@ -158,7 +158,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           {/*    isModalOpen={isModalOpen}*/}
           {/*    handleModalClose={handleModalClose}*/}
           {/*    id={selectedId}*/}
-          {/*    type="M"*/}
           {/*  />*/}
           {/*)}*/}
         </>

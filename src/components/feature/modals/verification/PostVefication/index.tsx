@@ -150,8 +150,6 @@ const Right = styled.section`
   margin-left: 2rem;
 `;
 
-
-
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;

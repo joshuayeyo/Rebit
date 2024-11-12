@@ -5,66 +5,48 @@ import { Divider } from '@chakra-ui/react';
 import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
 import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoBookmarkOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Spinner } from '@/components/common/Spinner';
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import useLiked from '@/util/hooks/useLiked';
+import instance from '@/api/instance';
+import { FeedData } from '@/types';
 
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   id: number;
-  isLogin: boolean;
-};
-
-type Author = {
-  nickname: string;
-  imageUrl?: string;
-};
-
-type FeedData = {
-  presignedUrl: string;
-  author: Author;
-  content: string;
-  likes: number;
 };
 
 const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [isLoading, setIsLoading] = useState(true);
+
+  const { isLiked, likes, setLikes, toggleLiked } = useLiked({
+    feedId: id,
+    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLikes: data ? data.likes : 0,
+  });
 
   useEffect(() => {
     async function getContentDetails() {
-      if (!id || !accessToken) return;
-
       try {
-        const res = await axios.get(`${BASE_URL}/api/feeds/${id}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        console.log(res);
+        const res = await instance.get(`/api/feeds/${id}`);
         const result = await res;
         setData(result.data);
-        console.log(import.meta.env);
+        setLikes(res.data.likes);
       } catch (e) {
-        console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
+        console.log(e)
       } finally {
         setIsLoading(false);
       }
     }
     getContentDetails();
-  }, [id, setData]);
+  }, [id, setLikes]);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  console.log(data);
 
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
@@ -78,7 +60,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
               <ProfileSection>
                 <CommonAvatar
                   username={data.author.nickname}
-                  imageURL={data.author.nickname}
+                  imageURL={data.author.presignedUrl}
                   size="md"
                 />
                 <Divider
@@ -92,13 +74,14 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                 <StoryContentDetail content={data.content} />
               </ContentSection>
               <ReactSection>
-                <IconLeft>
-                  <IoIosHeartEmpty size="2rem" />
+              <IconLeft onClick={toggleLiked}>
+                  {isLiked ? (
+                    <IoIosHeartEmpty size="2rem" color="red" />
+                  ) : (
+                    <IoIosHeartEmpty size="2rem" />
+                  )}
                 </IconLeft>
-                <Text>{data?.likes} Likes</Text>
-                <IconRight>
-                  <IoBookmarkOutline size="2rem" />
-                </IconRight>
+                <Text>{likes} Likes</Text>
               </ReactSection>
             </CommonContainer>
           </Right>
@@ -153,11 +136,6 @@ const IconLeft = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-`;
-const IconRight = styled.button`
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
 `;
 
 const Text = styled.text`

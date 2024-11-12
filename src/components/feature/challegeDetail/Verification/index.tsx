@@ -34,8 +34,6 @@ const Verification = ({ data, userData, challengeId, verificationData, isPartici
   const { filteredData } = useChallengeVerification(verificationData || [], userData?.id || 0, 'MY_VERIFICATION');
   const [filteredDataCount, setFilteredDataCount] = useState(0);
 
-  console.log("참여여부",isParticipating);
-
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
     const dateObject = new Date(date);

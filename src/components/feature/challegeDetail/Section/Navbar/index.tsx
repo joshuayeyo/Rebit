@@ -11,7 +11,7 @@ type NavbarProps = {
   handleModalClose: () => void;
   isModalOpen: boolean;
   setIsModalOpen: (visible: boolean) => void;
-  challengeId: Number | null;
+  challengeId: number | null;
   isParticipating: boolean;
 };
 
