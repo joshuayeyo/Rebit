@@ -9,14 +9,15 @@ type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
   setIsModalOpen: (visible: boolean) => void;
-  challengeId: Number | null;
+  challengeId: number | null;
 };
 
-const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, challengeId }: Props) => {
-
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
+const PostVerificationModal = ({
+  isModalOpen,
+  handleModalClose,
+  setIsModalOpen,
+  challengeId,
+}: Props) => {
   const [imageKey, setImageKey] = useState('');
 
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, 
     imageKey: '',
     content: '',
   });
-  
+
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
@@ -49,7 +50,10 @@ const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, 
     e.preventDefault();
     async function postVerificationData() {
       try {
-        const response = await instance.post(`/api/challenges/${challengeId}/verifications`, formData);
+        await instance.post(
+          `/api/challenges/${challengeId}/verifications`,
+          formData,
+        );
         alert('데이터가 성공적으로 들어갔습니다.');
         setIsModalOpen(false);
       } catch (e) {
@@ -70,7 +74,6 @@ const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, 
             <Left>
               <ImageContainer>
                 <UploadImage
-                  accessToken={accessToken}
                   setImageKey={setImageKey}
                   type="CHALLENGE_VERIFICATION"
                 />
@@ -99,7 +102,6 @@ const PostVerificationModal = ({ isModalOpen, handleModalClose, setIsModalOpen, 
                   />
                 </TextAreaField>
               </StyledForm>
-
             </Right>
           </FlexContainer>
           <SubmitButton>
@@ -197,7 +199,6 @@ const TextAreaField = styled.div`
     resize: none;
   }
 `;
-
 
 const SubmitButton = styled.div`
   display: flex;

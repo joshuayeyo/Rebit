@@ -46,7 +46,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
             content: storyContent,
           })
           .then((response) => {
-            console.log(response)
+            console.log(response);
           });
       } catch (e) {
         console.log(e);
@@ -80,10 +80,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           <FlexContainer>
             <Left>
               <ImageContainer>
-                <UploadImage
-                  setImageKey={setImageKey}
-                  type="FEED"
-                />
+                <UploadImage setImageKey={setImageKey} type="FEED" />
               </ImageContainer>
             </Left>
             <Right>

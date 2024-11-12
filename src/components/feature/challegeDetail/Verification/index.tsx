@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import { eachDayOfInterval, isWithinInterval, differenceInDays} from 'date-fns';
+import {
+  eachDayOfInterval,
+  isWithinInterval,
+  differenceInDays,
+} from 'date-fns';
 import styled from '@emotion/styled';
 import { ChallengeData, UserData, VerificationData } from '@/types';
 import { FaMedal } from 'react-icons/fa';
 import Navbar from '../Section/Navbar';
 import VerificationSection from '../Section/DetailItems';
 import useChallengeVerification from '@/util/hooks/useVerificationFilter';
-
 
 type ChallengeProps = {
   data: ChallengeData | null;
@@ -25,13 +28,26 @@ type ChallengeProps = {
 
 type FilterType = 'MY_VERIFICATION' | 'ALL';
 
-
-const Verification = ({ data, userData, challengeId, verificationData, isParticipating, page, setPage, hasMore, setHasMore }: ChallengeProps) => {
+const Verification = ({
+  data,
+  userData,
+  challengeId,
+  verificationData,
+  isParticipating,
+  page,
+  setPage,
+  hasMore,
+  setHasMore,
+}: ChallengeProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isInRange, setIsInRange] = useState<boolean>(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [filterType, setFilterType] = useState<FilterType>('ALL');
-  const { filteredData } = useChallengeVerification(verificationData || [], userData?.id || 0, 'MY_VERIFICATION');
+  const { filteredData } = useChallengeVerification(
+    verificationData || [],
+    userData?.id || 0,
+    'MY_VERIFICATION',
+  );
   const [filteredDataCount, setFilteredDataCount] = useState(0);
 
   function formatDate(date: string | null | undefined): string {
@@ -41,20 +57,26 @@ const Verification = ({ data, userData, challengeId, verificationData, isPartici
   }
   const handlePostModalClose = () => {
     setIsPostModalOpen(false);
-  }; 
+  };
 
   const challengeStartDate = formatDate(data?.challengeStartDate);
   const challengeEndDate = formatDate(data?.challengeEndDate);
   const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;
   const todayIndex = differenceInDays(new Date(), challengeStartDate) + 1;
-  const highlightedDates = eachDayOfInterval({ start: challengeStartDate, end: challengeEndDate });
+  const highlightedDates = eachDayOfInterval({
+    start: challengeStartDate,
+    end: challengeEndDate,
+  });
   const progressPercentage = (filteredDataCount / totalDays) * 100;
 
   useEffect(() => {
     setFilteredDataCount(filteredData.length);
     if (selectedDate) {
       setIsInRange(
-        isWithinInterval(selectedDate, { start: challengeStartDate, end: challengeEndDate })
+        isWithinInterval(selectedDate, {
+          start: challengeStartDate,
+          end: challengeEndDate,
+        }),
       );
     } else {
       setIsInRange(false);
@@ -65,29 +87,32 @@ const Verification = ({ data, userData, challengeId, verificationData, isPartici
     setSelectedDate(date);
   };
 
-
   return (
     <Wrapper>
       <HeaderWrapper>
-      <ProfileContainer isVisible={isParticipating}>
-        <ProfileWrapper>
-          <Profile src={userData?.presignedUrl} alt="프로필 사진" />  
-          <AuthorInfo>
-            <Author>{userData?.nickname}</Author>
-            <Bio>{userData?.bio}</Bio>
-          </AuthorInfo>
-        </ProfileWrapper>
-        <MedalWrapper>
-          <FaMedalStyled size={45} />
-          <ProgerssWrapper>
-            <span>{filteredDataCount}/{totalDays}</span>
-            <ProgressBar progress={progressPercentage} />
-          </ProgerssWrapper>
-        </MedalWrapper>
-      </ProfileContainer>
+        <ProfileContainer isVisible={isParticipating}>
+          <ProfileWrapper>
+            <Profile src={userData?.presignedUrl} alt="프로필 사진" />
+            <AuthorInfo>
+              <Author>{userData?.nickname}</Author>
+              <Bio>{userData?.bio}</Bio>
+            </AuthorInfo>
+          </ProfileWrapper>
+          <MedalWrapper>
+            <FaMedalStyled size={45} />
+            <ProgerssWrapper>
+              <span>
+                {filteredDataCount}/{totalDays}
+              </span>
+              <ProgressBar progress={progressPercentage} />
+            </ProgerssWrapper>
+          </MedalWrapper>
+        </ProfileContainer>
         <TitleWrapper>
           <Title>Proof</Title>
-          <Period>{challengeStartDate} ~ {challengeEndDate}</Period>
+          <Period>
+            {challengeStartDate} ~ {challengeEndDate}
+          </Period>
           <Today>#Day{todayIndex}</Today>
         </TitleWrapper>
         <DatePickerWrapper isInRange={isInRange}>
@@ -100,28 +125,26 @@ const Verification = ({ data, userData, challengeId, verificationData, isPartici
           />
         </DatePickerWrapper>
       </HeaderWrapper>
-      <Navbar 
+      <Navbar
         setFilterType={setFilterType}
         isModalOpen={isPostModalOpen}
         setIsModalOpen={setIsPostModalOpen}
         handleModalClose={handlePostModalClose}
         challengeId={challengeId}
         isParticipating={isParticipating}
-        />
-      <VerificationSection 
-      filterType={filterType} 
-      verificationData={verificationData || []} 
-      userId={userData?.id ?? 0} 
-      challengeId={challengeId}
-      page={page}
-      setPage={setPage}
-      hasMore={hasMore}
-      setHasMore={setHasMore}
+      />
+      <VerificationSection
+        filterType={filterType}
+        verificationData={verificationData || []}
+        userId={userData?.id ?? 0}
+        challengeId={challengeId}
+        page={page}
+        setPage={setPage}
+        hasMore={hasMore}
+        setHasMore={setHasMore}
       ></VerificationSection>
     </Wrapper>
   );
-
-
 };
 
 export default Verification;
@@ -133,7 +156,7 @@ const Wrapper = styled.section`
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  padding: 5rem 7rem; 
+  padding: 5rem 7rem;
   background-color: white;
   display: flex;
   align-items: center;
@@ -160,8 +183,7 @@ const ProfileWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-
-`
+`;
 
 const Profile = styled.img`
   border-radius: 50%;
@@ -206,7 +228,7 @@ const ProgerssWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   margin-left: 0.5rem;
-`
+`;
 
 const FaMedalStyled = styled(FaMedal)`
   margin-right: 0.5rem;
@@ -221,7 +243,7 @@ const ProgressBar = styled.div<{ progress: number }>`
   margin-top: 0.5rem;
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     height: 100%;
     width: ${(props) => props.progress}%; /* 달성 비율에 따라 조정 */
@@ -229,8 +251,6 @@ const ProgressBar = styled.div<{ progress: number }>`
     transition: width 0.3s ease; /* 애니메이션 효과 추가 */
   }
 `;
-;
-
 const TitleWrapper = styled.div`
   position: absolute;
   top: 50%;
@@ -240,7 +260,6 @@ const TitleWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   text-align: center;
-
 `;
 
 const Title = styled.h1`
@@ -248,13 +267,12 @@ const Title = styled.h1`
   font-weight: bold;
 `;
 
-
 const Period = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   text-decoration: underline 3px solid black;
   color: rgba(245, 175, 25, 0.6);
-  -webkit-text-stroke: 1px black; 
+  -webkit-text-stroke: 1px black;
 `;
 
 const Today = styled.h1`
@@ -262,7 +280,7 @@ const Today = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   color: rgba(245, 175, 25, 0.6);
-`
+`;
 
 const DatePickerWrapper = styled.div<{ isInRange: boolean }>`
   padding: 0.5rem;
@@ -281,12 +299,12 @@ const DatePickerWrapper = styled.div<{ isInRange: boolean }>`
   }
 
   .react-datepicker__day--highlighted {
-    background-color: #FFEB3B;
+    background-color: #ffeb3b;
     border-radius: 50%;
     color: white;
 
     &:hover {
-      background-color: #FDD835;
+      background-color: #fdd835;
       color: white;
       border-radius: 50%;
     }

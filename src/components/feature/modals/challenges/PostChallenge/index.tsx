@@ -15,9 +15,6 @@ const PostChallengyModal = ({
   handleModalClose,
   setIsModalOpen,
 }: Props) => {
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [imageKey, setImageKey] = useState('');
 
   return (
@@ -28,11 +25,7 @@ const PostChallengyModal = ({
     >
       <Container>
         <ImageContainer>
-          <UploadImage
-            accessToken={accessToken}
-            setImageKey={setImageKey}
-            type="CHALLENGE"
-          />
+          <UploadImage setImageKey={setImageKey} type="CHALLENGE" />
         </ImageContainer>
         <FormContainer>
           <ChallengeForm imageKey={imageKey} setIsModalOpen={setIsModalOpen} />

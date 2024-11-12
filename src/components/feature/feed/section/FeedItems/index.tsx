@@ -104,8 +104,8 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
       <InfiniteScroll
         dataLength={filteredData.length}
         next={fetchData}
-        hasMore={hasMore} 
-        loader={<></>} 
+        hasMore={hasMore}
+        loader={<></>}
         endMessage={<></>}
       >
         <CommonGrid columns={4} gap={50} style={{ overflow: 'hidden' }}>
@@ -126,8 +126,9 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                       <FeedCard
                         imageUrl={
                           data.type === 'S' || data.type === 'M'
-                          ? data.presignedUrl
-                          : data.book?.cover}
+                            ? data.presignedUrl
+                            : data.book?.cover
+                        }
                         content={data.content}
                       />
                     </Skeleton>

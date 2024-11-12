@@ -14,16 +14,23 @@ import { VerificationData } from '@/types';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
-  challengeId: number |null;
+  challengeId: number | null;
   verificationId: number;
-}
-const VerificationDetailModal = ({isModalOpen,handleModalClose,challengeId, verificationId}: Props) =>{
+};
+const VerificationDetailModal = ({
+  isModalOpen,
+  handleModalClose,
+  challengeId,
+  verificationId,
+}: Props) => {
   const [data, setData] = useState<VerificationData | null>(null);
 
   useEffect(() => {
     async function getContentDetails() {
       try {
-        const res = await instance.get(`/api/challenges/${challengeId}/verifications/${verificationId}`);
+        const res = await instance.get(
+          `/api/challenges/${challengeId}/verifications/${verificationId}`,
+        );
         const result = await res;
         setData(result.data);
       } catch (e) {
@@ -78,7 +85,6 @@ const VerificationDetailModal = ({isModalOpen,handleModalClose,challengeId, veri
       )}
     </CommonModal>
   );
-  
 };
 
 const Left = styled.section`
@@ -131,8 +137,4 @@ const IconRight = styled.button`
   margin-left: auto;
 `;
 
-const Text = styled.text`
-  font-size: 1rem;
-  margin-left: 0.5rem;
-`;
 export default VerificationDetailModal;

@@ -35,7 +35,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
         setData(result.data);
         setLikes(res.data.likes);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       } finally {
         setIsLoading(false);
       }
@@ -46,7 +46,6 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   if (isLoading) {
     return <Spinner />;
   }
-
 
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
@@ -74,7 +73,7 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                 <StoryContentDetail content={data.content} />
               </ContentSection>
               <ReactSection>
-              <IconLeft onClick={toggleLiked}>
+                <IconLeft onClick={toggleLiked}>
                   {isLiked ? (
                     <IoIosHeartEmpty size="2rem" color="red" />
                   ) : (

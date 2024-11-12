@@ -9,9 +9,13 @@ type NavbarProps = {
 };
 
 const Navbar = ({ setFilterType }: NavbarProps) => {
-  const [selectedFilter, setSelectedFilter] = useState<'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL'>('RECRUITING');
+  const [selectedFilter, setSelectedFilter] = useState<
+    'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL'
+  >('RECRUITING');
 
-  const handleButtonClick = (filterType: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL') => {
+  const handleButtonClick = (
+    filterType: 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL',
+  ) => {
     setSelectedFilter(filterType);
     setFilterType(filterType);
   };

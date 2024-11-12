@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
 import { Flex, Box } from '@chakra-ui/react';
-import { TbPencilPlus } from "react-icons/tb";
+import { TbPencilPlus } from 'react-icons/tb';
 import { useAuth } from '@/provider/Auth';
 import PostVerificationModal from '@/components/feature/modals/verification/PostVefication';
 
 type NavbarProps = {
-  setFilterType: (
-    filterType: 'MY_VERIFICATION' | 'ALL',
-  ) => void;
+  setFilterType: (filterType: 'MY_VERIFICATION' | 'ALL') => void;
   handleModalClose: () => void;
   isModalOpen: boolean;
   setIsModalOpen: (visible: boolean) => void;
@@ -15,24 +13,34 @@ type NavbarProps = {
   isParticipating: boolean;
 };
 
-const Navbar = ({ setFilterType, handleModalClose, isModalOpen, setIsModalOpen, challengeId,isParticipating}: NavbarProps) => {
-  
+const Navbar = ({
+  setFilterType,
+  handleModalClose,
+  isModalOpen,
+  setIsModalOpen,
+  challengeId,
+  isParticipating,
+}: NavbarProps) => {
   const { isLogin } = useAuth();
   const handleClick = () => {
     if (!isLogin) {
       alert('로그인이 필요합니다.');
       return;
-    } else if (!isParticipating){
+    } else if (!isParticipating) {
       alert('챌린지 참가자만 인증글 작성이 가능합니다.');
       return;
-    }
-    else {
+    } else {
       setIsModalOpen(true);
     }
   };
 
   return (
-    <Flex direction="row" justifyContent="space-between" mt={5} padding='0.5rem 6rem'>
+    <Flex
+      direction="row"
+      justifyContent="space-between"
+      mt={5}
+      padding="0.5rem 6rem"
+    >
       <Box display="flex">
         <StyledButton onClick={() => setFilterType('ALL')}>
           #오늘의 인증글
@@ -42,9 +50,10 @@ const Navbar = ({ setFilterType, handleModalClose, isModalOpen, setIsModalOpen, 
         </StyledButton>
       </Box>
       <Box display="flex" justifyContent="center" alignItems="center">
-      <Button onClick={handleClick}>
-        글 작성<TbPencilPlus size="50px" />
-      </Button>
+        <Button onClick={handleClick}>
+          글 작성
+          <TbPencilPlus size="50px" />
+        </Button>
         {isModalOpen && (
           <PostVerificationModal
             isModalOpen={isModalOpen}

@@ -57,7 +57,8 @@ const UploadImage = ({ setImageKey, type }: Props) => {
     async function getS3() {
       try {
         const res = await instance.get(
-          `api/s3/urls/upload?type=${type}&filename=${fileName}`);
+          `api/s3/urls/upload?type=${type}&filename=${fileName}`,
+        );
         const result = await res.data;
         setPresignedUrl(result.presignedUrl);
         setImageKey(result.key);

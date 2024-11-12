@@ -9,7 +9,12 @@ type Props = {
   title?: string;
 };
 
-const CommonModal = ({ children, isModalOpen, handleModalClose, title }: Props) => {
+const CommonModal = ({
+  children,
+  isModalOpen,
+  handleModalClose,
+  title,
+}: Props) => {
   return (
     <>
       <Overlay isOpen={isModalOpen} />
@@ -49,7 +54,8 @@ const ButtonContainer = styled.div<{ hasTitle: boolean }>`
   width: 100%;
   height: 2rem;
   display: flex;
-  justify-content: ${({ hasTitle }) => (hasTitle ? 'space-between' : 'flex-end')};
+  justify-content: ${({ hasTitle }) =>
+    hasTitle ? 'space-between' : 'flex-end'};
   padding: 2rem;
 `;
 

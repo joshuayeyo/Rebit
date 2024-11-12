@@ -20,7 +20,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
   };
 
   // 모달 열려있을 때, 스크롤 금지, 닫았을 때 다시 스크롤
-  if (isEditModalOpen ) {
+  if (isEditModalOpen) {
     document.body.style.overflow = 'hidden';
   } else {
     document.body.style.overflow = 'auto';
@@ -102,9 +102,12 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
           </UnknownSection>
         </CommonContainer>
       </CommonContainer>
-    {isEditModalOpen && (
-      <EditProfileModal isModalOpen={isEditModalOpen} handleModalClose={handleEditModalClose} />
-    )}
+      {isEditModalOpen && (
+        <EditProfileModal
+          isModalOpen={isEditModalOpen}
+          handleModalClose={handleEditModalClose}
+        />
+      )}
     </Wrapper>
   );
 };
