@@ -17,12 +17,16 @@ type ChallengeProps = {
   challengeId: number | null;
   verificationData: VerificationData[] | null;
   isParticipating: boolean;
+  page: number;
+  setPage: (page: number) => void;
+  hasMore: boolean;
+  setHasMore: (hasMore: boolean) => void;
 };
 
 type FilterType = 'MY_VERIFICATION' | 'ALL';
 
 
-const Verification = ({ data, userData, challengeId, verificationData,isParticipating }: ChallengeProps) => {
+const Verification = ({ data, userData, challengeId, verificationData, isParticipating, page, setPage, hasMore, setHasMore }: ChallengeProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isInRange, setIsInRange] = useState<boolean>(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
@@ -76,7 +80,7 @@ const Verification = ({ data, userData, challengeId, verificationData,isParticip
           </AuthorInfo>
         </ProfileWrapper>
         <MedalWrapper>
-          <FaMedalStyled size={36} />
+          <FaMedalStyled size={45} />
           <ProgerssWrapper>
             <span>{filteredDataCount}/{totalDays}</span>
             <ProgressBar progress={progressPercentage} />
@@ -106,7 +110,16 @@ const Verification = ({ data, userData, challengeId, verificationData,isParticip
         challengeId={challengeId}
         isParticipating={isParticipating}
         />
-      <VerificationSection filterType={filterType} verificationData={verificationData || []} userId={userData?.id ?? 0} challengeId={challengeId}></VerificationSection>
+      <VerificationSection 
+      filterType={filterType} 
+      verificationData={verificationData || []} 
+      userId={userData?.id ?? 0} 
+      challengeId={challengeId}
+      page={page}
+      setPage={setPage}
+      hasMore={hasMore}
+      setHasMore={setHasMore}
+      ></VerificationSection>
     </Wrapper>
   );
 
@@ -182,7 +195,8 @@ const Bio = styled.p`
 const MedalWrapper = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
+  text-align: center;
+  align-items: end;
   font-size: 2rem;
   font-weight: bold;
   color: #212121;
