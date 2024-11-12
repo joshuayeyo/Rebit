@@ -129,7 +129,13 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
                             ? data.presignedUrl
                             : data.book?.cover
                         }
-                        content={data.content}
+                        content={
+                          data.type === 'S'
+                          ? data.content
+                          : data.type === 'FB'
+                          ? data.briefReview
+                          : ''
+                        }
                       />
                     </Skeleton>
                   </ItemWrapper>
