@@ -46,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     path: RouterPath.bookdiary,
-    element: <BookDiaryPage />,
+    element: <PrivateRoute element={<BookDiaryPage />} />,
   },
 ]);
 
