@@ -8,6 +8,7 @@ type Props = {
   content?: string;
   username: string;
   profileImage?: string;
+  onClick?: () => void;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const CommonCard = ({
@@ -17,10 +18,11 @@ const CommonCard = ({
   content,
   profileImage,
   username,
+  onClick,
 }: Props) => {
   return (
     <>
-      <Card maxW={maxWidth}>
+      <Card maxW={maxWidth} onClick={onClick} style={{ cursor: 'pointer' }}>
         <CardBody>
           <CommonImage src={imageURL} ratio={'square'} width={500} />
           <br />
