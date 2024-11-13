@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-
 import { VerificationData } from '@/types';
 
 type Props = {
@@ -65,3 +64,4 @@ const Profile = styled.img`
   aspect-ratio: 1/1.2;
   object-fit: cover;
 `;
+
