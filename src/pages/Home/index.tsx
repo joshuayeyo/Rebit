@@ -25,7 +25,6 @@ const Homepage = () => {
             'jwt_token',
             JSON.stringify(response.data.token),
           );
-          // window.location.href = '/';
           console.log(response.data);
           setLogin(true);
           console.log('api 요청');

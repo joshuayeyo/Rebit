@@ -9,6 +9,7 @@ import BookDetailPage from '@/pages/BookDetail';
 import { RouterPath } from './path';
 import ChallengDetailPage from '@/pages/ChallengeDetail';
 import PrivateRoute from './PrivateRoute';
+import BookDiaryPage from '@/pages/BookDiary';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
   },
   {
     path: RouterPath.challengeDetail,
-    element: <ChallengDetailPage />,
+    element: <PrivateRoute element={<ChallengDetailPage />} />,
   },
   {
     path: RouterPath.bookSearch,
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: RouterPath.myPage,
     element: <PrivateRoute element={<MyPage />} />,
+  },
+  {
+    path: RouterPath.bookdiary,
+    element: <PrivateRoute element={<BookDiaryPage />} />,
   },
 ]);
 
