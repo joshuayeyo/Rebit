@@ -2,15 +2,42 @@ import styled from '@emotion/styled';
 
 import StorySample from '@/assets/Main/Story.svg?react';
 import LandingItems from '../Section/Landing-items';
+import { useEffect, useState } from 'react';
+import { FeedData } from '@/types';
+import instance from '@/api/instance';
+import axios from 'axios';
 
 const StoryIntro = () => {
+  const [data, setData] = useState<FeedData[]>([]);
+
+  useEffect(() => {
+    async function getFeedData() {
+      try {
+        const res = await instance.get(`/api/feeds`);
+        const result = await res.data;
+        const filteredData = result.content
+          .filter((item: FeedData) => item.type === 'S')
+          .slice(0, 4);
+        setData(filteredData);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          console.error('Error message:', errorMessage);
+          alert(errorMessage);
+        }
+      }
+    }
+    getFeedData();
+  }, []);
+
   return (
     <Wrapper>
       <Left>
         <StorySample />
       </Left>
       <Right>
-        <LandingItems />
+        <LandingItems data={data} />
       </Right>
     </Wrapper>
   );
