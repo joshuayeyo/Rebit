@@ -7,21 +7,25 @@ import { useState } from 'react';
 
 type Props = {
   imageKey: string;
+  initialNickname: string;
+  initialBio: string;
 };
 
-const EditProfileForm = ({ imageKey }: Props) => {
-  const [nickname, setNickname] = useState('');
-  const [bio, setBio] = useState('');
+const EditProfileForm = ({ imageKey, initialNickname, initialBio }: Props) => {
+  const [nickname, setNickname] = useState(initialNickname);
+  const [bio, setBio] = useState(initialBio);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    try {
-      const response = await instance.put(`api/members/me`, {
-        imageKey,
-        nickname,
-        bio,
-      });
-      console.log(response);
+    const updatedData: { imageKey: string; nickname: string; bio: string } = {
+      imageKey,
+      nickname: nickname !== initialNickname ? nickname : initialNickname,
+      bio: bio !== initialBio ? bio : initialBio,
+  };
+
+  try {
+    await instance.put(`api/members/me`, updatedData);
+      window.location.reload();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error.response ? error.response.data : error.message);
