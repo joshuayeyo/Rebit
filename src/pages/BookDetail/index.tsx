@@ -13,6 +13,8 @@ import { useLocation } from 'react-router-dom';
 import { BookData } from '@/types';
 import { ReviewData } from '@/types';
 import axios from 'axios';
+import { IoBookmarkOutline } from "react-icons/io5";
+
 
 const BookDetailPage = () => {
   const [data, setData] = useState<BookData | null>(null);
@@ -96,9 +98,12 @@ const BookDetailPage = () => {
                   <BookCoverContainer>
                     <BookCover src={data?.cover} alt="bookCover" />
                   </BookCoverContainer>
-                  <ButtonWrapper>
-                    <Button onClick={NavigateToBookStore}>서점으로 이동</Button>
-                  </ButtonWrapper>
+                  <ContentWrapper>
+                    <ButtonWrapper>
+                      <Button onClick={NavigateToBookStore}>서점으로 이동</Button>
+                    </ButtonWrapper>
+                    <IoBookmarkOutline size="2.5rem" />
+                  </ContentWrapper>
                 </BookCoverWrapper>
                 <BookDescriptionWrapper>
                   <UnderlinedHeading1>책 정보</UnderlinedHeading1>
@@ -188,7 +193,18 @@ const BookCover = styled.img`
 
 const ButtonWrapper = styled.div`
   border: 1px solid;
+  margin-right: 0.3rem;
 `;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: cloum;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
+
 
 const BookDescriptionWrapper = styled.section`
   width: 60%;
