@@ -7,6 +7,42 @@ export type BookData = {
   description: string;
   publisher: string;
   pubDate: string;
+  link: string;
+  topFullReview: string;
+};
+
+export type ReviewData = {
+  briefReviewAuthorImage: string;
+  briefReviewAuthor: string;
+  briefReview: string;
+};
+
+export type FeedData = {
+  presignedUrl: string;
+  author: AuthorData;
+  content: string;
+  book: BookData;
+  briefReview: string;
+  fullReview: string;
+  likes: number;
+  isLiked: boolean;
+  type: string;
+};
+
+export type AuthorData = {
+  nickname: string;
+  presignedUrl: string;
+};
+
+export type UserData = {
+  id: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  bio: string;
+  email: string;
+  role: 'ROLE_USER';
+  point: number;
 };
 
 export type ChallengeData = {
@@ -21,7 +57,7 @@ export type ChallengeData = {
   content: string;
   imageKey: string;
   presignedUrl: string;
-  type: "DAILY_WRITING" | "OTHER_TYPES";
+  type: 'DAILY_WRITING' | 'OTHER_TYPES';
   minimumEntryFee: number;
   recruitmentStartDate: string;
   recruitmentEndDate: string;
@@ -30,6 +66,37 @@ export type ChallengeData = {
   minHeadcount: number;
   maxHeadcount: number;
   createdAt: string;
-}
+};
 
-export type FilterType = 'RECRUITING' | 'IN_PROGRESS' | 'COMPLETED' | 'UPCOMING' | 'ALL';
+export type VerificationData = {
+  id: number;
+  participationId: number;
+  author: {
+    id: number;
+    nickname: string;
+    imageKey: string;
+    presignedUrl: string;
+  };
+  title: string;
+  imageKey: string;
+  presignedUrl: string;
+  content: string;
+  createdAt: string;
+};
+
+export type Participant = {
+  participationId: number;
+  memberId: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  participatedAt: string;
+  entryFee: number;
+};
+
+export type FilterType =
+  | 'RECRUITING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'UPCOMING'
+  | 'ALL';
