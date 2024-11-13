@@ -9,4 +9,6 @@ export const RouterPath = {
   feed: '/feed',
   bookSearch: '/book/search',
   bookdetails: '/book/details',
+  bookdiary: '/bookdiary',
+
 };
