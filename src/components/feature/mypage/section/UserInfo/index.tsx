@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import PointLogo from '@/assets/Mypage/point.svg?react';
 import { useState } from 'react';
 import EditProfileModal from '@/components/feature/modals/users/EditProfile';
+import instance from '@/api/instance';
 
 type Props = {
   nickname: string;
@@ -30,9 +31,24 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
     setIsEditModalOpen(true);
   };
 
-  const handleReloadPoints = () => {
-    alert('포인트를 충전합니다!');
-  };
+  const handleReloadPoints = async () => {
+    const amount = prompt("충전할 금액을 입력하세요:"); // 금액을 입력 받음
+
+    if (amount === null || isNaN(Number(amount)) || Number(amount) <= 0) {
+        alert("유효한 금액을 입력해주세요.");
+        return;
+    }
+    try {
+        // 포인트 충전 API 요청
+        const response = await instance.post("/api/members/points",
+          { points: amount }
+        );
+        alert(`${amount} 원이 충전되었습니다!`);
+        console.log(response)
+    } catch (error) {
+      console.log(error)
+    }};
+
 
   const pointsValue = (points?: number) => {
     if (points && points > 99999) {
