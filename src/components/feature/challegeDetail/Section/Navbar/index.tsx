@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Flex, Box } from '@chakra-ui/react';
 import { TbPencilPlus } from 'react-icons/tb';
 import { useAuth } from '@/provider/Auth';
-import PostVerificationModal from '@/components/feature/modals/verification/PostVefication';
+import PostVerificationModal from '@/components/feature/modals/verification/PostVerification';
 
 type NavbarProps = {
   setFilterType: (filterType: 'MY_VERIFICATION' | 'ALL') => void;

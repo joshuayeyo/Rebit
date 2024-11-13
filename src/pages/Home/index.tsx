@@ -25,9 +25,7 @@ const Homepage = () => {
             'jwt_token',
             JSON.stringify(response.data.token),
           );
-          console.log(response.data);
           setLogin(true);
-          console.log('api 요청');
         })
         .catch((error) => {
           console.error('로그인 실패:', error);

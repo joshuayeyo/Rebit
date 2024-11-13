@@ -4,8 +4,6 @@ import CommonContainer from '@/components/common/layouts/Container';
 import { Divider } from '@chakra-ui/react';
 import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
-import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoBookmarkOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import instance from '@/api/instance';
 import { Spinner } from '@/components/common/Spinner';
@@ -68,15 +66,6 @@ const VerificationDetailModal = ({
               <ContentSection>
                 <StoryContentDetail content={data.content} />
               </ContentSection>
-              <ReactSection>
-                <IconLeft>
-                  <IoIosHeartEmpty size="2rem" />
-                </IconLeft>
-                {/* <Text>{data?.likes} Likes</Text> */}
-                <IconRight>
-                  <IoBookmarkOutline size="2rem" />
-                </IconRight>
-              </ReactSection>
             </CommonContainer>
           </Right>
         </>
@@ -118,23 +107,5 @@ const ContentSection = styled.div`
   display: flex;
 `;
 
-const ReactSection = styled.div`
-  width: 100%;
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-const IconLeft = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-`;
-const IconRight = styled.button`
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
-`;
 
 export default VerificationDetailModal;
