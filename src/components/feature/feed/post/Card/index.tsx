@@ -2,16 +2,18 @@ import styled from '@emotion/styled';
 
 type Props = {
   imageUrl: string;
-  content: string;
+  content?: string;
+  onLoad?: () => void;
 };
 
-const FeedCard = ({ imageUrl, content }: Props) => {
+const FeedCard = ({ imageUrl, content = '', onLoad }: Props) => {
   const trimmedContent =
-    content.length > 100 ? `${content.substring(0, 100)}...` : content;
+    content?.length > 100 ? `${content.substring(0, 100)}...` : content;
+
   return (
     <Wrapper>
       <ImageContainer>
-        <PostImage src={imageUrl} />
+        <PostImage src={imageUrl} onLoad={onLoad} />
         <div className="summary">
           <Title>{trimmedContent}</Title>
         </div>
@@ -19,6 +21,7 @@ const FeedCard = ({ imageUrl, content }: Props) => {
     </Wrapper>
   );
 };
+
 export default FeedCard;
 
 const Wrapper = styled.div`
@@ -50,7 +53,7 @@ const ImageContainer = styled.div`
   }
 `;
 
-const Title = styled.text`
+const Title = styled.span`
   font-size: 1.5rem;
 `;
 

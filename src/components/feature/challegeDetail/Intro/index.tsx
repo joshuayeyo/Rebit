@@ -2,15 +2,16 @@ import styled from '@emotion/styled';
 import { Skeleton } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { ChallengeData } from '@/types';
-import Contents from '../Contents';
+import { ChallengeData, UserData } from '@/types';
+import Contents from '../Section/IntroContents';
 
 type ChallengeIntroProps = {
-  data: ChallengeData | null;
+  challengeData: ChallengeData | null;
+  userData: UserData | null;
   filter: string | null;
 };
 
-const Intro = ({ data, filter }: ChallengeIntroProps) => {
+const Intro = ({ challengeData, filter, userData }: ChallengeIntroProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -26,14 +27,18 @@ const Intro = ({ data, filter }: ChallengeIntroProps) => {
           transition={{ duration: 0.5 }}
         >
           <Left
-            src={data?.presignedUrl}
+            src={challengeData?.presignedUrl}
             onLoad={handleImageLoad}
-            alt={data?.title}
+            alt={challengeData?.title}
           />
         </motion.div>
       </Skeleton>
       <Right>
-        <Contents data={data} filter={filter}/>
+        <Contents
+          challengeData={challengeData}
+          filter={filter}
+          userData={userData}
+        />
       </Right>
     </Wrapper>
   );
@@ -59,7 +64,6 @@ const Right = styled.div`
   padding: 50px;
   align-items: center;
   justify-content: center;
-
 `;
 
 export default Intro;

@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 import { Flex, Box, Divider } from '@chakra-ui/react';
 
 const StyledButton = styled.button`
@@ -17,28 +17,23 @@ const StyledButton = styled.button`
 `;
 
 const Navbar = () => {
-    return (
-        <Flex direction="column" alignItems="center" mt={5}>
-            <Box display="flex" justifyContent="center" alignItems="center">
-                <StyledButton>Feed</StyledButton>
-                <StyledButton>Wish</StyledButton>
-                <StyledButton>Challenge</StyledButton>
-                <StyledButton>Diary</StyledButton>
-            </Box>
-            <Divider
-                mt="0.8rem"
-                mb="0.8rem"
-                borderColor="gray.800"
-                width="60%"
-            />
-            <Box display="flex" justifyContent="center" alignItems="center">
-                <StyledButton>전체</StyledButton>
-                <StyledButton>인생책</StyledButton>
-                <StyledButton>스토리</StyledButton>
-                <StyledButton>매거진</StyledButton>
-            </Box>
-        </Flex>
-    );
-}
+  return (
+    <Flex direction="column" alignItems="center" mt={5}>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <StyledButton>Feed</StyledButton>
+        <StyledButton>Wish</StyledButton>
+        <StyledButton>Challenge</StyledButton>
+        <StyledButton>Diary</StyledButton>
+      </Box>
+      <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <StyledButton>전체</StyledButton>
+        <StyledButton>인생책</StyledButton>
+        <StyledButton>스토리</StyledButton>
+        <StyledButton>매거진</StyledButton>
+      </Box>
+    </Flex>
+  );
+};
 
 export default Navbar;

@@ -5,7 +5,7 @@ type Props = {
   username: string;
   imageURL: string;
   size?: string;
-}
+};
 
 const CommonAvatar = ({ username, imageURL, size }: Props) => {
   return (
@@ -14,17 +14,12 @@ const CommonAvatar = ({ username, imageURL, size }: Props) => {
       justifyContent="flex-start"
       alignItems="center"
     >
-      <Avatar
-        name={username}
-        src={imageURL}
-        size={size}
-      />
-      <Text
-        fontSize={size}
-        ml="1rem"
-      >{username}</Text>
+      <Avatar name={username} src={imageURL} size={size} />
+      <Text fontSize={size} ml="1rem">
+        {username}
+      </Text>
     </CommonContainer>
-  )
-}
+  );
+};
 
 export default CommonAvatar;

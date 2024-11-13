@@ -9,7 +9,7 @@ const StyledButton = styled.button`
   font-size: 30px;
   font-weight: bold;
   margin: 0 40px 0 40px;
-  cursor: pointer;
+  cursor: pointer; 
   &:focus {
       color: orange;
       text-decoration: underline;

@@ -9,15 +9,19 @@ type Props = {
   title?: string;
 };
 
-const CommonModal = ({ title, children, isModalOpen, handleModalClose }: Props) => {
+const CommonModal = ({
+  children,
+  isModalOpen,
+  handleModalClose,
+  title,
+}: Props) => {
   return (
     <>
       <Overlay isOpen={isModalOpen} />
       <ModalContainer>
-        <ButtonContainer>
+        <ButtonContainer hasTitle={!!title}>
           {title && <Title>{title}</Title>}
           <Button onClick={handleModalClose} theme="outline" size="medium">
-            {' '}
             X
           </Button>
         </ButtonContainer>
@@ -41,16 +45,17 @@ const ModalContainer = styled.div`
   right: 20%;
   border-radius: 10px;
   overflow: auto;
-    &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.div<{ hasTitle: boolean }>`
   width: 100%;
-  height: 3rem;
+  height: 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasTitle }) =>
+    hasTitle ? 'space-between' : 'flex-end'};
   padding: 2rem;
 `;
 
