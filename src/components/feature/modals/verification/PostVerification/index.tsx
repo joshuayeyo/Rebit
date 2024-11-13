@@ -4,7 +4,7 @@ import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
 import { useState, useEffect } from 'react';
 import instance from '@/api/instance';
-
+import axios from 'axios';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
@@ -56,8 +56,13 @@ const PostVerificationModal = ({
         );
         alert('데이터가 성공적으로 들어갔습니다.');
         setIsModalOpen(false);
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          console.error('Error message:', errorMessage);
+          alert(errorMessage);
+          handleModalClose(); 
+        }
       }
     }
     postVerificationData();
