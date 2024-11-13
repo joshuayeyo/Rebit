@@ -15,8 +15,8 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
         <Title>{title}</Title>
       </ImageContainer>
       <PosterContiner>
-        <Author>{author}</Author>
-        <Profile src={profilePics} />
+          <Author>{author}</Author>
+          <Profile src={profilePics} />
       </PosterContiner>
     </Wrapper>
   );
@@ -29,7 +29,7 @@ const ImageContainer = styled.div`
   position: relative;
 `;
 
-const Title = styled.text`
+const Title = styled.div`
   font-size: 1rem;
   font-weight: bold;
   display: block;
@@ -53,16 +53,17 @@ const PosterContiner = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
-  flex-direction: row;
+  width: 100%;
 `;
 
-const Author = styled.text`
+const Author = styled.div`
   font-size: 1rem;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 `;
+
 const Profile = styled.img`
   border-radius: 50%;
-  width: 10%;
-  aspect-ratio: 1/1.2;
+  width: 2rem;
+  height: 2rem;
   object-fit: cover;
 `;
