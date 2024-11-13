@@ -2,9 +2,10 @@ import styled from '@emotion/styled';
 import { ChallengeData, UserData } from '@/types';
 import { useAuth } from '@/provider/Auth';
 import instance from '@/api/instance';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { IoIosHeartEmpty } from 'react-icons/io';
+import { toggleChallengeWishlist } from '@/util/hooks/useWishlist';
 
 type ChallengeProps = {
   challengeData: ChallengeData | null;
@@ -16,7 +17,12 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const { isLogin } = useAuth();
   const [entryFee, setEntryFee] = useState<number>(0);
   const userPoint = userData?.point !== undefined ? userData.point : 0;
-
+  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(null);
+  const challengeId = challengeData?.id
+  const { isWishlisted, toggleChallengeWishlisted, setIsWishlisted } = toggleChallengeWishlist({
+    initialWishlisted,
+    challengeId,
+  });
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
 
@@ -72,6 +78,28 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
     }
   };
 
+  useEffect(() => {
+    async function fetchWishlistStatus() {
+      try {
+        const response = await instance.get(`api/wishes/challenges`);
+        const challengeInWishlist = response.data.content.some(
+          (item: { challengeId: number }) => item.challengeId === challengeId
+        );
+        setInitialWishlisted(challengeInWishlist);
+      } catch (error) {
+        console.error('위시리스트 상태 로딩 오류:', error);
+        setInitialWishlisted(false);
+      }
+    }
+    fetchWishlistStatus();
+  }, [challengeId]);
+  
+  useEffect(() => {
+    if (initialWishlisted !== null) {
+      setIsWishlisted(initialWishlisted);
+    }
+  }, [initialWishlisted, setIsWishlisted]);
+
   return (
     <Wrapper>
       <TagWrapper>
@@ -125,7 +153,9 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
             <SubmitButton type="submit" onClick={handleSubmit}>
               챌린지 참가하기
             </SubmitButton>
-            <IoIosHeartEmpty size="2rem" color="white" />
+            <ReactionButton onClick={toggleChallengeWishlisted}>
+              {isWishlisted ? <IoIosHeartEmpty size="2rem" color="red" /> : <IoIosHeartEmpty size="2rem" color="white" />}
+            </ReactionButton>
           </ButtonWrapper>
         </>
       )}
@@ -256,3 +286,5 @@ const SubmitButton = styled.button`
     transform: scale(0.98);
   }
 `;
+
+const ReactionButton = styled.button``
