@@ -1,24 +1,20 @@
 import styled from '@emotion/styled';
-
-import Favorite from '@/assets/Main/Favorite.svg?react';
+import ChallengeSample from '@/assets/Main/Challenge.svg?react';
 import LandingItems from '../Section/Landing-items';
-import { useEffect, useState } from 'react';
-import { FeedData } from '@/types';
 import instance from '@/api/instance';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { ChallengeData } from '@/types';
 
-const FavoriteIntro = () => {
-  const [data, setData] = useState<FeedData[]>([]);
+const ChallengeIntro = () => {
+  const [data, setData] = useState<ChallengeData[]>([]);
 
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/feeds`);
+        const res = await instance.get(`/api/challenges`);
         const result = await res.data;
-        const filteredData = result.content
-          .filter((item: FeedData) => item.type === 'FB')
-          .slice(0, 4);
-        setData(filteredData);
+        setData(result.content.slice(0, 4));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -34,10 +30,10 @@ const FavoriteIntro = () => {
   return (
     <Wrapper>
       <Left>
-        <Favorite />
+        <LandingItems data={data} />
       </Left>
       <Right>
-        <LandingItems data={data} />
+        <ChallengeSample />
       </Right>
     </Wrapper>
   );
@@ -50,14 +46,13 @@ const Wrapper = styled.section`
 `;
 const Left = styled.div`
   width: 50vw;
-`;
-const Right = styled.div`
-  background-color: #89ff56;
-  width: 50vw;
   display: flex;
-  padding: 50px;
   align-items: center;
   justify-contents: center;
+  padding: 50px;
 `;
-
-export default FavoriteIntro;
+const Right = styled.div`
+  width: 50vw;
+  height: 100vh;
+`;
+export default ChallengeIntro;

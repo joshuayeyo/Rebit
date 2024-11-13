@@ -21,9 +21,8 @@ const CommonCard = ({
   return (
     <>
       <Card maxW={maxWidth}>
-        {/* <Link></Link> 추가해서 카드 누르면 해당 게시글로 갈 수 있게 */}
         <CardBody>
-          <CommonImage src={imageURL} ratio={'square'} />
+          <CommonImage src={imageURL} ratio={'square'} width={500} />
           <br />
           <Heading size="lg">{title}</Heading>
           <Text size="sm">{content}</Text>
