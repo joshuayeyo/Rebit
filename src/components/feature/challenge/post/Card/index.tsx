@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { IoIosHeartEmpty } from 'react-icons/io';
 
 type Props = {
   imageUrl: string;
@@ -15,8 +16,11 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
         <Title>{title}</Title>
       </ImageContainer>
       <PosterContiner>
-        <Author>{author}</Author>
-        <Profile src={profilePics} />
+        <IoIosHeartEmpty size="2rem" />
+        <AuthorProfileWrapper>
+          <Author>{author}</Author>
+          <Profile src={profilePics} />
+        </AuthorProfileWrapper>
       </PosterContiner>
     </Wrapper>
   );
@@ -29,7 +33,7 @@ const ImageContainer = styled.div`
   position: relative;
 `;
 
-const Title = styled.text`
+const Title = styled.div`
   font-size: 1rem;
   font-weight: bold;
   display: block;
@@ -52,17 +56,23 @@ const PostImage = styled.img`
 const PosterContiner = styled.div`
   display: flex;
   align-items: center;
-  justify-content: end;
-  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 `;
 
-const Author = styled.text`
-  font-size: 1rem;
-  margin-right: 1rem;
+const AuthorProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
+
+const Author = styled.div`
+  font-size: 1rem;
+  margin-right: 0.5rem;
+`;
+
 const Profile = styled.img`
   border-radius: 50%;
-  width: 10%;
-  aspect-ratio: 1/1.2;
+  width: 2rem;
+  height: 2rem;
   object-fit: cover;
 `;
