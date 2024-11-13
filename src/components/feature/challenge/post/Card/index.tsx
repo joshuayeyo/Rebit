@@ -16,11 +16,8 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
         <Title>{title}</Title>
       </ImageContainer>
       <PosterContiner>
-        <IoIosHeartEmpty size="2rem" />
-        <AuthorProfileWrapper>
           <Author>{author}</Author>
           <Profile src={profilePics} />
-        </AuthorProfileWrapper>
       </PosterContiner>
     </Wrapper>
   );
@@ -56,13 +53,8 @@ const PostImage = styled.img`
 const PosterContiner = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   width: 100%;
-`;
-
-const AuthorProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const Author = styled.div`
