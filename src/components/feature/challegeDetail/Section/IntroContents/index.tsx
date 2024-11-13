@@ -4,6 +4,7 @@ import { useAuth } from '@/provider/Auth';
 import instance from '@/api/instance';
 import { useState } from 'react';
 import axios from 'axios';
+import { IoIosHeartEmpty } from 'react-icons/io';
 
 type ChallengeProps = {
   challengeData: ChallengeData | null;
@@ -35,7 +36,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const handleSubmit = () => {
     if (!isValidEntryFee(entryFee)) {
       alert(
-        '유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다.',
+        `유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다. 보유 포인트는 ${userPoint} 입니다.`
       );
       return;
     }
@@ -120,9 +121,12 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
               ₩
             </Content>
           </FeeWrapper>
-          <SubmitButton type="submit" onClick={handleSubmit}>
-            챌린지 참가하기
-          </SubmitButton>
+          <ButtonWrapper>
+            <SubmitButton type="submit" onClick={handleSubmit}>
+              챌린지 참가하기
+            </SubmitButton>
+            <IoIosHeartEmpty size="2rem" color="white" />
+          </ButtonWrapper>
         </>
       )}
     </Wrapper>
@@ -167,7 +171,7 @@ const TiTleTag = styled.div`
 `;
 const DateTag = styled.div`
   color: white;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
 `;
 
@@ -211,7 +215,7 @@ const Content = styled.div`
 const ContentDetail = styled.div`
   padding: 0;
   color: black;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 20px;
 `;
 
@@ -230,23 +234,24 @@ const FeeBox = styled.input`
     text-align: center;
   }
 `;
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
 
 const SubmitButton = styled.button`
-  width: 80%;
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem;
   background-color: white;
   color: black;
   font-weight: bold;
-
   border-radius: 4px;
   font-size: 1rem;
-
   cursor: pointer;
-
   transition: background-color 0.3s;
-  margin: 0 auto;
-  margin-top: 6rem;
-
+  width: 60%;
   &:active {
     transform: scale(0.98);
   }
