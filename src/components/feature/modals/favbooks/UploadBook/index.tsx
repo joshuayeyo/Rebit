@@ -59,8 +59,8 @@ const Wrapper = styled.div`
 
 const ImageContainer = styled.div`
   width: 80%;
-  max-width: 200px;
-  max-height: 300px;
+  max-width: 250px;
+  max-height: 350px;
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
