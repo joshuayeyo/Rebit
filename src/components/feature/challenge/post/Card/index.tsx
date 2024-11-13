@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { IoIosHeartEmpty } from 'react-icons/io';
 
 type Props = {
   imageUrl: string;
