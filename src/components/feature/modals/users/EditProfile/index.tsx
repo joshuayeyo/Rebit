@@ -1,8 +1,9 @@
+import instance from '@/api/instance';
 import CommonModal from '@/components/common/Modal';
 import UploadImage from '@/components/feature/images/UploadImage';
 import EditProfileForm from '@/components/feature/mypage/section/EditProfileForm';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   isModalOpen: boolean;
@@ -11,6 +12,33 @@ type Props = {
 
 const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
   const [imageKey, setImageKey] = useState('');
+  const [initialNickname, setInitialNickname] = useState('');
+  const [initialBio, setInitialBio] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      const fetchProfileData = async () => {
+          try {
+              const response = await instance.get("/api/members/me");
+              const { imageKey, nickname, bio } = response.data;
+              console.log(response.data)
+              setImageKey(imageKey || null);
+              setInitialNickname(nickname || null);
+              setInitialBio(bio || null);
+          } catch (error) {
+              console.error("Error fetching profile data:", error);
+          } finally {
+              setLoading(false);
+          }
+      };
+
+      if (isModalOpen) {
+          fetchProfileData();
+      }
+  }, [isModalOpen]);
+
+  if (loading) return null; // 로딩 중일 때 빈 화면을 보여줌
+
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
       <Wrapper>
@@ -18,7 +46,11 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
           <UploadImage setImageKey={setImageKey} type="MEMBER" />
         </ImageContainer>
         <FormContainer>
-          <EditProfileForm imageKey={imageKey} />
+          <EditProfileForm 
+            imageKey={imageKey}
+            initialNickname={initialNickname}
+            initialBio={initialBio}
+          />
         </FormContainer>
       </Wrapper>
     </CommonModal>
