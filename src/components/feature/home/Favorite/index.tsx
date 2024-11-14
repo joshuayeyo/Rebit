@@ -13,12 +13,23 @@ const FavoriteIntro = () => {
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/feeds`);
-        const result = await res.data;
-        const filteredData = result.content
-          .filter((item: FeedData) => item.type === 'FB')
-          .slice(0, 4);
-        setData(filteredData);
+        const allFBData: FeedData[] = [];
+        let currentPage = 1;
+        let hasMoreData = true;
+
+        while (hasMoreData) {
+          const res = await instance.get(`/api/feeds`, {params: {page: currentPage} });
+          const result = await res.data;
+          const fbData = result.content.filter((item: FeedData) => item.type === 'FB');
+          allFBData.push(...fbData);
+
+          if (allFBData.length >= 4) {
+            hasMoreData = false;
+          } else {
+            currentPage += 1;
+          }  
+        }
+        setData(allFBData.slice(0, 4));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
