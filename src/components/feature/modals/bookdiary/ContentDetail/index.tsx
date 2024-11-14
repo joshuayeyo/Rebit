@@ -6,22 +6,29 @@ import { useEffect, useState } from 'react';
 import { Spinner } from '@/components/common/Spinner';
 import instance from '@/api/instance';
 import { DiaryData } from '@/types';
-
+import EditBookDiaryModal from '../EditBookDiary';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
+  selectedDate: string | null;
   id: number;
 };
 
-const DiaryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
+const DiaryDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen, selectedDate}: Props) => {
   const [data, setData] = useState<DiaryData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [posterId, setIsposterId] = useState(Number);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   useEffect(() => {
     async function getContentDetails() {
       try {
         const res = await instance.get(`/api/diaries/${id}`);
         setData(res.data);
+        setIsposterId(res.data.memberId);
+
       } catch (e) {
         console.log(e);
       } finally {
@@ -29,10 +36,39 @@ const DiaryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id]);
+  }, [id,isEditModalOpen, isDelete]);
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const res = await instance.delete(`/api/diaries/${id}`);
+      console.log('삭제 성공:', res.data);
+      setIsModalOpen(false);
+      setIsDelete(true);
+      window.location.reload();
+      setTimeout(() => {
+        window.history.go(-1);
+      }, 100);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제하는 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
-    <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
+  <>
+    <CommonModal posterId={posterId} isModalOpen={isModalOpen} handleModalClose={handleModalClose} handleEditClick={handleEditClick} handleDeletClick={handleDeleteClick}>
       {isLoading ? (
         <Spinner />
       ) : data ? (
@@ -54,7 +90,17 @@ const DiaryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
         <p>데이터를 불러오지 못했습니다.</p>
       )}
     </CommonModal>
-  );
+      {isEditModalOpen &&(
+        <EditBookDiaryModal
+          id={id}
+          data={data!!}
+          isModalOpen={isEditModalOpen}
+          handleModalClose={handleEditModalClose}
+          selectedDate={selectedDate}
+        />
+      )}
+      </>
+  )
 };
 
 export default DiaryDetailModal;
