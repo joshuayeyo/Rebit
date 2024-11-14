@@ -32,10 +32,15 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
   const handleDropdownClose = () => setIsDropdownVisible(false);
 
   useEffect(() => {
+    const endpoint = filter === 'S' ? 'feeds/stories':
+      filter === 'FB' ? 'feeds/favorite-books':
+      filter === 'M' ? 'feeds/magazines':
+      'feeds';
+
     async function getFeedData() {
       if (!hasMore) return;
       try {
-        const res = await instance.get(`/api/feeds`, {
+        const res = await instance.get(`/api/${endpoint}`, {
           params: { page: page },
         });
         const result = await res.data;
@@ -55,7 +60,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     if (hasMore && page >= 0) {
       getFeedData();
     }
-  }, [page, hasMore]);
+  }, [page, filter, hasMore]);
 
   const handleCardClick = (id: number, type: 'S' | 'FB' | 'M') => {
     if (!isLogin) {
@@ -111,13 +116,13 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
         <CommonGrid columns={4} gap={50} style={{ overflow: 'hidden' }}>
           <AnimatePresence>
             {Array.isArray(filteredData) &&
-              filteredData.map((data, index) => (
+              filteredData.map((data) => (
                 <motion.div
-                  key={data.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  // key={data.id}
+                  // initial={{ opacity: 0, y: 20 }}
+                  // animate={{ opacity: 1, y: 0 }}
+                  // exit={{ opacity: 0, y: -20 }}
+                  // transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <ItemWrapper
                     onClick={() => handleCardClick(data.id, data.type)}
