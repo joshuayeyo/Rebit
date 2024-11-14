@@ -53,12 +53,16 @@ const CommonModal = ({
         <ButtonContainer hasTitle={!!title}>
           {myId === posterId && (
             <>
-              <IconContainer onClick={handleEditClick}>
-                <MdModeEditOutline size="30" />
-              </IconContainer>
-              <IconContainer onClick={handleDeletClick}>
-                <MdDelete size="30" />
-              </IconContainer>
+              {handleEditClick && (
+                <IconContainer onClick={handleEditClick}>
+                  <MdModeEditOutline size="30" />
+                </IconContainer>
+              )}
+              {handleDeletClick && (
+                <IconContainer onClick={handleDeletClick}>
+                  <MdDelete size="30" />
+                </IconContainer>
+              )}
             </>
           )}
           {title && <Title>{title}</Title>}
