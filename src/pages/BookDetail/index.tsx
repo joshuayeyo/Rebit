@@ -234,7 +234,6 @@ const ContentWrapper = styled.div`
   justify-content: center;
   text-align: cloum;
   align-items: center;
-
   margin-top: 1rem;
 `;
 

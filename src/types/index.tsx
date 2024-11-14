@@ -28,6 +28,14 @@ export type FeedData = {
   isLiked: boolean;
   type: string;
 };
+export type DiaryData = {
+  id:number;
+  content: string;
+  book: BookData;
+  date:string;
+  isbn: string;
+};
+
 
 export type AuthorData = {
   nickname: string;
