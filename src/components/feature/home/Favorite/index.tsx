@@ -1,35 +1,23 @@
 import styled from '@emotion/styled';
 
-import Favorite from '@/assets/Main/Favorite.svg?react';
+import StorySample from '@/assets/Main/Story.svg?react';
 import LandingItems from '../Section/Landing-items';
 import { useEffect, useState } from 'react';
 import { FeedData } from '@/types';
 import instance from '@/api/instance';
 import axios from 'axios';
 
-const FavoriteIntro = () => {
+const StoryIntro = () => {
   const [data, setData] = useState<FeedData[]>([]);
 
   useEffect(() => {
     async function getFeedData() {
       try {
-        const allFBData: FeedData[] = [];
-        let currentPage = 1;
-        let hasMoreData = true;
-
-        while (hasMoreData) {
-          const res = await instance.get(`/api/feeds`, {params: {page: currentPage} });
-          const result = await res.data;
-          const fbData = result.content.filter((item: FeedData) => item.type === 'FB');
-          allFBData.push(...fbData);
-
-          if (allFBData.length >= 4) {
-            hasMoreData = false;
-          } else {
-            currentPage += 1;
-          }  
-        }
-        setData(allFBData.slice(0, 4));
+        const res = await instance.get(`/api/feeds/favorite-books`, {
+          params: {size: 4}
+        });
+        const result = await res.data;
+        setData(result.content);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -45,7 +33,7 @@ const FavoriteIntro = () => {
   return (
     <Wrapper>
       <Left>
-        <Favorite />
+        <StorySample />
       </Left>
       <Right>
         <LandingItems data={data} />
@@ -63,7 +51,6 @@ const Left = styled.div`
   width: 50vw;
 `;
 const Right = styled.div`
-  background-color: #89ff56;
   width: 50vw;
   display: flex;
   padding: 50px;
@@ -71,4 +58,4 @@ const Right = styled.div`
   justify-contents: center;
 `;
 
-export default FavoriteIntro;
+export default StoryIntro;

@@ -7,8 +7,10 @@ type Props = {
 };
 
 const FeedCard = ({ imageUrl, content = '', onLoad }: Props) => {
-  const trimmedContent =
-    content?.length > 100 ? `${content.substring(0, 100)}...` : content;
+  const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(content);
+  const trimmedContent = isKorean
+    ? content.substring(0, 55) + (content.length > 55 ? '...' : '')
+    : content.substring(0, 100) + (content.length > 100 ? '...' : '');
 
   return (
     <Wrapper>

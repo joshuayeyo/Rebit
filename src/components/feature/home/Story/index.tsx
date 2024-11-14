@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import StorySample from '@/assets/Main/Story.svg?react';
 import LandingItems from '../Section/Landing-items';
 import { useEffect, useState } from 'react';
@@ -12,24 +13,11 @@ const StoryIntro = () => {
   useEffect(() => {
     async function getFeedData() {
       try {
-        const allStoryData: FeedData[] =[];
-        let currentPage = 1;
-        let hasMoreData = true;
-
-        while (hasMoreData) {
-          const res = await instance.get(`api/feeds`, { params: {page: currentPage}});
-          const result = await res.data;
-
-          const storyData = result.content.filter((item: FeedData) => item.type === 'S');
-          allStoryData.push(...storyData);
-
-          if (allStoryData.length >= 4) {
-            hasMoreData = false;
-          } else {
-            currentPage += 1; // 페이지를 증가시켜서 계속 요청
-          }
-          setData(allStoryData.slice(0, 4))
-        }
+        const res = await instance.get(`/api/feeds/stories`, {
+          params: {size: 4}
+        });
+        const result = await res.data;
+        setData(result.content);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
