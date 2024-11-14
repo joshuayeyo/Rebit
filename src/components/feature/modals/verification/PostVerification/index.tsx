@@ -56,6 +56,8 @@ const PostVerificationModal = ({
         );
         alert('데이터가 성공적으로 들어갔습니다.');
         setIsModalOpen(false);
+        window.location.reload();
+
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
