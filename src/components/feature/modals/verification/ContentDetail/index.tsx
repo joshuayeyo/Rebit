@@ -34,8 +34,6 @@ const VerificationDetailModal = ({
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        // setIsLoading(false);
       }
     }
     getContentDetails();
