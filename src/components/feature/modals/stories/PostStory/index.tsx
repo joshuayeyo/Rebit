@@ -15,15 +15,15 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   const today = new Date();
   const time = {
     year: today.getFullYear(),
-    month: today.getMonth() + 1, // 리액트의 Month는 0~11월이다.
+    month: today.getMonth() + 1,
     date: today.getDate(),
   };
 
   const [storyContent, setStoryContent] = useState('');
   const [placeholder, setPlaceholder] = useState(
     '당신의 Story를 작성하세요...',
-  ); // placeholder를 동적으로 사용
-  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); // 입력된 텍스트가 없을 경우, placeholder를 빨갛게 바꿉니다.
+  );
+  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>('');
   const { imageKey, uploadImage2S3 } = useStoreImage({ type: 'FEED' });
@@ -48,7 +48,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           await instance
             .post(`api/feeds`, {
               type: 'S',
-              bookId: 1, // 현재 bookId가 없으면 400 에러가 발생하여 임시로 해둔 값. Story에서는 bookId가 없어야 함.
+              bookId: 1,
               imageKey: imageKey,
               content: storyContent,
             })
@@ -58,7 +58,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
         } catch (e) {
           console.log(e);
         } finally {
-          window.location.reload(); // Posting 후 페이지 새로고침
+          window.location.reload();
         }
       }
     }
@@ -68,7 +68,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setStoryContent(e.target.value);
     if (e.target.value) {
-      setPlaceholder('당신의 Story를 작성하세요...'); // 내용이 입력되면 placeholder 초기화
+      setPlaceholder('당신의 Story를 작성하세요...');
       setIsPlaceholderRed(false);
     }
   };
@@ -136,9 +136,10 @@ const Today = styled.div`
   font-size: 40px;
   font-family: 'DungGeunMo';
   font-weight: bold;
-  color: #a451f7;
+  color: black;
   justify-content: flex-start;
   margin-bottom: 1rem;
+  margin-left: 5rem;
 `;
 
 const FlexContainer = styled.div`
