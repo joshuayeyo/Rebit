@@ -43,11 +43,12 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
     const isbn = data?.book.isbn;
 
     if (isbn) {
-      window.open(`/book/details?isbn=${isbn}`, '_blank');
+      window.location.href = `/book/details?isbn=${isbn}`;
     } else {
       alert('책 정보를 찾을 수 없습니다.');
     }
   };
+
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
       {data ? (
