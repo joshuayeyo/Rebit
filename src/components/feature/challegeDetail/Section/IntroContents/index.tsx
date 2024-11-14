@@ -23,7 +23,6 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
     const dateObject = new Date(date);
     return dateObject.toISOString().split('T')[0].replace(/-/g, '/');
   }
-
   const recruitmentStartDate = formatDate(challengeData?.recruitmentStartDate);
   const recruitmentEndDate = formatDate(challengeData?.recruitmentEndDate);
   const challengeStartDate = formatDate(challengeData?.challengeStartDate);
@@ -38,6 +37,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       alert(
         `유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다. 보유 포인트는 ${userPoint} 입니다.`
       );
+      window.location.reload();
       return;
     }
 
@@ -105,7 +105,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       {filter === 'IN_PROGRESS' ? (
         <FeeWrapper>
           <Content>
-            <>현재 진행중인 챌린지입니다</>
+            <> 총 상금 : ₩{challengeData?.totalEntryFee}</>
           </Content>
         </FeeWrapper>
       ) : (
@@ -122,6 +122,9 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
             </Content>
           </FeeWrapper>
           <ButtonWrapper>
+            <CountWrapper>
+              {challengeData?.currentHeadcount}/{challengeData?.maxHeadcount}
+            </CountWrapper>
             <SubmitButton type="submit" onClick={handleSubmit}>
               챌린지 참가하기
             </SubmitButton>
@@ -234,6 +237,15 @@ const FeeBox = styled.input`
     text-align: center;
   }
 `;
+
+const CountWrapper = styled.div`
+  margin-right: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color:white;
+`;
+
+
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
