@@ -9,7 +9,7 @@ import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
 import { FeedData } from '@/types';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import useLiked from '@/util/hooks/useLiked';
-
+import EditFavbookModal from '../EditFavBook';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
@@ -20,7 +20,7 @@ type Props = {
 const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [posterId, setIsposterId] = useState<number | null>(null);
+  const [posterId, setIsposterId] = useState(Number);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
 
@@ -42,7 +42,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
       }
     }
     getContentDetails();
-  }, [id, isEditModalOpen, isDelete]);
+  }, [id, setLikes,isEditModalOpen, isDelete]);
 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
@@ -69,9 +69,12 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
     try {
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
-      setIsposterId(res.data.author.id)
       setIsModalOpen(false);
       setIsDelete(true);
+      window.location.reload();
+      setTimeout(() => {
+        window.history.go(-1);
+      }, 100);
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제하는 중 오류가 발생했습니다.');
@@ -79,61 +82,68 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
   };
 
   return (
-    <CommonModal
-      posterId={posterId}
-      isModalOpen={isModalOpen}
-      handleModalClose={handleModalClose}
-      handleEditClick={handleEditClick}
-      handleDeletClick={handleDeleteClick}
-    >
-      {data ? (
-        <CommonContainer maxWidth="100%" flexDirection="row">
-          <Left
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <ImageContainer src={data?.book.cover} />
-            {isHovered && (
-              <HoverButton onClick={handleNavigate}>책 상세 페이지</HoverButton>
-            )}
-          </Left>
-          <Right>
-            <CommonContainer flexDirection="column">
-              <ProfileSection>
-                <CommonAvatar
-                  username={data.author.nickname}
-                  imageURL={data.author.presignedUrl}
-                  size="md"
-                />
-                <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
-              </ProfileSection>
-              <ContentSection>
-                <ContentWrapper>
-                  <BiSolidQuoteLeft />
-                  <BriefReviewWrapper>{data?.briefReview}</BriefReviewWrapper>
-                  <BiSolidQuoteRight style={{ marginLeft: 'auto' }} />
-                </ContentWrapper>
-                <FullReviewWrapper>{data?.fullReview}</FullReviewWrapper>
-              </ContentSection>
-              <ReactSection>
-                <IconLeft onClick={toggleLiked}>
-                  {isLiked ? (
-                    <IoIosHeartEmpty size="2rem" color="red" />
-                  ) : (
-                    <IoIosHeartEmpty size="2rem" />
-                  )}
-                </IconLeft>
-                <Text>{likes} Likes</Text>
-              </ReactSection>
-            </CommonContainer>
-          </Right>
-        </CommonContainer>
-      ) : (
-        <></>
+    <>
+      <CommonModal
+        posterId={posterId}
+        isModalOpen={isModalOpen}
+        handleModalClose={handleModalClose}
+        handleEditClick={handleEditClick}
+        handleDeletClick={handleDeleteClick}
+      >
+        {data ? (
+          <CommonContainer maxWidth="100%" flexDirection="row">
+            <Left
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <ImageContainer src={data.book.cover} />
+              {isHovered && (
+                <HoverButton onClick={handleNavigate}>책 상세 페이지</HoverButton>
+              )}
+            </Left>
+            <Right>
+              <CommonContainer flexDirection="column">
+                <ProfileSection>
+                  <CommonAvatar
+                    username={data.author.nickname}
+                    imageURL={data.author.presignedUrl}
+                    size="md"
+                  />
+                  <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
+                </ProfileSection>
+                <ContentSection>
+                  <ContentWrapper>
+                    <BiSolidQuoteLeft />
+                    <BriefReviewWrapper>{data.briefReview}</BriefReviewWrapper>
+                    <BiSolidQuoteRight style={{ marginLeft: 'auto' }} />
+                  </ContentWrapper>
+                  <FullReviewWrapper>{data.fullReview}</FullReviewWrapper>
+                </ContentSection>
+                <ReactSection>
+                  <IconLeft onClick={toggleLiked}>
+                    {isLiked ? (
+                      <IoIosHeartEmpty size="2rem" color="red" />
+                    ) : (
+                      <IoIosHeartEmpty size="2rem" />
+                    )}
+                  </IconLeft>
+                  <Text>{likes} Likes</Text>
+                </ReactSection>
+              </CommonContainer>
+            </Right>
+          </CommonContainer>
+        ) : null}
+      </CommonModal>
+      {isEditModalOpen &&(
+        <EditFavbookModal
+          data={data!!}
+          isModalOpen={isEditModalOpen}
+          handleModalClose={handleEditModalClose}
+        />
       )}
-    </CommonModal>
-  );
-};
+    </>)
+  };
+  
 
 export default FavBookDetailModal;
 
