@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
 import { FeedData } from '@/types';
 import { IoIosHeartEmpty } from 'react-icons/io';
+import { IoBookmarkOutline } from "react-icons/io5";
 import useLiked from '@/util/hooks/useLiked';
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
 
 const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
-  const [isHovered, setIsHovered] = useState(false); // Hover 상태 관리
+  const [isHovered, setIsHovered] = useState(false);
 
   const { isLiked, likes, setLikes, toggleLiked } = useLiked({
     feedId: id,
@@ -37,20 +38,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-
-    async function test() {
-      try {
-        const res = await instance.get(`api/books/detail/8937460033`);
-        console.log('책 조회 결과', res.data);
-      } catch (e) {
-        console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        console.log(data);
-      }
-    }
-    test();
-  }, [id, setLikes]);
+  }, [id]);
 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
@@ -158,8 +146,8 @@ const ImageContainer = styled.img`
 
 const HoverButton = styled.button`
   position: absolute;
-  bottom: 60%;
-  left: 50%;
+  bottom: 50%;
+  left: 25%;
   transform: translateX(-50%);
   background-color: #f5f5f5;
   border: none;
