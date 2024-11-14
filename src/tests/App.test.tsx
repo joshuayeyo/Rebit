@@ -4,9 +4,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/store/store';
-import { AuthProvider } from './provider/Auth';
+import { AuthProvider } from '@/provider/Auth';
 import { Routes } from '@/routes';
-import App from './App';
 
 vi.mock('@/store/store', () => ({
   store: {

@@ -10,8 +10,8 @@ const UserWishes = ({ filter }: { filter: string }) => {
   const [challengeData, setChallengeData] = useState<ChallengeData[]>([]);
   const [bookIsbn, setBookIsbn] = useState<string[]>([]);
   const [bookData, setBookData] = useState<BookData[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
+  // const [hasMore, setHasMore] = useState(true);
+  // const [page, setPage] = useState(0);
 
   useEffect(() => {
     async function getChallengeWishes() {
@@ -107,11 +107,11 @@ const UserWishes = ({ filter }: { filter: string }) => {
     return null;
   };
 
-  const fetchData = () => {
-    if (hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // const fetchData = () => {
+  //   if (hasMore) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // };
 
   return (
     <Wrapper>

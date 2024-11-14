@@ -22,7 +22,7 @@ const UserInfo = ({
   imageUrl,
   bio,
   points,
-  coverImageUrl,
+  // coverImageUrl,
   challengeCount,
   diaryCount,
   feedCount,
