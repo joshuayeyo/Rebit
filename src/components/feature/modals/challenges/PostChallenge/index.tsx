@@ -15,7 +15,9 @@ const PostChallengyModal = ({
   handleModalClose,
   setIsModalOpen,
 }: Props) => {
-  const [imageKey, setImageKey] = useState('');
+  
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>('');
 
   return (
     <CommonModal
@@ -25,10 +27,10 @@ const PostChallengyModal = ({
     >
       <Container>
         <ImageContainer>
-          <UploadImage setImageKey={setImageKey} type="CHALLENGE" />
+          <UploadImage setFile={setFile} setPreview={setPreview} preview={preview} />
         </ImageContainer>
         <FormContainer>
-          <ChallengeForm imageKey={imageKey} setIsModalOpen={setIsModalOpen} />
+          <ChallengeForm file={file} setIsModalOpen={setIsModalOpen} />
         </FormContainer>
       </Container>
     </CommonModal>
