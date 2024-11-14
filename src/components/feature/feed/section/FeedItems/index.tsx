@@ -159,6 +159,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           {selectedType === 'S' && (
             <StoryDetailModal
               isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
             />
@@ -166,6 +167,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           {selectedType === 'FB' && (
             <FavBookDetailModal
               isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
             />
