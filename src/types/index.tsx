@@ -74,6 +74,8 @@ export type ChallengeData = {
   minHeadcount: number;
   maxHeadcount: number;
   createdAt: string;
+  currentHeadcount: number;
+  totalEntryFee: number;
 };
 
 export type VerificationData = {
