@@ -13,16 +13,20 @@ import useLiked from '@/util/hooks/useLiked';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
   id: number;
 };
 
-const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
+const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [posterId, setIsposterId] = useState<number | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   const { isLiked, likes, setLikes, toggleLiked } = useLiked({
     feedId: id,
-    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLiked: data?.isLiked ?? false,
     initialLikes: data ? data.likes : 0,
   });
 
@@ -30,6 +34,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
     async function getContentDetails() {
       try {
         const res = await instance.get(`api/feeds/${id}`);
+        setIsposterId(res.data.author.id);
         setData(res.data);
         setLikes(res.data.likes);
       } catch (e) {
@@ -37,24 +42,55 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id]);
+  }, [id, isEditModalOpen, isDelete]);
 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
-
     if (isbn) {
       window.open(`/book/details?isbn=${isbn}`, '_blank');
     } else {
       alert('책 정보를 찾을 수 없습니다.');
     }
   };
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const res = await instance.delete(`/api/feeds/${id}`);
+      console.log('삭제 성공:', res.data);
+      setIsposterId(res.data.author.id)
+      setIsModalOpen(false);
+      setIsDelete(true);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제하는 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
-    <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
+    <CommonModal
+      posterId={posterId}
+      isModalOpen={isModalOpen}
+      handleModalClose={handleModalClose}
+      handleEditClick={handleEditClick}
+      handleDeletClick={handleDeleteClick}
+    >
       {data ? (
         <CommonContainer maxWidth="100%" flexDirection="row">
           <Left
-            onMouseEnter={() => setIsHovered(true)} // Hover 시작
-            onMouseLeave={() => setIsHovered(false)} // Hover 종료
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
             <ImageContainer src={data?.book.cover} />
             {isHovered && (
@@ -69,12 +105,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                   imageURL={data.author.presignedUrl}
                   size="md"
                 />
-                <Divider
-                  mt="0.8rem"
-                  mb="0.8rem"
-                  borderColor="gray.800"
-                  width="60%"
-                />
+                <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
               </ProfileSection>
               <ContentSection>
                 <ContentWrapper>
@@ -93,7 +124,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                   )}
                 </IconLeft>
                 <Text>{likes} Likes</Text>
-              </ReactSection>{' '}
+              </ReactSection>
             </CommonContainer>
           </Right>
         </CommonContainer>
@@ -110,6 +141,7 @@ const Left = styled.section`
   width: 50%;
   height: 60vh;
 `;
+
 const Right = styled.section`
   width: 50%;
   height: 60vh;
@@ -162,6 +194,7 @@ const HoverButton = styled.button`
     background-color: rgba(255, 255, 255, 0.8);
   }
 `;
+
 const ProfileSection = styled.section`
   width: 100%;
   height: auto;
@@ -174,6 +207,7 @@ const ContentSection = styled.div`
   color: black;
   flex-direction: column;
 `;
+
 const ContentWrapper = styled.div`
   width: 100%;
   height: 40%;
@@ -199,7 +233,6 @@ const ReactSection = styled.div`
   margin-top: 2rem;
   flex-direction: row;
   align-items: center;
-
   display: flex;
   align-items: center;
   position: absolute;
@@ -209,18 +242,13 @@ const ReactSection = styled.div`
 
 const IconLeft = styled.button`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-
-  display: flex;
   align-items: center;
   background: none;
   border: none;
   cursor: pointer;
 `;
 
-const Text = styled.text`
+const Text = styled.span`
   font-size: 1rem;
   margin-left: 0.5rem;
 `;
