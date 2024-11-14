@@ -13,7 +13,7 @@ const ChallengeIntro = () => {
     async function getFeedData() {
       try {
         const res = await instance.get(`/api/challenges`, {
-          params: {size: 4}
+          params: { size: 4 },
         });
         const result = await res.data;
         setData(result.content);

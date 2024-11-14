@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import instance from "@/api/instance";
-import styled from "@emotion/styled";
-import { Skeleton } from "@chakra-ui/react";
-import { motion, AnimatePresence } from "framer-motion";
-import ChallengeCard from "@/components/feature/challenge/post/Card";  // Ensure this path is correct
-import CommonGrid from "@/components/common/Grid";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import instance from '@/api/instance';
+import styled from '@emotion/styled';
+import { Skeleton } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import ChallengeCard from '@/components/feature/challenge/post/Card'; // Ensure this path is correct
+import CommonGrid from '@/components/common/Grid';
+import { Link } from 'react-router-dom';
 
 const UserPostedChallenges = () => {
   const [data, setData] = useState<any[]>([]);
@@ -39,7 +39,9 @@ const UserPostedChallenges = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link to={`/challenge/detail?id=${challenge.id}&filter=IN_PROGRESS`}>
+                <Link
+                  to={`/challenge/detail?id=${challenge.id}&filter=IN_PROGRESS`}
+                >
                   <ItemWrapper>
                     <ChallengeCard
                       imageUrl={challenge.presignedUrl}

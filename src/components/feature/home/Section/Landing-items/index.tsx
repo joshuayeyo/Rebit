@@ -19,7 +19,6 @@ const LandingItems = ({ data = [] }: Props) => {
     }
   };
 
-
   return (
     <>
       <CommonContainer

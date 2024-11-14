@@ -1,4 +1,15 @@
-import { addMonths, addYears, eachDayOfInterval, endOfMonth, endOfWeek, format, startOfMonth, startOfWeek, subMonths, subYears } from 'date-fns';
+import {
+  addMonths,
+  addYears,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
+  subYears,
+} from 'date-fns';
 import { useState, useEffect } from 'react';
 import CommonHeader from '@/components/common/Header';
 import styled from '@emotion/styled';
@@ -33,7 +44,7 @@ const DiaryCalendar = () => {
     async function fetchDiaryData() {
       try {
         const response = await instance.get('api/diaries');
-        console.log("다이어리 조회", response);
+        console.log('다이어리 조회', response);
         setData(response.data.content);
       } catch (error) {
         console.log(error);
@@ -55,10 +66,14 @@ const DiaryCalendar = () => {
 
   const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  const handlePrevYear = () => setCurrentDate((prevDate) => subYears(prevDate, 1));
-  const handleNextYear = () => setCurrentDate((prevDate) => addYears(prevDate, 1));
-  const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, 1));
-  const handleNextMonth = () => setCurrentDate((prevDate) => addMonths(prevDate, 1));
+  const handlePrevYear = () =>
+    setCurrentDate((prevDate) => subYears(prevDate, 1));
+  const handleNextYear = () =>
+    setCurrentDate((prevDate) => addYears(prevDate, 1));
+  const handlePrevMonth = () =>
+    setCurrentDate((prevDate) => subMonths(prevDate, 1));
+  const handleNextMonth = () =>
+    setCurrentDate((prevDate) => addMonths(prevDate, 1));
 
   const handleDayClick = (date: string) => {
     setSelectedDate(date);
@@ -101,7 +116,7 @@ const DiaryCalendar = () => {
             </Weekday>
           ))}
           {formatDays.map((date, index) => {
-            const diaryEntry = data.find(entry => entry.date === date.date);
+            const diaryEntry = data.find((entry) => entry.date === date.date);
 
             return (
               <Day
@@ -122,15 +137,18 @@ const DiaryCalendar = () => {
                       alt="일기 이미지"
                       width={50}
                       height={50}
-                      onClick={() => handleViewModalOpen(diaryEntry.id, date.date)}
+                      onClick={() =>
+                        handleViewModalOpen(diaryEntry.id, date.date)
+                      }
                       style={{ cursor: 'pointer' }}
                     />
                   ) : (
                     hoveredDate === date.date && (
-                      <Button 
-                        theme='outline' 
-                        size='medium' 
-                        onClick={handlePostModalOpen}>
+                      <Button
+                        theme="outline"
+                        size="medium"
+                        onClick={handlePostModalOpen}
+                      >
                         일기쓰기
                       </Button>
                     )
@@ -142,17 +160,17 @@ const DiaryCalendar = () => {
         </Grid>
       </CalendarContainer>
       {isPostModalOpen && (
-        <PostBookDiaryModal 
-          isModalOpen={isPostModalOpen} 
-          handleModalClose={handlePostModalClose} 
-          selectedDate={selectedDate} 
+        <PostBookDiaryModal
+          isModalOpen={isPostModalOpen}
+          handleModalClose={handlePostModalClose}
+          selectedDate={selectedDate}
         />
       )}
       {isModalOpen && selectedID && selectedDate && (
-        <DiaryDetailModal 
-          isModalOpen={isModalOpen} 
-          handleModalClose={handleViewModalClose} 
-          id={selectedID} 
+        <DiaryDetailModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleViewModalClose}
+          id={selectedID}
         />
       )}
     </>
@@ -212,20 +230,25 @@ const Weekday = styled.div<{ isSunday: boolean }>`
   color: ${({ isSunday }) => (isSunday ? 'red' : 'inherit')};
 `;
 
-const Day = styled.div<{ $isCurrentMonth: boolean; $isSelected: boolean; isSunday: boolean; isToday: boolean }>`
+const Day = styled.div<{
+  $isCurrentMonth: boolean;
+  $isSelected: boolean;
+  isSunday: boolean;
+  isToday: boolean;
+}>`
   position: relative;
   text-align: center;
   padding: 1rem 0;
   font-size: 1.4rem;
   height: 15rem;
-  color: ${({ $isCurrentMonth, isSunday }) => 
+  color: ${({ $isCurrentMonth, isSunday }) =>
     isSunday ? 'red' : $isCurrentMonth ? '#000' : '#aaa'};
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: ${({ isToday }) => (isToday ? '#d3e4ff' : 'transparent')};
   cursor: pointer;
   &:hover {
-    background-color: #E9E9E9;
+    background-color: #e9e9e9;
   }
 `;
 
@@ -249,6 +272,6 @@ const Image = styled.img`
   cursor: pointer;
   transition: transform 0.2s;
   &:hover {
-    transform: scale(1.3); 
+    transform: scale(1.3);
   }
 `;

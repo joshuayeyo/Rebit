@@ -7,8 +7,14 @@ import instance from '@/api/instance';
 import { UserData } from '@/types';
 import ContentSection from '@/components/feature/mypage/section/ContentSection';
 
+interface ActivitySummary {
+  diaryCount: number;
+  feedCount: number;
+  challengeCount: number;
+}
+
 const Mypage = () => {
-  const [activitySummary, setActibitySummary] = useState<number>()
+  const [activitySummary, setActibitySummary] = useState<ActivitySummary | null>(null);
   const [data, setData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSection, setSelectedSection] = useState('Feed');
@@ -47,21 +53,21 @@ const Mypage = () => {
       <CommonHeader />
       {data ? (
         <Skeleton isLoaded={!isLoading}>
-          <UserInfo 
-            nickname={data.nickname} 
-            imageUrl={data.presignedUrl} 
+          <UserInfo
+            nickname={data.nickname}
+            imageUrl={data.presignedUrl}
             coverImageUrl={data.coverPresignedUrl}
             bio={data.bio}
             points={data.point}
-            diaryCount={activitySummary?.diaryCount} 
-            feedCount={activitySummary?.feedCount} 
-            challengeCount={activitySummary?.challengeCount}
+            diaryCount={activitySummary?.diaryCount ?? 0}
+            feedCount={activitySummary?.feedCount ?? 0}
+            challengeCount={activitySummary?.challengeCount ?? 0}
           />
-          <Navbar 
-            selectedSection={selectedSection} 
-            onSelectSection={setSelectedSection} 
-            selectedFilter={selectedFilter} 
-            onSelectFilter={setSelectedFilter} 
+          <Navbar
+            selectedSection={selectedSection}
+            onSelectSection={setSelectedSection}
+            selectedFilter={selectedFilter}
+            onSelectFilter={setSelectedFilter}
           />
           <ContentSection
             section={selectedSection}

@@ -14,7 +14,7 @@ const StoryIntro = () => {
     async function getFeedData() {
       try {
         const res = await instance.get(`/api/feeds/stories`, {
-          params: {size: 4}
+          params: { size: 4 },
         });
         const result = await res.data;
         setData(result.content);

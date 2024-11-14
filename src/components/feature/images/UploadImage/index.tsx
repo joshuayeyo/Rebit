@@ -21,15 +21,13 @@ const UploadImage = ({ setFile, preview, setPreview }: Props) => {
     }
   }, [setPreview, preview]);
 
-
   const handleUpload = () => {
     uploadImage.current?.click();
   };
 
-
   const handleDelete = () => {
     setPreview(defaultImage);
-    setFile(null)
+    setFile(null);
   };
 
   const handlePreview = (e: React.ChangeEvent<HTMLInputElement>) => {

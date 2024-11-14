@@ -11,7 +11,13 @@ type Props = {
   onSubmit: (e: React.FormEvent) => void;
 };
 
-const EditProfileForm = ({ onSubmit, nickname, setNickname, bio, setBio }: Props) => {
+const EditProfileForm = ({
+  onSubmit,
+  nickname,
+  setNickname,
+  bio,
+  setBio,
+}: Props) => {
   return (
     <Form onSubmit={onSubmit}>
       <CommonContainer

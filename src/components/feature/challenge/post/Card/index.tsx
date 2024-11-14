@@ -15,8 +15,8 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
         <Title>{title}</Title>
       </ImageContainer>
       <PosterContiner>
-          <Author>{author}</Author>
-          <Profile src={profilePics} />
+        <Author>{author}</Author>
+        <Profile src={profilePics} />
       </PosterContiner>
     </Wrapper>
   );

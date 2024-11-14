@@ -90,14 +90,14 @@ const VerificationSection = ({
         </Skeleton>
         {isModalOpen && selectedId !== null && (
           <VerificationDetailModal
-          isModalOpen={isModalOpen}
-          handleModalClose={handleModalClose}
-          challengeId={challengeId}
-          verificationId={selectedId}
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+            challengeId={challengeId}
+            verificationId={selectedId}
           />
         )}
       </Wrapper>
-      <Footer/>
+      <Footer />
     </>
   );
 };
@@ -122,4 +122,4 @@ const ItemWrapper = styled.div`
 const Footer = styled.div`
   width: 100%;
   height: 100px;
-`; 
+`;

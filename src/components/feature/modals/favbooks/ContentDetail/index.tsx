@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
 import { FeedData } from '@/types';
 import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoBookmarkOutline } from "react-icons/io5";
 import useLiked from '@/util/hooks/useLiked';
 
 type Props = {
@@ -94,7 +93,8 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                   )}
                 </IconLeft>
                 <Text>{likes} Likes</Text>
-              </ReactSection>            </CommonContainer>
+              </ReactSection>{' '}
+            </CommonContainer>
           </Right>
         </CommonContainer>
       ) : (

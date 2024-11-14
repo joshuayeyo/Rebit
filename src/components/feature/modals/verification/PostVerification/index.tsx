@@ -48,7 +48,6 @@ const PostVerificationModal = ({
     let updatedImageKey = imageKey;
 
     async function postVerificationData() {
-      
       if (file) {
         updatedImageKey = await uploadImage2S3(file);
         setImageKey(updatedImageKey);
@@ -59,7 +58,7 @@ const PostVerificationModal = ({
         ...formData,
         imageKey: updatedImageKey,
       };
-      
+
       try {
         await instance.post(
           `/api/challenges/${challengeId}/verifications`,
@@ -70,10 +69,11 @@ const PostVerificationModal = ({
         window.location.reload();
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          const errorMessage = error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          const errorMessage =
+            error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
           console.error('Error message:', errorMessage);
           alert(errorMessage);
-          handleModalClose(); 
+          handleModalClose();
         }
       }
     }
@@ -90,7 +90,11 @@ const PostVerificationModal = ({
           <FlexContainer>
             <Left>
               <ImageContainer>
-              <UploadImage setFile={setFile} preview={preview} setPreview={setPreview} />
+                <UploadImage
+                  setFile={setFile}
+                  preview={preview}
+                  setPreview={setPreview}
+                />
               </ImageContainer>
             </Left>
             <Right>

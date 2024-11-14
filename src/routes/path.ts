@@ -10,5 +10,4 @@ export const RouterPath = {
   bookSearch: '/book/search',
   bookdetails: '/book/details',
   bookdiary: '/bookdiary',
-
 };

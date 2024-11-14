@@ -53,7 +53,12 @@ const MagazineDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                   imageURL={data.author.presignedUrl}
                   size="md"
                 />
-                <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
+                <Divider
+                  mt="0.8rem"
+                  mb="0.8rem"
+                  borderColor="gray.800"
+                  width="60%"
+                />
               </ProfileSection>
               <ContentSection>
                 <StoryContentDetail content={data.content} />

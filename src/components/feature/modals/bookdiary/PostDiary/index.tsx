@@ -11,8 +11,12 @@ type Props = {
   selectedDate: string | null;
 };
 
-const PostBookDiaryModal = ({ isModalOpen, handleModalClose, selectedDate}: Props) => {
-  const date = selectedDate ? new Date(selectedDate) : new Date(); 
+const PostBookDiaryModal = ({
+  isModalOpen,
+  handleModalClose,
+  selectedDate,
+}: Props) => {
+  const date = selectedDate ? new Date(selectedDate) : new Date();
   const time = {
     year: date.getFullYear(),
     month: date.getMonth() + 1,
@@ -20,7 +24,8 @@ const PostBookDiaryModal = ({ isModalOpen, handleModalClose, selectedDate}: Prop
   };
 
   const [Content, setContent] = useState('');
-  const [contentPlaceholder, setContentPlaceholder] = useState('오늘의 일기를 작성하세요');
+  const [contentPlaceholder, setContentPlaceholder] =
+    useState('오늘의 일기를 작성하세요');
   const [isPlaceholderRed, setIsPlaceholderRed] = useState(false);
 
   const [selectedBook, setSelectedBook] = useState(() => {
@@ -41,9 +46,8 @@ const PostBookDiaryModal = ({ isModalOpen, handleModalClose, selectedDate}: Prop
 
     async function postFeedData() {
       try {
-        await instance.get('api/diaries', {
-        }).then((response) => {
-          console.log("다이어리 조회",response);
+        await instance.get('api/diaries', {}).then((response) => {
+          console.log('다이어리 조회', response);
           window.location.reload();
         });
       } catch (error) {
@@ -64,19 +68,21 @@ const PostBookDiaryModal = ({ isModalOpen, handleModalClose, selectedDate}: Prop
 
     async function postFeedData() {
       try {
-        await instance.post('api/diaries', {
-          content:Content,
-          isbn:selectedBook?.isbn,
-          date:selectedDate
-        }).then((response) => {
-          console.log("다이어리 조회",response);
-          window.location.reload();
-        });
+        await instance
+          .post('api/diaries', {
+            content: Content,
+            isbn: selectedBook?.isbn,
+            date: selectedDate,
+          })
+          .then((response) => {
+            console.log('다이어리 조회', response);
+            window.location.reload();
+          });
       } catch (error) {
         console.log(error);
       }
     }
-    postFeedData();   
+    postFeedData();
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

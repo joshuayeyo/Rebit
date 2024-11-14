@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 
 type Props = {
-    imageUrl: string;
-    title: string;
-    author: string;
+  imageUrl: string;
+  title: string;
+  author: string;
 };
 
 const WishCard = ({ imageUrl, title, author }: Props) => {
@@ -14,7 +14,7 @@ const WishCard = ({ imageUrl, title, author }: Props) => {
         <Title>{title}</Title>
       </ImageContainer>
       <PosterContiner>
-          <Author>{author}</Author>
+        <Author>{author}</Author>
       </PosterContiner>
     </Wrapper>
   );
