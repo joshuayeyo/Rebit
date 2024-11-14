@@ -62,7 +62,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCou
   };
 
   return (
-    <Wrapper coverImageUrl={coverImageUrl}>
+    <Wrapper>
       <CommonContainer
         flexDirection="row"
         justifyContent="space-between"
@@ -134,16 +134,28 @@ const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCou
 
 export default UserInfo;
 
-const Wrapper = styled.section<{ coverImageUrl: string }>`
+// const Wrapper = styled.section<{ coverImageUrl: string }>`
+//   width: 100%;
+//   margin-top: 2rem;
+//   height: 30vh;
+//   min-height: 10vh;
+//   background-image: url(${props => props.coverImageUrl});
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat; 
+// `;
+
+const Wrapper = styled.section`
   width: 100%;
   margin-top: 2rem;
   height: 30vh;
   min-height: 10vh;
-  background-image: url(${props => props.coverImageUrl});
+  background-color: black;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; 
 `;
+
 
 const ProfileImage = styled.div`
   height: auto;
@@ -167,7 +179,7 @@ const Username = styled.text`
 `;
 
 const Userbio = styled.text`
-  color: black;
+  color: white;
   font-size: 1.5rem;
 `;
 
@@ -179,7 +191,6 @@ const EditButton = styled.button`
 const UnknownSection = styled.div`
   width: auto;
   padding: 2rem;
-  background-color: black;
 `;
 
 const PointContainer = styled.div`
