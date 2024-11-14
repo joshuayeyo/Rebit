@@ -11,9 +11,13 @@ type Props = {
   imageUrl?: string;
   bio?: string;
   points?: number;
+  coverImageUrl: string;
+  challengeCount: number;
+  diaryCount: number;
+  feedCount: number;
 };
 
-const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
+const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCount, diaryCount, feedCount }: Props) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleEditModalClose = () => {
@@ -50,7 +54,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
     }};
 
 
-  const pointsValue = (points?: number) => {
+  const pointsValue = () => {
     if (points && points > 99999) {
       return '+99999';
     }
@@ -58,7 +62,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper coverImageUrl={coverImageUrl}>
       <CommonContainer
         flexDirection="row"
         justifyContent="space-between"
@@ -75,7 +79,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
         </ProfileImage>
         <CommonContainer flexDirection="column" alignItems="flex-start">
           <Username>{nickname}</Username>
-          <Userbio>{bio ? bio : '바이오가 없습니다.'}</Userbio>
+          <Userbio>{bio ? bio : '책을 통해 세상을 보는 독서광'}</Userbio>
           <EditButton onClick={handleEditProfileButton}>
             Edit Profile
           </EditButton>
@@ -91,18 +95,18 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
               flexDirection="column"
               style={{ color: 'white', fontSize: '40px', fontWeight: 'bold' }}
             >
-              #17 Challenges
+              #{challengeCount} Challenges
               <br />
-              #32 Feeds
+              #{feedCount} Feeds
               <br />
-              #102 Diaries
+              #{diaryCount} Diaries
             </CommonContainer>
             <PointContainer>
               <PointInfo>
                 <PointLogoContainer>
                   <PointLogo />
                 </PointLogoContainer>
-                <PointAccount>{pointsValue(points)}</PointAccount>
+                <PointAccount>{pointsValue()}</PointAccount>
               </PointInfo>
               <button
                 onClick={handleReloadPoints}
@@ -130,12 +134,15 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
 
 export default UserInfo;
 
-const Wrapper = styled.section`
+const Wrapper = styled.section<{ coverImageUrl: string }>`
   width: 100%;
   margin-top: 2rem;
   height: 30vh;
   min-height: 10vh;
-  background-color: green;
+  background-image: url(${props => props.coverImageUrl});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
 `;
 
 const ProfileImage = styled.div`
@@ -160,17 +167,19 @@ const Username = styled.text`
 `;
 
 const Userbio = styled.text`
-  color: white;
+  color: black;
   font-size: 1.5rem;
 `;
 
 const EditButton = styled.button`
   cursor: pointer;
+  color-white;
 `;
 
 const UnknownSection = styled.div`
   width: auto;
   padding: 2rem;
+  background-color: black;
 `;
 
 const PointContainer = styled.div`

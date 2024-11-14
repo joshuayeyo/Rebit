@@ -1,40 +1,19 @@
-import instance from '@/api/instance';
 import { Button } from '@/components/common/Button';
 import CommonContainer from '@/components/common/layouts/Container';
 import styled from '@emotion/styled';
-import axios from 'axios';
-import { useState } from 'react';
+// import { useState } from 'react';
 
 type Props = {
-  imageKey: string;
-  initialNickname: string;
-  initialBio: string;
+  nickname: string;
+  setNickname: (e: string) => void;
+  bio: string;
+  setBio: (e: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
 };
 
-const EditProfileForm = ({ imageKey, initialNickname, initialBio }: Props) => {
-  const [nickname, setNickname] = useState(initialNickname);
-  const [bio, setBio] = useState(initialBio);
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const updatedData: { imageKey: string; nickname: string; bio: string } = {
-      imageKey,
-      nickname: nickname !== initialNickname ? nickname : initialNickname,
-      bio: bio !== initialBio ? bio : initialBio,
-  };
-
-  try {
-    await instance.put(`api/members/me`, updatedData);
-      window.location.reload();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(error.response ? error.response.data : error.message);
-      }
-    }
-  };
-
+const EditProfileForm = ({ onSubmit, nickname, setNickname, bio, setBio }: Props) => {
   return (
-    <Wrapper>
+    <Form onSubmit={onSubmit}>
       <CommonContainer
         flexDirection="column"
         justifyContent="center"
@@ -57,17 +36,17 @@ const EditProfileForm = ({ imageKey, initialNickname, initialBio }: Props) => {
             placeholder="바이오를 입력하세요"
           />
         </BioField>
-        <Button size="medium" theme="lightgray" onClick={handleSubmit}>
+        <Button size="medium" theme="lightgray" type="submit">
           프로필 수정하기
         </Button>
       </CommonContainer>
-    </Wrapper>
+    </Form>
   );
 };
 
 export default EditProfileForm;
 
-const Wrapper = styled.div`
+const Form = styled.form`
   width: 80%;
   height: 100%;
   overflow-y: auto;
