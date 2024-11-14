@@ -9,7 +9,7 @@ import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
 import { FeedData } from '@/types';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import { IoBookmarkOutline } from "react-icons/io5";
-
+import useLiked from '@/util/hooks/useLiked';
 
 type Props = {
   isModalOpen: boolean;
@@ -21,11 +21,18 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
+  const { isLiked, likes, setLikes, toggleLiked } = useLiked({
+    feedId: id,
+    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLikes: data ? data.likes : 0,
+  });
+
   useEffect(() => {
     async function getContentDetails() {
       try {
         const res = await instance.get(`api/feeds/${id}`);
         setData(res.data);
+        setLikes(res.data.likes);
       } catch (e) {
         console.log(e);
       }
@@ -79,12 +86,15 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                 <FullReviewWrapper>{data?.fullReview}</FullReviewWrapper>
               </ContentSection>
               <ReactSection>
-                <IconLeft >
-                  <IoIosHeartEmpty size="2rem" />
+                <IconLeft onClick={toggleLiked}>
+                  {isLiked ? (
+                    <IoIosHeartEmpty size="2rem" color="red" />
+                  ) : (
+                    <IoIosHeartEmpty size="2rem" />
+                  )}
                 </IconLeft>
-                <Text>Likes</Text>
-              </ReactSection>
-            </CommonContainer>
+                <Text>{likes} Likes</Text>
+              </ReactSection>            </CommonContainer>
           </Right>
         </CommonContainer>
       ) : (
