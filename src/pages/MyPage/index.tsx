@@ -4,20 +4,15 @@ import UserInfo from '@/components/feature/mypage/section/UserInfo';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@chakra-ui/react';
 import instance from '@/api/instance';
-
-type UserData = {
-  nickname: string;
-  presignedUrl: string;
-  bio?: string;
-  point?: number;
-};
+import { UserData } from '@/types';
+import ContentSection from '@/components/feature/mypage/section/ContentSection';
 
 const Mypage = () => {
+  const [activitySummary, setActibitySummary] = useState<number>()
   const [data, setData] = useState<UserData | null>(null);
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedSection, setSelectedSection] = useState('Feed');
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
 
   useEffect(() => {
     async function getUserDetails() {
@@ -32,15 +27,37 @@ const Mypage = () => {
       }
     }
     getUserDetails();
-  }, [accessToken]);
-
+  }, []);
+  useEffect(() => {
+    async function getUserActivitySummary() {
+      try {
+        const res = await instance.get(`/api/members/me/activity-summary`);
+        setActibitySummary(res.data);
+      } catch (error) {
+        console.log(error);
+        alert('Error: 데이터를 불러올 수 없습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getUserActivitySummary();
+  }, []);
   return (
     <>
       <CommonHeader />
       {data ? (
         <Skeleton isLoaded={!isLoading}>
-          <UserInfo nickname={data.nickname} imageUrl={data.presignedUrl} />
-          <Navbar />
+          <UserInfo nickname={data.nickname} imageUrl={data.presignedUrl} coverImageUrl={data.coverPresignedUrl} diaryCount={activitySummary?.diaryCount} feedCount={activitySummary?.feedCount} challengeCount={activitySummary?.challengeCount} />
+          <Navbar 
+            selectedSection={selectedSection} 
+            onSelectSection={setSelectedSection} 
+            selectedFilter={selectedFilter} 
+            onSelectFilter={setSelectedFilter} 
+          />
+          <ContentSection
+            section={selectedSection}
+            selectedFilter={selectedFilter}
+          />
         </Skeleton>
       ) : (
         <></>
