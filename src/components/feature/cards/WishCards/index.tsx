@@ -4,10 +4,9 @@ type Props = {
   imageUrl: string;
   title: string;
   author: string;
-  profilePics: string;
 };
 
-const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
+const WishCard = ({ imageUrl, title, author }: Props) => {
   return (
     <Wrapper>
       <ImageContainer>
@@ -16,12 +15,11 @@ const ChallengeCard = ({ imageUrl, title, author, profilePics }: Props) => {
       </ImageContainer>
       <PosterContiner>
         <Author>{author}</Author>
-        <Profile src={profilePics} />
       </PosterContiner>
     </Wrapper>
   );
 };
-export default ChallengeCard;
+export default WishCard;
 
 const Wrapper = styled.div``;
 
@@ -59,11 +57,4 @@ const PosterContiner = styled.div`
 const Author = styled.div`
   font-size: 1rem;
   margin-right: 0.5rem;
-`;
-
-const Profile = styled.img`
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  object-fit: cover;
 `;

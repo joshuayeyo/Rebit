@@ -13,12 +13,11 @@ const StoryIntro = () => {
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/feeds`);
+        const res = await instance.get(`/api/feeds/stories`, {
+          params: { size: 4 },
+        });
         const result = await res.data;
-        const filteredData = result.content
-          .filter((item: FeedData) => item.type === 'S')
-          .slice(0, 4);
-        setData(filteredData);
+        setData(result.content);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =

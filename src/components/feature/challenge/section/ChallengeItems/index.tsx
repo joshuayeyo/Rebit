@@ -42,8 +42,6 @@ const ChallegeItemSection = ({ filterType }: ChallegeItemSectionProps) => {
         });
 
         const result = await res.data;
-        console.log(result);
-
         if (result.content && result.content.length > 0) {
           setData((prevData) => [...prevData, ...result.content]);
         } else {

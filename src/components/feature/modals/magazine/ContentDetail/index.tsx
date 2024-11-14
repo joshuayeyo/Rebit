@@ -4,54 +4,53 @@ import CommonContainer from '@/components/common/layouts/Container';
 import { Divider } from '@chakra-ui/react';
 import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
+import { IoIosHeartEmpty } from 'react-icons/io';
 import { useEffect, useState } from 'react';
-import instance from '@/api/instance';
 import { Spinner } from '@/components/common/Spinner';
-import { VerificationData } from '@/types';
+import instance from '@/api/instance';
+import { FeedData } from '@/types';
 
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
-  challengeId: number | null;
-  verificationId: number;
+  id: number;
 };
-const VerificationDetailModal = ({
-  isModalOpen,
-  handleModalClose,
-  challengeId,
-  verificationId,
-}: Props) => {
-  const [data, setData] = useState<VerificationData | null>(null);
+
+const MagazineDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
+  const [data, setData] = useState<FeedData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getContentDetails() {
       try {
-        const res = await instance.get(
-          `/api/challenges/${challengeId}/verifications/${verificationId}`,
-        );
-        const result = await res;
-        setData(result.data);
+        const res = await instance.get(`/api/feeds/magazines/${id}`);
+        setData(res.data);
       } catch (e) {
         console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
+      } finally {
+        setIsLoading(false);
       }
     }
     getContentDetails();
-  }, [challengeId, setData]);
+  }, [id]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
       {data ? (
-        <>
+        <CommonContainer maxWidth="100%" flexDirection="row">
           <Left>
-            <ImageContainer src={data?.presignedUrl}></ImageContainer>
+            <ImageContainer src={data.presignedUrl} />
           </Left>
           <Right>
             <CommonContainer flexDirection="column">
               <ProfileSection>
                 <CommonAvatar
-                  username={data?.author.nickname}
-                  imageURL={data.author.nickname}
+                  username={data.author.nickname}
+                  imageURL={data.author.presignedUrl}
                   size="md"
                 />
                 <Divider
@@ -64,15 +63,23 @@ const VerificationDetailModal = ({
               <ContentSection>
                 <StoryContentDetail content={data.content} />
               </ContentSection>
+              <ReactSection>
+                <IconLeft>
+                  <IoIosHeartEmpty size="2rem" />
+                </IconLeft>
+                <Text>Likes</Text>
+              </ReactSection>
             </CommonContainer>
           </Right>
-        </>
+        </CommonContainer>
       ) : (
         <Spinner />
       )}
     </CommonModal>
   );
 };
+
+export default MagazineDetailModal;
 
 const Left = styled.section`
   width: 50%;
@@ -105,4 +112,27 @@ const ContentSection = styled.div`
   display: flex;
 `;
 
-export default VerificationDetailModal;
+const ReactSection = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  bottom: 5%;
+  left: 60%rem;
+`;
+
+const IconLeft = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const Text = styled.span`
+  font-size: 1rem;
+  margin-left: 0.5rem;
+`;

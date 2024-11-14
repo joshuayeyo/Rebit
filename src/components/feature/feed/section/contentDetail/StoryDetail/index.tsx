@@ -14,7 +14,7 @@ const StoryContentDetail = ({ content }: Props) => {
 const ContentWrapper = styled.div`
   width: 100%;
   height: 40vh;
-  overflow-y: scroll;
+  overflow: hidden;
   text-align: left;
   padding: 1rem;
 `;

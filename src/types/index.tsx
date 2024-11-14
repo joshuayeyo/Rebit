@@ -28,6 +28,13 @@ export type FeedData = {
   isLiked: boolean;
   type: string;
 };
+export type DiaryData = {
+  id: number;
+  content: string;
+  book: BookData;
+  date: string;
+  isbn: string;
+};
 
 export type AuthorData = {
   nickname: string;
@@ -43,6 +50,8 @@ export type UserData = {
   email: string;
   role: 'ROLE_USER';
   point: number;
+  coverPresignedUrl: string;
+  coverImageKey: string;
 };
 
 export type ChallengeData = {
@@ -66,6 +75,8 @@ export type ChallengeData = {
   minHeadcount: number;
   maxHeadcount: number;
   createdAt: string;
+  currentHeadcount: number;
+  totalEntryFee: number;
 };
 
 export type VerificationData = {
@@ -100,3 +111,19 @@ export type FilterType =
   | 'COMPLETED'
   | 'UPCOMING'
   | 'ALL';
+
+export interface ChallengeFormData {
+  title: string;
+  content: string;
+  imageKey: string;
+  type: string;
+  minimumEntryFee: number;
+  maxHeadcount: number;
+  minHeadcount: number;
+  challengeStartDate: Date;
+  challengeEndDate: Date;
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date;
+  currentHeadCount: number;
+  totalEntryFee: number;
+}

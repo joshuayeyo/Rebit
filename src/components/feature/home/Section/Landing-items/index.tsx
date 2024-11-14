@@ -2,12 +2,23 @@ import CommonContainer from '@/components/common/layouts/Container';
 import CommonGrid from '@/components/common/Grid';
 import CommonCard from '@/components/feature/home/Card';
 import { ChallengeData, FeedData } from '@/types';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   data: (ChallengeData | FeedData)[];
 };
 
 const LandingItems = ({ data = [] }: Props) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (data: ChallengeData | FeedData) => {
+    if ('challengeStartDate' in data) {
+      navigate(`/challenge`);
+    } else {
+      navigate(`/feed`);
+    }
+  };
+
   return (
     <>
       <CommonContainer
@@ -48,6 +59,7 @@ const LandingItems = ({ data = [] }: Props) => {
                 ('author' in data && data.author.nickname) ||
                 ''
               }
+              onClick={() => handleCardClick(data)}
             />
           ))}
         </CommonGrid>

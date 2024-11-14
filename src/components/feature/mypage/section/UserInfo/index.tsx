@@ -11,9 +11,22 @@ type Props = {
   imageUrl?: string;
   bio?: string;
   points?: number;
+  coverImageUrl: string;
+  challengeCount: number;
+  diaryCount: number;
+  feedCount: number;
 };
 
-const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
+const UserInfo = ({
+  nickname,
+  imageUrl,
+  bio,
+  points,
+  // coverImageUrl,
+  challengeCount,
+  diaryCount,
+  feedCount,
+}: Props) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleEditModalClose = () => {
@@ -32,25 +45,25 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
   };
 
   const handleReloadPoints = async () => {
-    const amount = prompt("충전할 금액을 입력하세요:"); // 금액을 입력 받음
+    const amount = prompt('충전할 금액을 입력하세요:'); // 금액을 입력 받음
 
     if (amount === null || isNaN(Number(amount)) || Number(amount) <= 0) {
-        alert("유효한 금액을 입력해주세요.");
-        return;
+      alert('유효한 금액을 입력해주세요.');
+      return;
     }
     try {
-        // 포인트 충전 API 요청
-        const response = await instance.post("/api/members/points",
-          { points: amount }
-        );
-        alert(`${amount} 원이 충전되었습니다!`);
-        console.log(response)
+      // 포인트 충전 API 요청
+      const response = await instance.post('/api/members/points', {
+        points: amount,
+      });
+      alert(`${amount} 원이 충전되었습니다!`);
+      console.log(response);
     } catch (error) {
-      console.log(error)
-    }};
+      console.log(error);
+    }
+  };
 
-
-  const pointsValue = (points?: number) => {
+  const pointsValue = () => {
     if (points && points > 99999) {
       return '+99999';
     }
@@ -75,7 +88,7 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
         </ProfileImage>
         <CommonContainer flexDirection="column" alignItems="flex-start">
           <Username>{nickname}</Username>
-          <Userbio>{bio ? bio : '바이오가 없습니다.'}</Userbio>
+          <Userbio>{bio ? bio : '책을 통해 세상을 보는 독서광'}</Userbio>
           <EditButton onClick={handleEditProfileButton}>
             Edit Profile
           </EditButton>
@@ -91,18 +104,16 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
               flexDirection="column"
               style={{ color: 'white', fontSize: '40px', fontWeight: 'bold' }}
             >
-              #17 Challenges
-              <br />
-              #32 Feeds
-              <br />
-              #102 Diaries
+              #{challengeCount} Challenges
+              <br />#{feedCount} Feeds
+              <br />#{diaryCount} Diaries
             </CommonContainer>
             <PointContainer>
               <PointInfo>
                 <PointLogoContainer>
                   <PointLogo />
                 </PointLogoContainer>
-                <PointAccount>{pointsValue(points)}</PointAccount>
+                <PointAccount>{pointsValue()}</PointAccount>
               </PointInfo>
               <button
                 onClick={handleReloadPoints}
@@ -130,12 +141,26 @@ const UserInfo = ({ nickname, imageUrl, bio, points }: Props) => {
 
 export default UserInfo;
 
+// const Wrapper = styled.section<{ coverImageUrl: string }>`
+//   width: 100%;
+//   margin-top: 2rem;
+//   height: 30vh;
+//   min-height: 10vh;
+//   background-image: url(${props => props.coverImageUrl});
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat;
+// `;
+
 const Wrapper = styled.section`
   width: 100%;
   margin-top: 2rem;
   height: 30vh;
   min-height: 10vh;
-  background-color: green;
+  background-color: black;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const ProfileImage = styled.div`
@@ -166,6 +191,7 @@ const Userbio = styled.text`
 
 const EditButton = styled.button`
   cursor: pointer;
+  color-white;
 `;
 
 const UnknownSection = styled.div`

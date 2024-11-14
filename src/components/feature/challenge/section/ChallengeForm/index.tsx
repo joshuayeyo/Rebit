@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from '@emotion/styled';
@@ -6,20 +6,24 @@ import { format } from 'date-fns';
 import instance from '@/api/instance';
 import { ko } from 'date-fns/locale';
 import axios from 'axios';
+import { useStoreImage } from '@/util/hooks/useStoreImage';
+
 type Props = {
-  imageKey: string;
+  file: File | null;
   setIsModalOpen: (visible: boolean) => void;
 };
 
 const tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
 
-const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
+const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
+  const { imageKey, uploadImage2S3 } = useStoreImage({ type: 'CHALLENGE' });
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    imageKey: '',
     type: '',
+    imageKey: '',
     minimumEntryFee: 0,
     maxHeadcount: 0,
     minHeadcount: 0,
@@ -29,17 +33,10 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
     recruitmentEndDate: tomorrow,
   });
 
-  useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      imageKey: imageKey,
-    }));
-  }, [imageKey]);
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -57,33 +54,48 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    let imageResult = '';
+    if (file) {
+      imageResult = await uploadImage2S3(file);
+      
+      if (!imageResult) {
+        alert('이미지 업로드에 실패했습니다!');
+        return;
+      }
+    }
+
+    const formattedData = {
+      ...formData,
+      imageKey: imageResult,
+      challengeStartDate: format(
+        formData.challengeStartDate,
+        "yyyy-MM-dd'T'00:00:00",
+      ),
+      challengeEndDate: format(
+        formData.challengeEndDate,
+        "yyyy-MM-dd'T'23:59:59",
+      ),
+      recruitmentStartDate: format(
+        formData.recruitmentStartDate,
+        "yyyy-MM-dd'T'00:00:00",
+      ),
+      recruitmentEndDate: format(
+        formData.recruitmentEndDate,
+        "yyyy-MM-dd'T'23:59:59",
+      ),
+    };
+  
+    console.log('Formatted Data:', formattedData);
+  
     try {
-      const formattedData = {
-        ...formData,
-        challengeStartDate: format(
-          formData.challengeStartDate,
-          "yyyy-MM-dd'T'00:00:00",
-        ),
-        challengeEndDate: format(
-          formData.challengeEndDate,
-          "yyyy-MM-dd'T'23:59:59",
-        ),
-        recruitmentStartDate: format(
-          formData.recruitmentStartDate,
-          "yyyy-MM-dd'T'00:00:00",
-        ),
-        recruitmentEndDate: format(
-          formData.recruitmentEndDate,
-          "yyyy-MM-dd'T'23:59:59",
-        ),
-      };
-      console.log('Response:', formattedData);
       const response = await instance.post('/api/challenges', formattedData);
       console.log('Response:', response.data);
       setIsModalOpen(false);
       alert('챌린지가 생성되었습니다.');
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        console.log(imageKey)
         console.error(
           'Error sending form data:',
           error.response ? error.response.data : error.message,
@@ -91,7 +103,6 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
       }
     }
   };
-
   return (
     <StyledFormContainer>
       <StyledForm onSubmit={handleSubmit}>
@@ -114,7 +125,7 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
             required
           >
             <option value="">챌린지 유형을 선택하세요.</option>
-            <option value="DAILY_READING">매일매일 책 읽기</option>
+            <option value="DAILY_WRITING">매일매일 책 읽기</option>
             <option value="RELAY_NOVEL">릴레이 소설</option>
             <option value="SITUATIONAL_SENTENCE">기타</option>
           </select>
@@ -206,6 +217,7 @@ const ChallengeForm = ({ imageKey, setIsModalOpen }: Props) => {
 };
 
 export default ChallengeForm;
+
 
 const StyledFormContainer = styled.div`
   width: 80%;

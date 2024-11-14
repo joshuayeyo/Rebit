@@ -7,6 +7,8 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { BiSolidQuoteLeft, BiSolidQuoteRight } from 'react-icons/bi';
 import { FeedData } from '@/types';
+import { IoIosHeartEmpty } from 'react-icons/io';
+import useLiked from '@/util/hooks/useLiked';
 
 type Props = {
   isModalOpen: boolean;
@@ -16,32 +18,25 @@ type Props = {
 
 const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
-  const [isHovered, setIsHovered] = useState(false); // Hover 상태 관리
+  const [isHovered, setIsHovered] = useState(false);
+
+  const { isLiked, likes, setLikes, toggleLiked } = useLiked({
+    feedId: id,
+    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLikes: data ? data.likes : 0,
+  });
 
   useEffect(() => {
     async function getContentDetails() {
       try {
         const res = await instance.get(`api/feeds/${id}`);
         setData(res.data);
+        setLikes(res.data.likes);
       } catch (e) {
         console.log(e);
       }
     }
     getContentDetails();
-    // }, [id]);
-
-    async function test() {
-      try {
-        const res = await instance.get(`api/books/detail/8937460033`);
-        console.log('책 조회 결과', res.data);
-      } catch (e) {
-        console.log(e);
-        alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        console.log(data);
-      }
-    }
-    test();
   }, [id]);
 
   const handleNavigate = () => {
@@ -89,6 +84,16 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
                 </ContentWrapper>
                 <FullReviewWrapper>{data?.fullReview}</FullReviewWrapper>
               </ContentSection>
+              <ReactSection>
+                <IconLeft onClick={toggleLiked}>
+                  {isLiked ? (
+                    <IoIosHeartEmpty size="2rem" color="red" />
+                  ) : (
+                    <IoIosHeartEmpty size="2rem" />
+                  )}
+                </IconLeft>
+                <Text>{likes} Likes</Text>
+              </ReactSection>{' '}
             </CommonContainer>
           </Right>
         </CommonContainer>
@@ -104,13 +109,13 @@ export default FavBookDetailModal;
 const Left = styled.section`
   width: 50%;
   height: 60vh;
-  position: relative;
 `;
 const Right = styled.section`
   width: 50%;
-  height: 100%;
+  height: 60vh;
   padding-right: 2rem;
   padding-left: 2rem;
+  position: relative;
 `;
 
 const ImageContainer = styled.img`
@@ -141,8 +146,8 @@ const ImageContainer = styled.img`
 
 const HoverButton = styled.button`
   position: absolute;
-  bottom: 60%;
-  left: 50%;
+  bottom: 50%;
+  left: 25%;
   transform: translateX(-50%);
   background-color: #f5f5f5;
   border: none;
@@ -187,4 +192,35 @@ const FullReviewWrapper = styled.div`
   overflow-y: scroll;
   text-align: left;
   padding: 1rem;
+`;
+
+const ReactSection = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  flex-direction: row;
+  align-items: center;
+
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 6rem;
+  left: 1rem;
+`;
+
+const IconLeft = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const Text = styled.text`
+  font-size: 1rem;
+  margin-left: 0.5rem;
 `;

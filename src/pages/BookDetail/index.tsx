@@ -13,6 +13,8 @@ import { useLocation } from 'react-router-dom';
 import { BookData } from '@/types';
 import { ReviewData } from '@/types';
 import axios from 'axios';
+import { IoBookmarkOutline } from 'react-icons/io5';
+import { toggleBookWishlist } from '@/util/hooks/useWishlist';
 
 const BookDetailPage = () => {
   const [data, setData] = useState<BookData | null>(null);
@@ -20,7 +22,15 @@ const BookDetailPage = () => {
   const isLandingVisible = useLandingPage(4000);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isbn = queryParams.get('isbn'); // 쿼리에서 isbn 값 추출
+  const isbn = queryParams.get('isbn') || ''; // 쿼리에서 isbn 값 추출
+  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(
+    null,
+  );
+  const { isWishlisted, toggleBookWishlisted, setIsWishlisted } =
+    toggleBookWishlist({
+      initialWishlisted,
+      isbn,
+    });
 
   useEffect(() => {
     async function getBookData() {
@@ -61,6 +71,28 @@ const BookDetailPage = () => {
     getBriefReviews();
   }, [setReviews]);
 
+  useEffect(() => {
+    async function fetchWishlistStatus() {
+      try {
+        const response = await instance.get(`api/wishes/books`);
+        const bookInWishlist = response.data.content.some(
+          (item: { isbn: string }) => item.isbn === isbn,
+        );
+        setInitialWishlisted(bookInWishlist);
+      } catch (error) {
+        console.error('위시리스트 상태 로딩 오류:', error);
+        setInitialWishlisted(false);
+      }
+    }
+    fetchWishlistStatus();
+  }, [isbn]);
+
+  useEffect(() => {
+    if (initialWishlisted !== null) {
+      setIsWishlisted(initialWishlisted);
+    }
+  }, [initialWishlisted, setIsWishlisted]);
+
   const NavigateToBookStore = () => {
     if (data?.link) {
       window.location.href = data.link;
@@ -96,9 +128,14 @@ const BookDetailPage = () => {
                   <BookCoverContainer>
                     <BookCover src={data?.cover} alt="bookCover" />
                   </BookCoverContainer>
-                  <ButtonWrapper>
-                    <Button onClick={NavigateToBookStore}>서점으로 이동</Button>
-                  </ButtonWrapper>
+                  <ContentWrapper>
+                    <ButtonWrapper>
+                      <Button onClick={NavigateToBookStore}>
+                        서점으로 이동
+                      </Button>
+                    </ButtonWrapper>
+                    <IoBookmarkOutline size="2.5rem" />
+                  </ContentWrapper>
                 </BookCoverWrapper>
                 <BookDescriptionWrapper>
                   <UnderlinedHeading1>책 정보</UnderlinedHeading1>
@@ -118,6 +155,17 @@ const BookDetailPage = () => {
                       <span>{data?.topFullReview} </span>
                     </FullReviewContainer>
                   </TopFullReview>
+                  <ButtonWrapper>
+                    <Button
+                      size="medium"
+                      theme="lightgray"
+                      onClick={toggleBookWishlisted}
+                    >
+                      {isWishlisted
+                        ? '위시리스트에서 제거'
+                        : '위시리스트에 추가'}
+                    </Button>
+                  </ButtonWrapper>
                 </BookDescriptionWrapper>
               </CommonContainer>
             </DetailsWrapper>
@@ -188,6 +236,15 @@ const BookCover = styled.img`
 
 const ButtonWrapper = styled.div`
   border: 1px solid;
+  margin-right: 0.3rem;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: cloum;
+  align-items: center;
+  margin-top: 1rem;
 `;
 
 const BookDescriptionWrapper = styled.section`
