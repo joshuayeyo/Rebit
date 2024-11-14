@@ -47,7 +47,16 @@ const Mypage = () => {
       <CommonHeader />
       {data ? (
         <Skeleton isLoaded={!isLoading}>
-          <UserInfo nickname={data.nickname} imageUrl={data.presignedUrl} coverImageUrl={data.coverPresignedUrl} diaryCount={activitySummary?.diaryCount} feedCount={activitySummary?.feedCount} challengeCount={activitySummary?.challengeCount} />
+          <UserInfo 
+            nickname={data.nickname} 
+            imageUrl={data.presignedUrl} 
+            coverImageUrl={data.coverPresignedUrl}
+            bio={data.bio}
+            points={data.point}
+            diaryCount={activitySummary?.diaryCount} 
+            feedCount={activitySummary?.feedCount} 
+            challengeCount={activitySummary?.challengeCount}
+          />
           <Navbar 
             selectedSection={selectedSection} 
             onSelectSection={setSelectedSection} 
