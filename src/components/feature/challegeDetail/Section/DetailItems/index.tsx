@@ -66,36 +66,39 @@ const VerificationSection = ({
   };
 
   return (
-    <Wrapper>
-      <Skeleton isLoaded={filteredData.length > 0}>
-        <CommonGrid columns={4} gap={50}>
-          <AnimatePresence>
-            {filteredData.map((data, index) => (
-              <motion.div
-                key={data.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                ref={index === filteredData.length - 1 ? ref : null} // 마지막 요소에 ref 설정
-              >
-                <ItemWrapper onClick={() => handleCardClick(data.id)}>
-                  <VerificaitionCard verificationData={data} />
-                </ItemWrapper>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </CommonGrid>
-      </Skeleton>
-      {isModalOpen && selectedId !== null && (
-        <VerificationDetailModal
+    <>
+      <Wrapper>
+        <Skeleton isLoaded={filteredData.length > 0}>
+          <CommonGrid columns={4} gap={50}>
+            <AnimatePresence>
+              {filteredData.map((data, index) => (
+                <motion.div
+                  key={data.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  ref={index === filteredData.length - 1 ? ref : null} // 마지막 요소에 ref 설정
+                >
+                  <ItemWrapper onClick={() => handleCardClick(data.id)}>
+                    <VerificaitionCard verificationData={data} />
+                  </ItemWrapper>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </CommonGrid>
+        </Skeleton>
+        {isModalOpen && selectedId !== null && (
+          <VerificationDetailModal
           isModalOpen={isModalOpen}
           handleModalClose={handleModalClose}
           challengeId={challengeId}
           verificationId={selectedId}
-        />
-      )}
-    </Wrapper>
+          />
+        )}
+      </Wrapper>
+      <Footer/>
+    </>
   );
 };
 
@@ -115,3 +118,8 @@ const ItemWrapper = styled.div`
   width: 20vw;
   min-width: 10vw;
 `;
+
+const Footer = styled.div`
+  width: 100%;
+  height: 100px;
+`; 
