@@ -155,6 +155,7 @@ const DiaryCalendar = () => {
           })}
         </Grid>
       </CalendarContainer>
+      <Footer />
       {isPostModalOpen && (
         <PostBookDiaryModal
           isModalOpen={isPostModalOpen}
@@ -164,9 +165,11 @@ const DiaryCalendar = () => {
       )}
       {isModalOpen && selectedID && selectedDate && (
         <DiaryDetailModal
+          setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
           handleModalClose={handleViewModalClose}
           id={selectedID}
+          selectedDate={selectedDate}
         />
       )}
     </>
@@ -271,4 +274,9 @@ const Image = styled.img`
   &:hover {
     transform: scale(1.3);
   }
+`;
+
+const Footer = styled.div`
+  width: 100%;
+  height: 100px;
 `;
