@@ -26,7 +26,14 @@ const CommonCard = ({
         <CardBody>
           <CommonImage src={imageURL} ratio={'square'} width={500} />
           <br />
-          <Heading size="lg">{title}</Heading>
+          <Heading 
+            size="md"
+            isTruncated
+            noOfLines={1} // 한 줄만 표시
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+            overflow="hidden"
+          >{title}</Heading>
           <Text size="sm">{content}</Text>
           <Flex
             gap="2"
