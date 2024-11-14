@@ -21,7 +21,7 @@ const UploadBook = () => {
   }, []);
 
   const handleNavigate = () => {
-    window.open('/book/search', '_blank');
+    window.location.href = `/book/search`;
   };
 
   return (
@@ -39,7 +39,7 @@ const UploadBook = () => {
         theme="lightgray"
         onClick={handleNavigate}
       >
-        책 검색
+        {!selectedBook ? '책 검색' : '책 변경'}
       </Button>
     </Wrapper>
   );
