@@ -11,6 +11,7 @@ import instance from '@/api/instance';
 import { useAuth } from '@/provider/Auth';
 import FavBookDetailModal from '@/components/feature/modals/favbooks/ContentDetail';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import MagazineDetailModal from '@/components/feature/modals/magazine/ContentDetail';
 
 type selectedType = 'S' | 'FB' | 'M' | null;
 
@@ -165,13 +166,13 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
               id={selectedId}
             />
           )}
-          {/*{selectedType === 'M' && (*/}
-          {/*  <MagazineDetailModal*/}
-          {/*    isModalOpen={isModalOpen}*/}
-          {/*    handleModalClose={handleModalClose}*/}
-          {/*    id={selectedId}*/}
-          {/*  />*/}
-          {/*)}*/}
+          {selectedType === 'M' && (
+            <MagazineDetailModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+            id={selectedId}
+          />
+        )}
         </>
       )}
       <ButtonWrapper
