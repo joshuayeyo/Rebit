@@ -4,6 +4,7 @@ import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
 import { useState } from 'react';
 import instance from '@/api/instance';
+import { useStoreImage } from '@/util/hooks/useStoreImage';
 
 type Props = {
   isModalOpen: boolean;
@@ -17,12 +18,15 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     month: today.getMonth() + 1, // 리액트의 Month는 0~11월이다.
     date: today.getDate(),
   };
-  const [imageKey, setImageKey] = useState('');
+
   const [storyContent, setStoryContent] = useState('');
   const [placeholder, setPlaceholder] = useState(
     '당신의 Story를 작성하세요...',
   ); // placeholder를 동적으로 사용
   const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); // 입력된 텍스트가 없을 경우, placeholder를 빨갛게 바꿉니다.
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>('');
+  const { imageKey, uploadImage2S3 } = useStoreImage({ type: 'FEED' });
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -37,21 +41,25 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     }
 
     async function postFeedData() {
-      try {
-        await instance
-          .post(`api/feeds`, {
-            type: 'S',
-            bookId: 1, // 현재 bookId가 없으면 400 에러가 발생하여 임시로 해둔 값. Story에서는 bookId가 없어야 함.
-            imageKey: imageKey,
-            content: storyContent,
-          })
-          .then((response) => {
-            console.log(response);
-          });
-      } catch (e) {
-        console.log(e);
-      } finally {
-        window.location.reload(); // Posting 후 페이지 새로고침
+      if (file) {
+        try {
+          const imageKey = await uploadImage2S3(file);
+          console.log(imageKey)
+          await instance
+            .post(`api/feeds`, {
+              type: 'S',
+              bookId: 1, // 현재 bookId가 없으면 400 에러가 발생하여 임시로 해둔 값. Story에서는 bookId가 없어야 함.
+              imageKey: imageKey,
+              content: storyContent,
+            })
+            .then((response) => {
+              console.log(response);
+            });
+        } catch (e) {
+          console.log(e);
+        } finally {
+          window.location.reload(); // Posting 후 페이지 새로고침
+        }
       }
     }
     postFeedData();
@@ -80,7 +88,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           <FlexContainer>
             <Left>
               <ImageContainer>
-                <UploadImage setImageKey={setImageKey} type="FEED" />
+                <UploadImage setFile={setFile} setPreview={setPreview} preview={preview} />
               </ImageContainer>
             </Left>
             <Right>
