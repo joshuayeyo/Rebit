@@ -90,6 +90,7 @@ const VerificationSection = ({
         </Skeleton>
         {isModalOpen && selectedId !== null && (
           <VerificationDetailModal
+            setIsModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
             handleModalClose={handleModalClose}
             challengeId={challengeId}
