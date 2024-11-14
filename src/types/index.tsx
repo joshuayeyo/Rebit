@@ -9,6 +9,8 @@ export type BookData = {
   pubDate: string;
   link: string;
   topFullReview: string;
+  reviewAuthor: string;
+  reviewAuthorImage: string;
 };
 
 export type ReviewData = {
