@@ -44,7 +44,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
       if (file) {
         try {
           const imageKey = await uploadImage2S3(file);
-          console.log(imageKey)
+          console.log(imageKey);
           await instance
             .post(`api/feeds`, {
               type: 'S',
@@ -88,7 +88,11 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           <FlexContainer>
             <Left>
               <ImageContainer>
-                <UploadImage setFile={setFile} setPreview={setPreview} preview={preview} />
+                <UploadImage
+                  setFile={setFile}
+                  setPreview={setPreview}
+                  preview={preview}
+                />
               </ImageContainer>
             </Left>
             <Right>

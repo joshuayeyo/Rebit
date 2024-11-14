@@ -17,7 +17,16 @@ type Props = {
   feedCount: number;
 };
 
-const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCount, diaryCount, feedCount }: Props) => {
+const UserInfo = ({
+  nickname,
+  imageUrl,
+  bio,
+  points,
+  coverImageUrl,
+  challengeCount,
+  diaryCount,
+  feedCount,
+}: Props) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleEditModalClose = () => {
@@ -36,23 +45,23 @@ const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCou
   };
 
   const handleReloadPoints = async () => {
-    const amount = prompt("충전할 금액을 입력하세요:"); // 금액을 입력 받음
+    const amount = prompt('충전할 금액을 입력하세요:'); // 금액을 입력 받음
 
     if (amount === null || isNaN(Number(amount)) || Number(amount) <= 0) {
-        alert("유효한 금액을 입력해주세요.");
-        return;
+      alert('유효한 금액을 입력해주세요.');
+      return;
     }
     try {
-        // 포인트 충전 API 요청
-        const response = await instance.post("/api/members/points",
-          { points: amount }
-        );
-        alert(`${amount} 원이 충전되었습니다!`);
-        console.log(response)
+      // 포인트 충전 API 요청
+      const response = await instance.post('/api/members/points', {
+        points: amount,
+      });
+      alert(`${amount} 원이 충전되었습니다!`);
+      console.log(response);
     } catch (error) {
-      console.log(error)
-    }};
-
+      console.log(error);
+    }
+  };
 
   const pointsValue = () => {
     if (points && points > 99999) {
@@ -96,10 +105,8 @@ const UserInfo = ({ nickname, imageUrl, bio, points, coverImageUrl, challengeCou
               style={{ color: 'white', fontSize: '40px', fontWeight: 'bold' }}
             >
               #{challengeCount} Challenges
-              <br />
-              #{feedCount} Feeds
-              <br />
-              #{diaryCount} Diaries
+              <br />#{feedCount} Feeds
+              <br />#{diaryCount} Diaries
             </CommonContainer>
             <PointContainer>
               <PointInfo>
@@ -142,7 +149,7 @@ export default UserInfo;
 //   background-image: url(${props => props.coverImageUrl});
 //   background-size: cover;
 //   background-position: center;
-//   background-repeat: no-repeat; 
+//   background-repeat: no-repeat;
 // `;
 
 const Wrapper = styled.section`
@@ -153,9 +160,8 @@ const Wrapper = styled.section`
   background-color: black;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
 `;
-
 
 const ProfileImage = styled.div`
   height: auto;

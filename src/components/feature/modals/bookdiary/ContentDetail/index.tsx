@@ -103,7 +103,6 @@ const Date = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   margin-left: 0.5rem;
-
 `;
 
 const Line = styled.div`

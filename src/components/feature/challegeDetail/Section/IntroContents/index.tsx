@@ -17,12 +17,15 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const { isLogin } = useAuth();
   const [entryFee, setEntryFee] = useState<number>(0);
   const userPoint = userData?.point !== undefined ? userData.point : 0;
-  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(null);
-  const challengeId = challengeData?.id
-  const { isWishlisted, toggleChallengeWishlisted, setIsWishlisted } = toggleChallengeWishlist({
-    initialWishlisted,
-    challengeId,
-  });
+  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(
+    null,
+  );
+  const challengeId = challengeData?.id;
+  const { isWishlisted, toggleChallengeWishlisted, setIsWishlisted } =
+    toggleChallengeWishlist({
+      initialWishlisted,
+      challengeId,
+    });
   function formatDate(date: string | null | undefined): string {
     if (!date) return '';
 
@@ -41,7 +44,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const handleSubmit = () => {
     if (!isValidEntryFee(entryFee)) {
       alert(
-        `유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다. 보유 포인트는 ${userPoint} 입니다.`
+        `유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다. 보유 포인트는 ${userPoint} 입니다.`,
       );
       window.location.reload();
       return;
@@ -83,7 +86,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       try {
         const response = await instance.get(`api/wishes/challenges`);
         const challengeInWishlist = response.data.content.some(
-          (item: { challengeId: number }) => item.challengeId === challengeId
+          (item: { challengeId: number }) => item.challengeId === challengeId,
         );
         setInitialWishlisted(challengeInWishlist);
       } catch (error) {
@@ -93,7 +96,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
     }
     fetchWishlistStatus();
   }, [challengeId]);
-  
+
   useEffect(() => {
     if (initialWishlisted !== null) {
       setIsWishlisted(initialWishlisted);
@@ -157,7 +160,11 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
               챌린지 참가하기
             </SubmitButton>
             <ReactionButton onClick={toggleChallengeWishlisted}>
-              {isWishlisted ? <IoIosHeartEmpty size="2rem" color="red" /> : <IoIosHeartEmpty size="2rem" color="white" />}
+              {isWishlisted ? (
+                <IoIosHeartEmpty size="2rem" color="red" />
+              ) : (
+                <IoIosHeartEmpty size="2rem" color="white" />
+              )}
             </ReactionButton>
           </ButtonWrapper>
         </>
@@ -272,9 +279,8 @@ const CountWrapper = styled.div`
   margin-right: 2rem;
   font-weight: bold;
   font-size: 2rem;
-  color:white;
+  color: white;
 `;
-
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -299,4 +305,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-const ReactionButton = styled.button``
+const ReactionButton = styled.button``;

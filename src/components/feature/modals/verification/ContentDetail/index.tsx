@@ -105,5 +105,4 @@ const ContentSection = styled.div`
   display: flex;
 `;
 
-
 export default VerificationDetailModal;

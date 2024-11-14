@@ -1,14 +1,11 @@
 import DiaryCalendar from '@/components/feature/bookDiary/DiaryCalender';
 
-const BookDiaryPage= () => {
-
+const BookDiaryPage = () => {
   return (
     <>
-      <DiaryCalendar/>
+      <DiaryCalendar />
     </>
-  
   );
 };
 
 export default BookDiaryPage;
-

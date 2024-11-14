@@ -64,4 +64,3 @@ const Profile = styled.img`
   aspect-ratio: 1/1.2;
   object-fit: cover;
 `;
-

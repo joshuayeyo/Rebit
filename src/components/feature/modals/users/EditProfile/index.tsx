@@ -17,29 +17,29 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
   const [imageKey, setImageKey] = useState('');
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-  const [bio, setBio] = useState('')
-  const [nickname, setNickname] = useState('')
-  
+  const [bio, setBio] = useState('');
+  const [nickname, setNickname] = useState('');
+
   const { uploadImage2S3 } = useStoreImage({ type: 'MEMBER' });
 
   useEffect(() => {
-      const fetchProfileData = async () => {
-          try {
-              const response = await instance.get("/api/members/me");
-              const { presignedUrl, imageKey, nickname, bio } = response.data;
-              setPreview(presignedUrl)
-              setImageKey(imageKey || null);
-              setNickname(nickname || null);
-              setBio(bio || null);
-          } catch (error) {
-              console.log(error);
-          } finally {
-              setLoading(false);
-          }
-      };
-      if (isModalOpen) {
-          fetchProfileData();
+    const fetchProfileData = async () => {
+      try {
+        const response = await instance.get('/api/members/me');
+        const { presignedUrl, imageKey, nickname, bio } = response.data;
+        setPreview(presignedUrl);
+        setImageKey(imageKey || null);
+        setNickname(nickname || null);
+        setBio(bio || null);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
+    };
+    if (isModalOpen) {
+      fetchProfileData();
+    }
   }, [isModalOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,8 +55,7 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
       imageKey: updatedImageKey,
       nickname: nickname,
       bio: bio,
-    }
-
+    };
 
     if (!isUploading && imageKey) {
       setIsUploading(true); // 업로드 상태 변경
@@ -77,10 +76,14 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
     <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
       <Wrapper>
         <ImageContainer>
-          <UploadImage setFile={setFile} preview={preview} setPreview={setPreview} />
+          <UploadImage
+            setFile={setFile}
+            preview={preview}
+            setPreview={setPreview}
+          />
         </ImageContainer>
         <FormContainer>
-          <EditProfileForm 
+          <EditProfileForm
             nickname={nickname}
             setNickname={setNickname}
             bio={bio}

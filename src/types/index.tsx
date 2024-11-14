@@ -29,13 +29,12 @@ export type FeedData = {
   type: string;
 };
 export type DiaryData = {
-  id:number;
+  id: number;
   content: string;
   book: BookData;
-  date:string;
+  date: string;
   isbn: string;
 };
-
 
 export type AuthorData = {
   nickname: string;
@@ -113,18 +112,18 @@ export type FilterType =
   | 'UPCOMING'
   | 'ALL';
 
-  export interface ChallengeFormData {
-    title: string;
-    content: string;
-    imageKey: string;
-    type: string;
-    minimumEntryFee: number;
-    maxHeadcount: number;
-    minHeadcount: number;
-    challengeStartDate: Date;
-    challengeEndDate: Date;
-    recruitmentStartDate: Date;
-    recruitmentEndDate: Date;
-    currentHeadCount: number;
-    totalEntryFee: number;
-  }
+export interface ChallengeFormData {
+  title: string;
+  content: string;
+  imageKey: string;
+  type: string;
+  minimumEntryFee: number;
+  maxHeadcount: number;
+  minHeadcount: number;
+  challengeStartDate: Date;
+  challengeEndDate: Date;
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date;
+  currentHeadCount: number;
+  totalEntryFee: number;
+}

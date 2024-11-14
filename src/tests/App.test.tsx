@@ -31,7 +31,7 @@ describe('App Component', () => {
             </AuthProvider>
           </PersistGate>
         </Provider>
-      </ChakraProvider>
+      </ChakraProvider>,
     );
     expect(screen.getByText('Home Page')).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe('App Component', () => {
             </AuthProvider>
           </PersistGate>
         </Provider>
-      </ChakraProvider>
+      </ChakraProvider>,
     );
 
     expect(screen.getByText('Login')).toBeInTheDocument();

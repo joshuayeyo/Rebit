@@ -8,23 +8,36 @@ type Props = {
   onSelectFilter: (filter: string) => void;
 };
 
-const Navbar = ({ selectedSection, onSelectSection, onSelectFilter }: Props) => {
-
+const Navbar = ({
+  selectedSection,
+  onSelectSection,
+  onSelectFilter,
+}: Props) => {
   const renderButtons = () => {
     switch (selectedSection) {
       case 'Feed':
         return (
           <>
-            <StyledButton onClick={() => onSelectFilter('ALL')}>All</StyledButton>
-            <StyledButton onClick={() => onSelectFilter('FB')}>인생책</StyledButton>
-            <StyledButton onClick={() => onSelectFilter('S')}>스토리</StyledButton>
+            <StyledButton onClick={() => onSelectFilter('ALL')}>
+              All
+            </StyledButton>
+            <StyledButton onClick={() => onSelectFilter('FB')}>
+              인생책
+            </StyledButton>
+            <StyledButton onClick={() => onSelectFilter('S')}>
+              스토리
+            </StyledButton>
           </>
         );
       case 'Wish':
         return (
           <>
-            <StyledButton onClick={() => onSelectFilter('Book')}>Book</StyledButton>
-            <StyledButton onClick={() => onSelectFilter("Challenge")}>Challenge</StyledButton>
+            <StyledButton onClick={() => onSelectFilter('Book')}>
+              Book
+            </StyledButton>
+            <StyledButton onClick={() => onSelectFilter('Challenge')}>
+              Challenge
+            </StyledButton>
           </>
         );
       case 'Challenge':
@@ -39,10 +52,18 @@ const Navbar = ({ selectedSection, onSelectSection, onSelectFilter }: Props) => 
   return (
     <Flex direction="column" alignItems="center" mt={5}>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <StyledButton onClick={() => onSelectSection('Feed')}>Feed</StyledButton>
-        <StyledButton onClick={() => onSelectSection('Wish')}>Wish</StyledButton>
-        <StyledButton onClick={() => onSelectSection('Challenge')}>Challenge</StyledButton>
-        <StyledButton onClick={() => onSelectSection('Diary')}>Diary</StyledButton>
+        <StyledButton onClick={() => onSelectSection('Feed')}>
+          Feed
+        </StyledButton>
+        <StyledButton onClick={() => onSelectSection('Wish')}>
+          Wish
+        </StyledButton>
+        <StyledButton onClick={() => onSelectSection('Challenge')}>
+          Challenge
+        </StyledButton>
+        <StyledButton onClick={() => onSelectSection('Diary')}>
+          Diary
+        </StyledButton>
       </Box>
       <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
       <Box display="flex" justifyContent="center" alignItems="center">
@@ -51,7 +72,6 @@ const Navbar = ({ selectedSection, onSelectSection, onSelectFilter }: Props) => 
     </Flex>
   );
 };
-
 
 export default Navbar;
 

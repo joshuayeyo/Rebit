@@ -33,10 +33,14 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
   const handleDropdownClose = () => setIsDropdownVisible(false);
 
   useEffect(() => {
-    const endpoint = filter === 'S' ? 'feeds/stories':
-      filter === 'FB' ? 'feeds/favorite-books':
-      filter === 'M' ? 'feeds/magazines':
-      'feeds';
+    const endpoint =
+      filter === 'S'
+        ? 'feeds/stories'
+        : filter === 'FB'
+          ? 'feeds/favorite-books'
+          : filter === 'M'
+            ? 'feeds/magazines'
+            : 'feeds';
 
     async function getFeedData() {
       if (!hasMore) return;
@@ -119,11 +123,11 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
             {Array.isArray(filteredData) &&
               filteredData.map((data) => (
                 <motion.div
-                  // key={data.id}
-                  // initial={{ opacity: 0, y: 20 }}
-                  // animate={{ opacity: 1, y: 0 }}
-                  // exit={{ opacity: 0, y: -20 }}
-                  // transition={{ duration: 0.3, delay: index * 0.1 }}
+                // key={data.id}
+                // initial={{ opacity: 0, y: 20 }}
+                // animate={{ opacity: 1, y: 0 }}
+                // exit={{ opacity: 0, y: -20 }}
+                // transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <ItemWrapper
                     onClick={() => handleCardClick(data.id, data.type)}
@@ -168,11 +172,11 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
           )}
           {selectedType === 'M' && (
             <MagazineDetailModal
-            isModalOpen={isModalOpen}
-            handleModalClose={handleModalClose}
-            id={selectedId}
-          />
-        )}
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+              id={selectedId}
+            />
+          )}
         </>
       )}
       <ButtonWrapper
