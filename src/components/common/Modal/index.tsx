@@ -1,6 +1,7 @@
 import Overlay from '@/components/common/overlay';
 import styled from '@emotion/styled';
 import { Button } from '@/components/common/Button';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   isModalOpen: boolean;
@@ -8,17 +9,34 @@ type Props = {
   children?: React.ReactNode;
   title?: string;
 };
-
 const CommonModal = ({
   children,
   isModalOpen,
   handleModalClose,
   title,
 }: Props) => {
+const modalRef = useRef<HTMLDivElement>(null)
+
+  const handleEscKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleModalClose();
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      window.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isModalOpen]);
+
   return (
     <>
-      <Overlay isOpen={isModalOpen} />
-      <ModalContainer>
+      <Overlay isOpen={isModalOpen}  onClick={handleModalClose} />
+      <ModalContainer ref={modalRef}>
         <ButtonContainer hasTitle={!!title}>
           {title && <Title>{title}</Title>}
           <Button onClick={handleModalClose} theme="outline" size="medium">
@@ -48,6 +66,8 @@ const ModalContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  border: none;
+  outline: none;
 `;
 
 const ButtonContainer = styled.div<{ hasTitle: boolean }>`
