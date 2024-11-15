@@ -47,7 +47,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
     if (isbn) {
-      window.open(`/book/details?isbn=${isbn}`, '_blank');
+      window.location.href = `/book/details?isbn=${isbn}`;
     } else {
       alert('책 정보를 찾을 수 없습니다.');
     }
@@ -80,7 +80,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
       alert('삭제하는 중 오류가 발생했습니다.');
     }
   };
-
+    
   return (
     <>
       <CommonModal

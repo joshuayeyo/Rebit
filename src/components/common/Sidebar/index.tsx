@@ -44,7 +44,7 @@ function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: any }) {
           mb="10px"
           marginRight={'5vw'}
         >
-          <Link to="https://www.instagram.com/katarinabluu/">
+          <Link to="https://www.instagram.com/">
             <FiInstagram color="black" size="3rem" />
           </Link>
           <Box margin={'10px'} />
@@ -74,7 +74,7 @@ function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: any }) {
         </StyledButton>
         <br />
         <StyledButton>
-          <Link to="/mypage/:userId">MyPage</Link>
+          <Link to="/mypage/me">MyPage</Link>
         </StyledButton>
         <br />
 
