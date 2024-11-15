@@ -1,7 +1,7 @@
 import Overlay from '@/components/common/overlay';
 import styled from '@emotion/styled';
 import { Button } from '@/components/common/Button';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import instance from '@/api/instance';
 import axios from 'axios';
 import { MdDelete } from 'react-icons/md';
@@ -16,7 +16,6 @@ type Props = {
   title?: string;
   posterId?: number;
 };
-
 const CommonModal = ({
   children,
   isModalOpen,
@@ -26,6 +25,24 @@ const CommonModal = ({
   title,
   posterId,
 }: Props) => {
+  const modalRef = useRef<HTMLDivElement>(null)
+  
+  const handleEscKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleModalClose();
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      window.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isModalOpen]);
+
   const [myId, setMyId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -48,8 +65,8 @@ const CommonModal = ({
 
   return (
     <>
-      <Overlay isOpen={isModalOpen} />
-      <ModalContainer>
+      <Overlay isOpen={isModalOpen}  onClick={handleModalClose} />
+      <ModalContainer ref={modalRef}>
         <ButtonContainer hasTitle={!!title}>
           {myId === posterId && (
             <>
@@ -94,6 +111,8 @@ const ModalContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  border: none;
+  outline: none;
 `;
 
 const ButtonContainer = styled.div<{ hasTitle: boolean }>`
