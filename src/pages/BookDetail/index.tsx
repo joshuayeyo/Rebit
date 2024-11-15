@@ -22,7 +22,7 @@ const BookDetailPage = () => {
   const isLandingVisible = useLandingPage(4000);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isbn = queryParams.get('isbn') || ''; // 쿼리에서 isbn 값 추출
+  const isbn = queryParams.get('isbn') || '';
   const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(
     null,
   );

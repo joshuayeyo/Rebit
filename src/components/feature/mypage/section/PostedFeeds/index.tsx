@@ -3,7 +3,6 @@ import CommonGrid from '@/components/common/Grid';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import FeedCard from '@/components/feature/feed/post/Card';
-import useFilter from '@/util/hooks/useFilter';
 import { AnimatePresence, motion } from 'framer-motion';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import FavBookDetailModal from '@/components/feature/modals/favbooks/ContentDetail';
@@ -16,6 +15,12 @@ const UserPostedFeeds = ({ filter }: { filter: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setData([]); 
+    setPage(0); 
+    setHasMore(true); 
+  }, [filter]);
 
   useEffect(() => {
     const endpoint =
@@ -71,10 +76,12 @@ const UserPostedFeeds = ({ filter }: { filter: string }) => {
 
   if (!data) return <></>;
 
-  const { filteredData, setFilter } = useFilter(data, 'type', filter);
-  useEffect(() => {
-    setFilter(filter);
-  }, [filter]);
+  const filteredData = data.filter((item) => {
+    if (filter === 'S') return item.type === 'S';
+    if (filter === 'FB') return item.type === 'FB';
+    if (filter === 'M') return item.type === 'M';
+    return true;
+  });
 
   const fetchData = () => {
     if (hasMore) {

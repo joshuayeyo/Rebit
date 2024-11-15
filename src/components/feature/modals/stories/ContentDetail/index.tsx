@@ -10,20 +10,26 @@ import { Spinner } from '@/components/common/Spinner';
 import useLiked from '@/util/hooks/useLiked';
 import instance from '@/api/instance';
 import { FeedData } from '@/types';
+import EditStoryModal from '../EditStory';
 
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
   id: number;
 };
 
-const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
+const StoryDetailModal = ({ isModalOpen, handleModalClose, id,setIsModalOpen}: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [posterId, setIsposterId] = useState(Number);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isdelete, setisDelete] = useState(false);
+
 
   const { isLiked, likes, setLikes, toggleLiked } = useLiked({
     feedId: id,
-    initialLiked: data?.isLiked ?? false, // 초기 liked 상태(아직 백에서 구현 안된 상태임)
+    initialLiked: data?.isLiked ?? false,
     initialLikes: data ? data.likes : 0,
   });
 
@@ -32,6 +38,8 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       try {
         const res = await instance.get(`/api/feeds/${id}`);
         const result = await res;
+        console.log(result.data);
+        setIsposterId(result.data.author.id)
         setData(result.data);
         setLikes(res.data.likes);
       } catch (e) {
@@ -41,14 +49,40 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
       }
     }
     getContentDetails();
-  }, [id, setLikes]);
+  }, [id, setLikes, isEditModalOpen,isdelete]);
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+  
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const res = await instance.delete(`/api/feeds/${id}`);
+      console.log('삭제 성공:', res.data);
+      setIsModalOpen(false);
+      setisDelete(true);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제하는 중 오류가 발생했습니다.');
+    }
+  };
 
   if (isLoading) {
     return <Spinner />;
   }
 
   return (
-    <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
+    <>
+    <CommonModal posterId={posterId} isModalOpen={isModalOpen} handleModalClose={handleModalClose} handleEditClick={handleEditClick} handleDeletClick={handleDeleteClick}>
       {data ? (
         <CommonContainer maxWidth="100%" flexDirection="row">
           <Left>
@@ -89,6 +123,14 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id }: Props) => {
         <Spinner />
       )}
     </CommonModal>
+    {isEditModalOpen && (
+      <EditStoryModal
+        data={data!!}
+        isModalOpen={isEditModalOpen}
+        handleModalClose={handleEditModalClose}
+      />
+    )}
+    </>
   );
 };
 

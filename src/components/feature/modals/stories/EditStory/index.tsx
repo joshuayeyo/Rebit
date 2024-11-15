@@ -2,87 +2,64 @@ import CommonModal from '@/components/common/Modal';
 import styled from '@emotion/styled';
 import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import instance from '@/api/instance';
 import { useStoreImage } from '@/util/hooks/useStoreImage';
+import { FeedData } from '@/types';
 
 type Props = {
+  data : FeedData
   isModalOpen: boolean;
   handleModalClose: () => void;
 };
 
-const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
-  const today = new Date();
-  const time = {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    date: today.getDate(),
-  };
+const EditStoryModal = ({ data,isModalOpen,handleModalClose}: Props) => {
 
-  const [storyContent, setStoryContent] = useState(() => {
-    const savedStoryContent = localStorage.getItem('storyContent');
-    return savedStoryContent ? JSON.parse(savedStoryContent) : '';
-  });
-
-  const [placeholder, setPlaceholder] = useState(
-    '당신의 Story를 작성하세요...',
-  );
-  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); 
+  const [storyContent, setStoryContent] = useState(data?.content);
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string>('');
-  const { imageKey, uploadImage2S3 } = useStoreImage({ type: 'FEED' });
+  const [preview, setPreview] = useState<string>(data?.presignedUrl);
+  const { uploadImage2S3 } = useStoreImage({ type: 'FEED' });
+  const [imageKey, setImageKey] = useState(data.imageKey);
 
-  const handleSubmit = (e: any) => {
+
+  const handleSubmit = async (e: React.FormEvent)  => {
     e.preventDefault();
-    if (!storyContent) {
-      setPlaceholder('내용을 입력해야 합니다!');
-      setIsPlaceholderRed(true);
-      return;
+
+    let updatedImageKey = imageKey;
+
+    if (file) {
+      updatedImageKey = await uploadImage2S3(file);
     }
+
     if (imageKey == '') {
       alert('이미지가 없습니다!');
       return;
-    }
+    };
+
 
     async function postFeedData() {
-      if (file) {
         try {
-          const imageKey = await uploadImage2S3(file);
           console.log(imageKey);
           await instance
-            .post(`api/feeds`, {
-              type: 'S',
-              bookId: 1,
-              imageKey: imageKey,
-              content: storyContent,
+            .put(`api/feeds/stories/${data.id}`, {
+              imageKey: updatedImageKey,
+                content: storyContent,
+                bookId: 1,
             })
             .then((response) => {
               console.log(response);
+              handleModalClose();
             });
         } catch (e) {
           console.log(e);
-        } finally {
-          localStorage.removeItem('isPostModalOpen')
-          localStorage.removeItem('storyContent')
-          window.location.reload(); // Posting 후 페이지 새로고침
         }
-      }
     }
     postFeedData();
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setStoryContent(e.target.value);
-    if (e.target.value) {
-      setPlaceholder('당신의 Story를 작성하세요...');
-      setIsPlaceholderRed(false);
-    }
   };
-
-  useEffect(() => {
-    localStorage.setItem('storyContent', JSON.stringify(storyContent));
-  }, [storyContent]);
-
 
   return (
     <>
@@ -91,11 +68,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
         handleModalClose={handleModalClose}
       >
         <form onSubmit={handleSubmit} style={{ width: '100%', height: '100%' }}>
-          <HeaderBox>
-            <Today>
-              {time.year}.{time.month}.{time.date}
-            </Today>
-          </HeaderBox>
           <FlexContainer>
             <Left>
               <ImageContainer>
@@ -111,8 +83,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
                 <TextForm
                   value={storyContent}
                   onChange={handleContentChange}
-                  placeholder={placeholder}
-                  isPlaceholderRed={isPlaceholoerRed}
                 />{' '}
               </FormContainer>
             </Right>
@@ -124,7 +94,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
               style={{ justifyContent: 'flex-end' }}
               type="submit"
             >
-              POST!
+              edit!
             </Button>
           </SubmitButton>
         </form>
@@ -133,7 +103,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   );
 };
 
-export default PostStoryModal;
+export default EditStoryModal;
 
 const HeaderBox = styled.section`
   height: auto;
@@ -147,10 +117,9 @@ const Today = styled.div`
   font-size: 40px;
   font-family: 'DungGeunMo';
   font-weight: bold;
-  color: black;
+  color: #a451f7;
   justify-content: flex-start;
   margin-bottom: 1rem;
-  margin-left: 5rem;
 `;
 
 const FlexContainer = styled.div`
@@ -193,7 +162,7 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
-const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
+const TextForm = styled.textarea`
   width: 90%;
   height: 80%;
   padding: 1rem;
@@ -201,14 +170,10 @@ const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
   border-radius: 8px;
   font-size: 1rem;
   resize: none;
-  color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : 'inherit')};
+  color:'inherit')};
   &:focus {
     outline: none;
     border-color: #a451f7;
-  }
-  ::placeholder {
-    color: ${(props) =>
-      props.isPlaceholderRed ? '#ff0000' : '#999'}; // placeholder 빨간색
   }
 `;
 
