@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-
-import StorySample from '@/assets/Main/Story.svg?react';
+import StorySample from '@/assets/Main/Favorite.svg?react';
 import LandingItems from '../Section/Landing-items';
 import { useEffect, useState } from 'react';
 import { FeedData } from '@/types';
