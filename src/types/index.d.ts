@@ -34,7 +34,7 @@ export type FeedData = {
 };
 export type DiaryData = {
   id: number;
-  memberId: number,
+  memberId: number;
   content: string;
   book: BookData;
   date: string;

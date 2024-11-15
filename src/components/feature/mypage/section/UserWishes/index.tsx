@@ -5,7 +5,7 @@ import WishCard from '@/components/feature/cards/WishCards';
 import CommonGrid from '@/components/common/Grid';
 import { BookData, ChallengeData } from '@/types';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
 const UserWishes = ({ filter }: { filter: string }) => {
   const [challengeId, setChallengeId] = useState<number[]>([]);
@@ -14,19 +14,18 @@ const UserWishes = ({ filter }: { filter: string }) => {
   const [bookData, setBookData] = useState<BookData[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
-  
 
   useEffect(() => {
     async function getChallengeWishes() {
       try {
         const res = await instance.get(`api/wishes/challenges`, {
-          params: {page: page},
+          params: { page: page },
         });
         const idList = res.data.content.map(
           (challenge: { challengeId: number }) => challenge.challengeId,
         );
         setChallengeId(idList);
-        setHasMore(res.data.content.length >0);
+        setHasMore(res.data.content.length > 0);
       } catch (e) {
         console.log(e);
       }
@@ -40,13 +39,13 @@ const UserWishes = ({ filter }: { filter: string }) => {
     async function getBookWishes() {
       try {
         const res = await instance.get(`api/wishes/books`, {
-          params: {page: page},
+          params: { page: page },
         });
         const isbnList = res.data.content.map(
           (book: { isbn: string }) => book.isbn,
         );
         setBookIsbn(isbnList);
-        setHasMore(res.data.content.length >0);
+        setHasMore(res.data.content.length > 0);
       } catch (e) {
         console.log(e);
       }
@@ -59,14 +58,17 @@ const UserWishes = ({ filter }: { filter: string }) => {
   useEffect(() => {
     if (bookIsbn.length > 0) {
       bookIsbn.forEach((isbn) => {
-        instance.get(`api/books/${isbn}`).then((res) => {
-          setBookData((prevData) => {
-            if (!prevData.some((book) => book.isbn === res.data.isbn)) {
-              return [...prevData, res.data];
-            }
-            return prevData;
-          });
-        }).catch((e) => console.log(e));
+        instance
+          .get(`api/books/${isbn}`)
+          .then((res) => {
+            setBookData((prevData) => {
+              if (!prevData.some((book) => book.isbn === res.data.isbn)) {
+                return [...prevData, res.data];
+              }
+              return prevData;
+            });
+          })
+          .catch((e) => console.log(e));
       });
     }
   }, [bookIsbn]);
@@ -74,14 +76,21 @@ const UserWishes = ({ filter }: { filter: string }) => {
   useEffect(() => {
     if (challengeId.length > 0) {
       challengeId.forEach((id) => {
-        instance.get(`api/challenges/${id}`).then((res) => {
-          setChallengeData((prevData) => {
-            if (!prevData.some((challenge) => challenge.id === res.data.challengeId)) {
-              return [...prevData, res.data]; 
-            }
-            return prevData;
-          });
-        }).catch((e) => console.log(e));
+        instance
+          .get(`api/challenges/${id}`)
+          .then((res) => {
+            setChallengeData((prevData) => {
+              if (
+                !prevData.some(
+                  (challenge) => challenge.id === res.data.challengeId,
+                )
+              ) {
+                return [...prevData, res.data];
+              }
+              return prevData;
+            });
+          })
+          .catch((e) => console.log(e));
       });
     }
   }, [challengeId]);
@@ -104,16 +113,15 @@ const UserWishes = ({ filter }: { filter: string }) => {
     window.location.href = `/challenge/detail?id=${id}`;
   };
 
-
   const renderContent = () => {
     if (filter === 'Book') {
       return bookData?.map((book: BookData, index) => (
         <motion.div
-        key={index}  
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.4 }}
+          key={index}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.4 }}
         >
           <ItemWrapper onClick={() => handleBookCardClick(book.isbn)}>
             <WishCard
@@ -123,20 +131,22 @@ const UserWishes = ({ filter }: { filter: string }) => {
             />
           </ItemWrapper>
         </motion.div>
-
       ));
     }
 
     if (filter === 'Challenge') {
       return challengeData?.map((challenge: ChallengeData, index) => (
         <motion.div
-        key={index}  
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.4 }}
+          key={index}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.4 }}
         >
-          <ItemWrapper key={index} onClick={() => handleChallengeCardClick(challenge.id)}>
+          <ItemWrapper
+            key={index}
+            onClick={() => handleChallengeCardClick(challenge.id)}
+          >
             <WishCard
               imageUrl={challenge.presignedUrl || ''}
               title={challenge.title || ''}
@@ -153,7 +163,7 @@ const UserWishes = ({ filter }: { filter: string }) => {
   return (
     <Wrapper>
       <InfiniteScroll
-        dataLength={filter === 'Book' ? bookData.length : challengeData.length} 
+        dataLength={filter === 'Book' ? bookData.length : challengeData.length}
         next={fetchData}
         hasMore={hasMore}
         loader={<div>Loading...</div>}
@@ -163,7 +173,6 @@ const UserWishes = ({ filter }: { filter: string }) => {
           {renderContent()}
         </CommonGrid>
       </InfiniteScroll>
-
     </Wrapper>
   );
 };

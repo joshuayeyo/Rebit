@@ -134,13 +134,12 @@ const BookDetailPage = () => {
                         서점으로 이동
                       </Button>
                     </ButtonWrapper>
-                    <Button
-                      onClick={toggleBookWishlisted}
-                    >
-                      {isWishlisted
-                      ? <IoBookmarkOutline size="2.5rem" color="red" />
-                      : <IoBookmarkOutline size="2.5rem" />
-                      }
+                    <Button onClick={toggleBookWishlisted}>
+                      {isWishlisted ? (
+                        <IoBookmarkOutline size="2.5rem" color="red" />
+                      ) : (
+                        <IoBookmarkOutline size="2.5rem" />
+                      )}
                     </Button>
                   </ContentWrapper>
                 </BookCoverWrapper>
@@ -158,7 +157,11 @@ const BookDetailPage = () => {
                   <TopFullReview>
                     <UnderlinedHeading2>Best 서평</UnderlinedHeading2>
                     <FullReviewContainer>
-                      <CommonAvatar size="sm" username={data?.reviewAuthor} imageURL={data?.reviewAuthorImage} />
+                      <CommonAvatar
+                        size="sm"
+                        username={data?.reviewAuthor}
+                        imageURL={data?.reviewAuthorImage}
+                      />
                       <span>{data?.topFullReview} </span>
                     </FullReviewContainer>
                   </TopFullReview>

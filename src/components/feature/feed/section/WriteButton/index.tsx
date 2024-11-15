@@ -103,7 +103,7 @@ const PostFeedsButton = ({
             setSelectedType(null);
             localStorage.removeItem('selectedBook');
             localStorage.removeItem('fullReview');
-            localStorage.removeItem('briefReview')
+            localStorage.removeItem('briefReview');
           }}
         />
       )}

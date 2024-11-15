@@ -7,12 +7,11 @@ import instance from '@/api/instance';
 import { DiaryData } from '@/types';
 
 type Props = {
-  data : DiaryData
+  data: DiaryData;
   isModalOpen: boolean;
   handleModalClose: () => void;
   selectedDate: string | null;
   id: number;
-
 };
 
 const EditBookDiaryModal = ({
@@ -47,9 +46,7 @@ const EditBookDiaryModal = ({
     };
     async function postFeedData() {
       try {
-        
-        await instance.put(`api/diaries/${id}`
-        ).then((response) => {
+        await instance.put(`api/diaries/${id}`).then((response) => {
           console.log('다이어리 조회', response);
           window.location.reload();
         });
@@ -100,10 +97,7 @@ const EditBookDiaryModal = ({
           </Left>
           <Right>
             <FormContainer>
-              <TextForm
-                value={Content}
-                onChange={handleContentChange}
-              />
+              <TextForm value={Content} onChange={handleContentChange} />
             </FormContainer>
             <SubmitButton>
               <Button
@@ -184,12 +178,11 @@ const TextForm = styled.textarea`
   border-radius: 8px;
   font-size: 1rem;
   resize: none;
-  color:inherit;
+  color: inherit;
   &:focus {
     outline: none;
     border-color: #a451f7;
   }
-
 `;
 
 const SubmitButton = styled.div`

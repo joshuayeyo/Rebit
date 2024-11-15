@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import instance from '@/api/instance';
 import axios from 'axios';
 import { MdDelete } from 'react-icons/md';
-import { MdModeEditOutline } from "react-icons/md";
+import { MdModeEditOutline } from 'react-icons/md';
 
 type Props = {
   isModalOpen: boolean;
@@ -25,8 +25,8 @@ const CommonModal = ({
   title,
   posterId,
 }: Props) => {
-  const modalRef = useRef<HTMLDivElement>(null)
-  
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleEscKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       handleModalClose();
@@ -65,7 +65,7 @@ const CommonModal = ({
 
   return (
     <>
-      <Overlay isOpen={isModalOpen}  onClick={handleModalClose} />
+      <Overlay isOpen={isModalOpen} onClick={handleModalClose} />
       <ModalContainer ref={modalRef}>
         <ButtonContainer hasTitle={!!title}>
           {myId === posterId && (
@@ -139,7 +139,6 @@ const ContentSection = styled.section`
   display: flex;
   flex-direction: row;
 `;
-
 
 const IconContainer = styled.div`
   cursor: pointer;

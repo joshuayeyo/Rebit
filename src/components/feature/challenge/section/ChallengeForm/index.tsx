@@ -36,7 +36,7 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -54,11 +54,11 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     let imageResult = '';
     if (file) {
       imageResult = await uploadImage2S3(file);
-      
+
       if (!imageResult) {
         alert('이미지 업로드에 실패했습니다!');
         return;
@@ -87,14 +87,12 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
     };
 
     if (formData.minimumEntryFee <= 0) {
-      alert(
-        `최소 입장료는 0원 이상입니다.`,
-      );
+      alert(`최소 입장료는 0원 이상입니다.`);
       return;
     }
 
     console.log('Formatted Data:', formattedData);
-  
+
     try {
       const response = await instance.post('/api/challenges', formattedData);
       console.log('Response:', response.data);
@@ -102,7 +100,7 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
       alert('챌린지가 생성되었습니다.');
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(imageKey)
+        console.log(imageKey);
         console.error(
           'Error sending form data:',
           error.response ? error.response.data : error.message,
@@ -224,7 +222,6 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
 };
 
 export default ChallengeForm;
-
 
 const StyledFormContainer = styled.div`
   width: 80%;

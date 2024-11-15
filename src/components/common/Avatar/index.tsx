@@ -2,8 +2,8 @@ import { Avatar, Text } from '@chakra-ui/react';
 import CommonContainer from '@/components/common/layouts/Container';
 
 type Props = {
-  username: string;
-  imageURL: string;
+  username?: string;
+  imageURL?: string;
   size?: string;
 };
 

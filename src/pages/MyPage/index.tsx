@@ -14,7 +14,8 @@ interface ActivitySummary {
 }
 
 const Mypage = () => {
-  const [activitySummary, setActibitySummary] = useState<ActivitySummary | null>(null);
+  const [activitySummary, setActibitySummary] =
+    useState<ActivitySummary | null>(null);
   const [data, setData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSection, setSelectedSection] = useState('Feed');

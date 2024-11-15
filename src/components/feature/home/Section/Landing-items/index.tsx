@@ -20,21 +20,20 @@ const LandingItems = ({ data = [] }: Props) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { isLogin } = useAuth();
 
-
   const handleCardClick = (data: ChallengeData | FeedData) => {
     if (!isLogin) {
-      navigate("/login")
+      navigate('/login');
       return;
     }
 
     if (data.type === 'S') {
       setModalType('S');
-      setSelectedId(data.id)
+      setSelectedId(data.id);
     } else if (data.type === 'FB') {
       setModalType('FB');
       setSelectedId(data.id);
     } else {
-      navigate(`/challenge/detail?id=${data.id}`) 
+      navigate(`/challenge/detail?id=${data.id}`);
     }
     setIsModalOpen(true);
   };
@@ -88,8 +87,22 @@ const LandingItems = ({ data = [] }: Props) => {
           ))}
         </CommonGrid>
       </CommonContainer>
-      {isModalOpen && modalType === 'S' && <StoryDetailModal handleModalClose={handleModalClose} isModalOpen={isModalOpen} id={selectedId} />}
-      {isModalOpen && modalType === 'FB' && <FavBookDetailModal handleModalClose={handleModalClose} isModalOpen={isModalOpen} id={selectedId} />}
+      {isModalOpen && modalType === 'S' && selectedId != null && (
+        <StoryDetailModal
+          setIsModalOpen={setIsModalOpen}
+          handleModalClose={handleModalClose}
+          isModalOpen={isModalOpen}
+          id={selectedId}
+        />
+      )}
+      {isModalOpen && modalType === 'FB' && selectedId != null && (
+        <FavBookDetailModal
+          handleModalClose={handleModalClose}
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+          id={selectedId}
+        />
+      )}
     </>
   );
 };

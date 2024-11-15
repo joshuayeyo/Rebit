@@ -17,7 +17,11 @@ type Props = {
   id: number;
 };
 
-const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen }: Props) => {
+const FavBookDetailModal = ({
+  isModalOpen,
+  handleModalClose,
+  id,
+}: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [posterId, setIsposterId] = useState(Number);
@@ -42,7 +46,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
       }
     }
     getContentDetails();
-  }, [id, setLikes,isEditModalOpen, isDelete]);
+  }, [id, setLikes, isEditModalOpen, isDelete]);
 
   const handleNavigate = () => {
     const isbn = data?.book.isbn;
@@ -62,7 +66,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
   };
 
   const handleDeleteClick = async () => {
-    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
+    const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
     if (!isConfirmed) {
       return;
     }
@@ -70,6 +74,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
       handleModalClose();
+      setIsDelete(true)
       window.location.reload();
       setTimeout(() => {
         window.history.go(-1);
@@ -79,7 +84,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
       alert('삭제하는 중 오류가 발생했습니다.');
     }
   };
-    
+
   return (
     <>
       <CommonModal
@@ -97,7 +102,9 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
             >
               <ImageContainer src={data.book.cover} />
               {isHovered && (
-                <HoverButton onClick={handleNavigate}>책 상세 페이지</HoverButton>
+                <HoverButton onClick={handleNavigate}>
+                  책 상세 페이지
+                </HoverButton>
               )}
             </Left>
             <Right>
@@ -108,7 +115,12 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
                     imageURL={data.author.presignedUrl}
                     size="md"
                   />
-                  <Divider mt="0.8rem" mb="0.8rem" borderColor="gray.800" width="60%" />
+                  <Divider
+                    mt="0.8rem"
+                    mb="0.8rem"
+                    borderColor="gray.800"
+                    width="60%"
+                  />
                 </ProfileSection>
                 <ContentSection>
                   <ContentWrapper>
@@ -133,16 +145,16 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
           </CommonContainer>
         ) : null}
       </CommonModal>
-      {isEditModalOpen &&(
+      {isEditModalOpen && (
         <EditFavbookModal
-          data={data!!}
+          data={data!}
           isModalOpen={isEditModalOpen}
           handleModalClose={handleEditModalClose}
         />
       )}
-    </>)
-  };
-  
+    </>
+  );
+};
 
 export default FavBookDetailModal;
 

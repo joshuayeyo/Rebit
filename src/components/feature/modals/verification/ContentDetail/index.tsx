@@ -21,7 +21,7 @@ const VerificationDetailModal = ({
   handleModalClose,
   challengeId,
   verificationId,
-  setIsModalOpen
+  setIsModalOpen,
 }: Props) => {
   const [data, setData] = useState<VerificationData | null>(null);
   const [isdelete, setisDelete] = useState(false);
@@ -42,16 +42,18 @@ const VerificationDetailModal = ({
       }
     }
     getContentDetails();
-  }, [challengeId, setData,isdelete]);
+  }, [challengeId, setData, isdelete]);
 
   const handleDeleteClick = async () => {
-    const isConfirmed = window.confirm("정말 삭제하시겠습니까?");
-  
+    const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
+
     if (!isConfirmed) {
       return;
     }
     try {
-      const res = await instance.delete(`/api/challenges/${challengeId}/verifications/${verificationId}`);
+      const res = await instance.delete(
+        `/api/challenges/${challengeId}/verifications/${verificationId}`,
+      );
       console.log('삭제 성공:', res.data);
       setIsModalOpen(false);
       setisDelete(true);
@@ -66,7 +68,12 @@ const VerificationDetailModal = ({
   };
 
   return (
-    <CommonModal posterId={posterId} isModalOpen={isModalOpen} handleModalClose={handleModalClose} handleDeletClick={handleDeleteClick}>
+    <CommonModal
+      posterId={posterId}
+      isModalOpen={isModalOpen}
+      handleModalClose={handleModalClose}
+      handleDeletClick={handleDeleteClick}
+    >
       {data ? (
         <>
           <Left>
@@ -97,7 +104,6 @@ const VerificationDetailModal = ({
         <Spinner />
       )}
     </CommonModal>
-    
   );
 };
 

@@ -42,18 +42,17 @@ const DiaryCalendar = () => {
     const fetchDiaryData = async () => {
       try {
         const response = await instance.get('api/diaries', {
-          params: { date: filterDate }
+          params: { date: filterDate },
         });
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching diary data:", error);
+        console.error('Error fetching diary data:', error);
         setData([]);
       }
     };
-  
+
     fetchDiaryData();
   }, [currentDate, selectedDate]);
-  
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -67,10 +66,14 @@ const DiaryCalendar = () => {
 
   const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  const handlePrevYear = () => setCurrentDate((prevDate) => subYears(prevDate, 1));
-  const handleNextYear = () => setCurrentDate((prevDate) => addYears(prevDate, 1));
-  const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, 1));
-  const handleNextMonth = () => setCurrentDate((prevDate) => addMonths(prevDate, 1));
+  const handlePrevYear = () =>
+    setCurrentDate((prevDate) => subYears(prevDate, 1));
+  const handleNextYear = () =>
+    setCurrentDate((prevDate) => addYears(prevDate, 1));
+  const handlePrevMonth = () =>
+    setCurrentDate((prevDate) => subMonths(prevDate, 1));
+  const handleNextMonth = () =>
+    setCurrentDate((prevDate) => addMonths(prevDate, 1));
 
   const handleDayClick = (date: string) => {
     setSelectedDate(date);
@@ -135,7 +138,9 @@ const DiaryCalendar = () => {
                       alt="일기 이미지"
                       width={50}
                       height={50}
-                      onClick={() => handleViewModalOpen(diaryEntry.id, date.date)}
+                      onClick={() =>
+                        handleViewModalOpen(diaryEntry.id, date.date)
+                      }
                       style={{ cursor: 'pointer' }}
                     />
                   ) : (
@@ -175,7 +180,6 @@ const DiaryCalendar = () => {
     </>
   );
 };
-
 
 export default DiaryCalendar;
 

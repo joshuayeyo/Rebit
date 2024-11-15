@@ -32,8 +32,8 @@ const ChallengeIntro = () => {
   }, []);
 
   const handleNavigate = () => {
-    navigate("/challenge")
-  }
+    navigate('/challenge');
+  };
 
   return (
     <Wrapper>
