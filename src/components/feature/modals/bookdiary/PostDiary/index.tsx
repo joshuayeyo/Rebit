@@ -43,10 +43,15 @@ const PostBookDiaryModal = ({
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-
     async function postFeedData() {
       try {
-        await instance.get('api/diaries', {}).then((response) => {
+        
+        await instance.get(`api/diaries`, {
+          params: {
+            date: selectedDate
+          }
+        }
+        ).then((response) => {
           console.log('다이어리 조회', response);
           window.location.reload();
         });

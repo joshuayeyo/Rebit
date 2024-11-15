@@ -31,28 +31,29 @@ const DiaryCalendar = () => {
 
   const startCurrentMonth = startOfMonth(currentDate);
   const endCurrentMonth = endOfMonth(currentDate);
-
   const startOfFirstWeek = startOfWeek(startCurrentMonth, { weekStartsOn: 0 });
   const endOfLastWeek = endOfWeek(endCurrentMonth, { weekStartsOn: 0 });
-
   const days = eachDayOfInterval({
     start: startOfFirstWeek,
     end: endOfLastWeek,
   });
 
   useEffect(() => {
-    async function fetchDiaryData() {
+    const fetchDiaryData = async () => {
       try {
-        const response = await instance.get('api/diaries');
-        console.log('다이어리 조회', response);
-        setData(response.data.content);
+        const response = await instance.get('api/diaries', {
+          params: { date: filterDate }
+        });
+        setData(response.data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching diary data:", error);
+        setData([]);
       }
-    }
-
+    };
+  
     fetchDiaryData();
-  }, [currentDate]);
+  }, [currentDate, selectedDate]);
+  
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -66,14 +67,10 @@ const DiaryCalendar = () => {
 
   const weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  const handlePrevYear = () =>
-    setCurrentDate((prevDate) => subYears(prevDate, 1));
-  const handleNextYear = () =>
-    setCurrentDate((prevDate) => addYears(prevDate, 1));
-  const handlePrevMonth = () =>
-    setCurrentDate((prevDate) => subMonths(prevDate, 1));
-  const handleNextMonth = () =>
-    setCurrentDate((prevDate) => addMonths(prevDate, 1));
+  const handlePrevYear = () => setCurrentDate((prevDate) => subYears(prevDate, 1));
+  const handleNextYear = () => setCurrentDate((prevDate) => addYears(prevDate, 1));
+  const handlePrevMonth = () => setCurrentDate((prevDate) => subMonths(prevDate, 1));
+  const handleNextMonth = () => setCurrentDate((prevDate) => addMonths(prevDate, 1));
 
   const handleDayClick = (date: string) => {
     setSelectedDate(date);
@@ -91,6 +88,7 @@ const DiaryCalendar = () => {
   const handleViewModalClose = () => setIsModalOpen(false);
 
   const formatCurrentMonth = format(currentDate, 'MMMM yyyy');
+  const filterDate = format(new Date(currentDate.setDate(1)), 'yyyy-MM-dd');
 
   return (
     <>
@@ -137,9 +135,7 @@ const DiaryCalendar = () => {
                       alt="일기 이미지"
                       width={50}
                       height={50}
-                      onClick={() =>
-                        handleViewModalOpen(diaryEntry.id, date.date)
-                      }
+                      onClick={() => handleViewModalOpen(diaryEntry.id, date.date)}
                       style={{ cursor: 'pointer' }}
                     />
                   ) : (
@@ -176,6 +172,7 @@ const DiaryCalendar = () => {
     </>
   );
 };
+
 
 export default DiaryCalendar;
 
