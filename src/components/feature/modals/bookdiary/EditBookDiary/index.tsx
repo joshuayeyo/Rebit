@@ -73,7 +73,7 @@ const EditBookDiaryModal = ({
           })
           .then((response) => {
             console.log('다이어리 조회', response);
-            window.location.reload();
+            handleModalClose();
           });
       } catch (error) {
         console.log(error);
@@ -112,7 +112,7 @@ const EditBookDiaryModal = ({
                 style={{ justifyContent: 'flex-end' }}
                 type="submit"
               >
-                POST!
+                Edit!
               </Button>
             </SubmitButton>
           </Right>
