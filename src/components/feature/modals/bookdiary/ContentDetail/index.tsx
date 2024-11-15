@@ -54,8 +54,7 @@ const DiaryDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen, s
     try {
       const res = await instance.delete(`/api/diaries/${id}`);
       console.log('삭제 성공:', res.data);
-      setIsModalOpen(false);
-      setIsDelete(true);
+      handleModalClose();
       window.location.reload();
       setTimeout(() => {
         window.history.go(-1);

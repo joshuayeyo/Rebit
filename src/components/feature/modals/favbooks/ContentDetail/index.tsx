@@ -69,8 +69,7 @@ const FavBookDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen 
     try {
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
-      setIsModalOpen(false);
-      setIsDelete(true);
+      handleModalClose();
       window.location.reload();
       setTimeout(() => {
         window.history.go(-1);
