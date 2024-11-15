@@ -57,4 +57,8 @@ const PosterContiner = styled.div`
 const Author = styled.div`
   font-size: 1rem;
   margin-right: 0.5rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
