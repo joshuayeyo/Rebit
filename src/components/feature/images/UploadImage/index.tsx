@@ -1,76 +1,41 @@
 import { Button } from '@/components/common/Button';
 import CommonImage from '@/components/common/Image';
 import styled from '@emotion/styled';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import defaultImage from '@/assets/defaultImage.png';
-import instance from '@/api/instance';
-import axios from 'axios';
 
-type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
+// type UploadType = 'MEMBER' | 'FEED' | 'CHALLENGE' | 'CHALLENGE_VERIFICATION';
 
 type Props = {
-  setImageKey: React.Dispatch<React.SetStateAction<string>>;
-  type: UploadType;
+  setFile: React.Dispatch<React.SetStateAction<File | null>>;
+  preview: string;
+  setPreview: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const UploadImage = ({ setImageKey, type }: Props) => {
-  const [preview, setPreview] = useState<string>(defaultImage);
+const UploadImage = ({ setFile, preview, setPreview }: Props) => {
   const uploadImage = useRef<HTMLInputElement | null>(null);
-  const [presignedUrl, setPresignedUrl] = useState('');
-  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (presignedUrl && file) {
-      const extension = file.name.split('.').pop()?.toLowerCase();
-      async function putS3() {
-        try {
-          await axios
-            .put(presignedUrl, file, {
-              headers: {
-                'Content-Type': `image/${extension}`,
-              },
-            })
-            .then((res) => {
-              alert('데이터가 성공적으로 들어갔습니다.');
-              console.log(res);
-            });
-        } catch (e: any) {
-          console.log(e);
-        }
-      }
-      putS3();
+    if (!preview) {
+      setPreview(defaultImage);
     }
-  }, [presignedUrl]);
+  }, [setPreview, preview]);
 
   const handleUpload = () => {
     uploadImage.current?.click();
   };
 
-  const handlePreview = (e: any) => {
-    if (uploadImage.current?.files != null) {
-      setPreview(URL.createObjectURL(uploadImage.current?.files[0]));
-    }
-    const fileName = e.target.files[0].name;
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-
-    async function getS3() {
-      try {
-        const res = await instance.get(
-          `api/s3/urls/upload?type=${type}&filename=${fileName}`,
-        );
-        const result = await res.data;
-        setPresignedUrl(result.presignedUrl);
-        setImageKey(result.key);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getS3();
-  };
-
   const handleDelete = () => {
     setPreview(defaultImage);
+    setFile(null);
+  };
+
+  const handlePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFile = e.target.files[0];
+      setPreview(URL.createObjectURL(selectedFile));
+      setFile(selectedFile);
+    }
   };
 
   return (

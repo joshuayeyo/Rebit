@@ -2,8 +2,10 @@ import CommonModal from '@/components/common/Modal';
 import styled from '@emotion/styled';
 import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import instance from '@/api/instance';
+import axios from 'axios';
+import { useStoreImage } from '@/util/hooks/useStoreImage';
 
 type Props = {
   isModalOpen: boolean;
@@ -18,20 +20,15 @@ const PostVerificationModal = ({
   setIsModalOpen,
   challengeId,
 }: Props) => {
+  const { uploadImage2S3 } = useStoreImage({ type: 'CHALLENGE_VERIFICATION' });
   const [imageKey, setImageKey] = useState('');
-
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     imageKey: '',
     content: '',
   });
-
-  useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      imageKey: imageKey,
-    }));
-  }, [imageKey]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -48,16 +45,36 @@ const PostVerificationModal = ({
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    let updatedImageKey = imageKey;
+
     async function postVerificationData() {
+      if (file) {
+        updatedImageKey = await uploadImage2S3(file);
+        setImageKey(updatedImageKey);
+      }
+      console.log(imageKey);
+
+      const updatedFormData = {
+        ...formData,
+        imageKey: updatedImageKey,
+      };
+
       try {
         await instance.post(
           `/api/challenges/${challengeId}/verifications`,
-          formData,
+          updatedFormData,
         );
-        alert('데이터가 성공적으로 들어갔습니다.');
+        alert('인증글 작성이 완료되었습니다.');
         setIsModalOpen(false);
-      } catch (e) {
-        console.log(e);
+        window.location.reload();
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.message || '알 수 없는 오류가 발생했습니다.';
+          console.error('Error message:', errorMessage);
+          alert(errorMessage);
+          handleModalClose();
+        }
       }
     }
     postVerificationData();
@@ -74,8 +91,9 @@ const PostVerificationModal = ({
             <Left>
               <ImageContainer>
                 <UploadImage
-                  setImageKey={setImageKey}
-                  type="CHALLENGE_VERIFICATION"
+                  setFile={setFile}
+                  preview={preview}
+                  setPreview={setPreview}
                 />
               </ImageContainer>
             </Left>

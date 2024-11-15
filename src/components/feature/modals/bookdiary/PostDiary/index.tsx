@@ -8,17 +8,24 @@ import instance from '@/api/instance';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  selectedDate: string | null;
 };
 
-const PostBookDiaryModal = ({ isModalOpen, handleModalClose }: Props) => {
-  const today = new Date();
+const PostBookDiaryModal = ({
+  isModalOpen,
+  handleModalClose,
+  selectedDate,
+}: Props) => {
+  const date = selectedDate ? new Date(selectedDate) : new Date();
   const time = {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    date: today.getDate(),
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    date: date.getDate(),
   };
+
   const [Content, setContent] = useState('');
-  const [contentPlaceholder, setContentPlaceholder] = useState('오늘의 일기를 작성하세요');
+  const [contentPlaceholder, setContentPlaceholder] =
+    useState('오늘의 일기를 작성하세요');
   const [isPlaceholderRed, setIsPlaceholderRed] = useState(false);
 
   const [selectedBook, setSelectedBook] = useState(() => {
@@ -36,6 +43,23 @@ const PostBookDiaryModal = ({ isModalOpen, handleModalClose }: Props) => {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
+    async function postFeedData() {
+      try {
+        await instance
+          .get(`api/diaries`, {
+            params: {
+              date: selectedDate,
+            },
+          })
+          .then((response) => {
+            console.log('다이어리 조회', response);
+            window.location.reload();
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    postFeedData();
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,13 +73,16 @@ const PostBookDiaryModal = ({ isModalOpen, handleModalClose }: Props) => {
 
     async function postFeedData() {
       try {
-        await instance.post('api/feeds', {
-          bookId: selectedBook?.id,
-          Content,
-        }).then((response) => {
-          console.log(response);
-          window.location.reload();
-        });
+        await instance
+          .post('api/diaries', {
+            content: Content,
+            isbn: selectedBook?.isbn,
+            date: selectedDate,
+          })
+          .then((response) => {
+            console.log('다이어리 조회', response);
+            window.location.reload();
+          });
       } catch (error) {
         console.log(error);
       }

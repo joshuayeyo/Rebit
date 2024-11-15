@@ -2,8 +2,11 @@ import styled from '@emotion/styled';
 import { ChallengeData, UserData } from '@/types';
 import { useAuth } from '@/provider/Auth';
 import instance from '@/api/instance';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { addDays } from 'date-fns';
 import axios from 'axios';
+import { IoIosHeartEmpty } from 'react-icons/io';
+import { toggleChallengeWishlist } from '@/util/hooks/useWishlist';
 
 type ChallengeProps = {
   challengeData: ChallengeData | null;
@@ -15,17 +18,37 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const { isLogin } = useAuth();
   const [entryFee, setEntryFee] = useState<number>(0);
   const userPoint = userData?.point !== undefined ? userData.point : 0;
+  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(
+    null,
+  );
+  const challengeId = challengeData?.id;
+  const { isWishlisted, toggleChallengeWishlisted, setIsWishlisted } =
+    toggleChallengeWishlist({
+      initialWishlisted,
+      challengeId,
+    });
 
-  function formatDate(date: string | null | undefined): string {
+  function formatDate(
+    date: string | null | undefined,
+    addOneDay: boolean = false,
+  ): string {
     if (!date) return '';
-
-    const dateObject = new Date(date);
+    let dateObject = new Date(date);
+    if (addOneDay) {
+      dateObject = addDays(dateObject, 1);
+    }
     return dateObject.toISOString().split('T')[0].replace(/-/g, '/');
   }
 
-  const recruitmentStartDate = formatDate(challengeData?.recruitmentStartDate);
+  const recruitmentStartDate = formatDate(
+    challengeData?.recruitmentStartDate,
+    true,
+  );
   const recruitmentEndDate = formatDate(challengeData?.recruitmentEndDate);
-  const challengeStartDate = formatDate(challengeData?.challengeStartDate);
+  const challengeStartDate = formatDate(
+    challengeData?.challengeStartDate,
+    true,
+  );
   const challengeEndDate = formatDate(challengeData?.challengeEndDate);
 
   const isValidEntryFee = (fee: number): boolean => {
@@ -35,8 +58,9 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
   const handleSubmit = () => {
     if (!isValidEntryFee(entryFee)) {
       alert(
-        '유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다.',
+        `유효한 참가비를 입력하세요. 참가비는 1원 이상 1,000,000원 이하이고, 보유 포인트 이하여야 합니다. 보유 포인트는 ${userPoint} 입니다.`,
       );
+      window.location.reload();
       return;
     }
 
@@ -71,6 +95,28 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
     }
   };
 
+  useEffect(() => {
+    async function fetchWishlistStatus() {
+      try {
+        const response = await instance.get(`api/wishes/challenges`);
+        const challengeInWishlist = response.data.content.some(
+          (item: { challengeId: number }) => item.challengeId === challengeId,
+        );
+        setInitialWishlisted(challengeInWishlist);
+      } catch (error) {
+        console.error('위시리스트 상태 로딩 오류:', error);
+        setInitialWishlisted(false);
+      }
+    }
+    fetchWishlistStatus();
+  }, [challengeId]);
+
+  useEffect(() => {
+    if (initialWishlisted !== null) {
+      setIsWishlisted(initialWishlisted);
+    }
+  }, [initialWishlisted, setIsWishlisted]);
+
   return (
     <Wrapper>
       <TagWrapper>
@@ -104,7 +150,7 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       {filter === 'IN_PROGRESS' ? (
         <FeeWrapper>
           <Content>
-            <>현재 진행중인 챌린지입니다</>
+            <> 총 상금 : ₩{challengeData?.totalEntryFee}</>
           </Content>
         </FeeWrapper>
       ) : (
@@ -120,9 +166,21 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
               ₩
             </Content>
           </FeeWrapper>
-          <SubmitButton type="submit" onClick={handleSubmit}>
-            챌린지 참가하기
-          </SubmitButton>
+          <ButtonWrapper>
+            <CountWrapper>
+              {challengeData?.currentHeadcount}/{challengeData?.maxHeadcount}
+            </CountWrapper>
+            <SubmitButton type="submit" onClick={handleSubmit}>
+              챌린지 참가하기
+            </SubmitButton>
+            <ReactionButton onClick={toggleChallengeWishlisted}>
+              {isWishlisted ? (
+                <IoIosHeartEmpty size="2rem" color="red" />
+              ) : (
+                <IoIosHeartEmpty size="2rem" color="white" />
+              )}
+            </ReactionButton>
+          </ButtonWrapper>
         </>
       )}
     </Wrapper>
@@ -167,7 +225,7 @@ const TiTleTag = styled.div`
 `;
 const DateTag = styled.div`
   color: white;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
 `;
 
@@ -211,7 +269,7 @@ const Content = styled.div`
 const ContentDetail = styled.div`
   padding: 0;
   color: black;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 20px;
 `;
 
@@ -231,23 +289,34 @@ const FeeBox = styled.input`
   }
 `;
 
+const CountWrapper = styled.div`
+  margin-right: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
+  color: white;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
 const SubmitButton = styled.button`
-  width: 80%;
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem;
   background-color: white;
   color: black;
   font-weight: bold;
-
   border-radius: 4px;
   font-size: 1rem;
-
   cursor: pointer;
-
   transition: background-color 0.3s;
-  margin: 0 auto;
-  margin-top: 6rem;
-
+  width: 60%;
   &:active {
     transform: scale(0.98);
   }
 `;
+
+const ReactionButton = styled.button``;

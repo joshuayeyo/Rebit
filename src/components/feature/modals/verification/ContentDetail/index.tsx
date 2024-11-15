@@ -4,8 +4,6 @@ import CommonContainer from '@/components/common/layouts/Container';
 import { Divider } from '@chakra-ui/react';
 import CommonAvatar from '@/components/common/Avatar';
 import StoryContentDetail from '@/components/feature/feed/section/contentDetail/StoryDetail';
-import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoBookmarkOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import instance from '@/api/instance';
 import { Spinner } from '@/components/common/Spinner';
@@ -14,6 +12,7 @@ import { VerificationData } from '@/types';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
   challengeId: number | null;
   verificationId: number;
 };
@@ -22,8 +21,11 @@ const VerificationDetailModal = ({
   handleModalClose,
   challengeId,
   verificationId,
+  setIsModalOpen,
 }: Props) => {
   const [data, setData] = useState<VerificationData | null>(null);
+  const [isdelete, setisDelete] = useState(false);
+  const [posterId, setIsposterId] = useState(Number);
 
   useEffect(() => {
     async function getContentDetails() {
@@ -33,18 +35,45 @@ const VerificationDetailModal = ({
         );
         const result = await res;
         setData(result.data);
+        setIsposterId(result.data.author.id);
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
-      } finally {
-        // setIsLoading(false);
       }
     }
     getContentDetails();
-  }, [challengeId, setData]);
+  }, [challengeId, setData, isdelete]);
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
+
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const res = await instance.delete(
+        `/api/challenges/${challengeId}/verifications/${verificationId}`,
+      );
+      console.log('삭제 성공:', res.data);
+      setIsModalOpen(false);
+      setisDelete(true);
+      window.location.reload();
+      setTimeout(() => {
+        window.history.go(-1);
+      }, 100);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제하는 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
-    <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
+    <CommonModal
+      posterId={posterId}
+      isModalOpen={isModalOpen}
+      handleModalClose={handleModalClose}
+      handleDeletClick={handleDeleteClick}
+    >
       {data ? (
         <>
           <Left>
@@ -68,15 +97,6 @@ const VerificationDetailModal = ({
               <ContentSection>
                 <StoryContentDetail content={data.content} />
               </ContentSection>
-              <ReactSection>
-                <IconLeft>
-                  <IoIosHeartEmpty size="2rem" />
-                </IconLeft>
-                {/* <Text>{data?.likes} Likes</Text> */}
-                <IconRight>
-                  <IoBookmarkOutline size="2rem" />
-                </IconRight>
-              </ReactSection>
             </CommonContainer>
           </Right>
         </>
@@ -116,25 +136,6 @@ const ContentSection = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-`;
-
-const ReactSection = styled.div`
-  width: 100%;
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-const IconLeft = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-`;
-const IconRight = styled.button`
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
 `;
 
 export default VerificationDetailModal;
