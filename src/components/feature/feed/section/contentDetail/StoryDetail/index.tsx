@@ -17,5 +17,7 @@ const ContentWrapper = styled.div`
   overflow: hidden;
   text-align: left;
   padding: 1rem;
+  white-space: pre-wrap;
+  font-size: 1rem;
 `;
 export default StoryContentDetail;

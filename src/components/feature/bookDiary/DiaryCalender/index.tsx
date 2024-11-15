@@ -31,28 +31,28 @@ const DiaryCalendar = () => {
 
   const startCurrentMonth = startOfMonth(currentDate);
   const endCurrentMonth = endOfMonth(currentDate);
-
   const startOfFirstWeek = startOfWeek(startCurrentMonth, { weekStartsOn: 0 });
   const endOfLastWeek = endOfWeek(endCurrentMonth, { weekStartsOn: 0 });
-
   const days = eachDayOfInterval({
     start: startOfFirstWeek,
     end: endOfLastWeek,
   });
 
   useEffect(() => {
-    async function fetchDiaryData() {
+    const fetchDiaryData = async () => {
       try {
-        const response = await instance.get('api/diaries');
-        console.log('다이어리 조회', response);
-        setData(response.data.content);
+        const response = await instance.get('api/diaries', {
+          params: { date: filterDate },
+        });
+        setData(response.data);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching diary data:', error);
+        setData([]);
       }
-    }
+    };
 
     fetchDiaryData();
-  }, [currentDate]);
+  }, [currentDate, selectedDate]);
 
   const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -91,6 +91,7 @@ const DiaryCalendar = () => {
   const handleViewModalClose = () => setIsModalOpen(false);
 
   const formatCurrentMonth = format(currentDate, 'MMMM yyyy');
+  const filterDate = format(new Date(currentDate.setDate(1)), 'yyyy-MM-dd');
 
   return (
     <>
@@ -159,6 +160,7 @@ const DiaryCalendar = () => {
           })}
         </Grid>
       </CalendarContainer>
+      <Footer />
       {isPostModalOpen && (
         <PostBookDiaryModal
           isModalOpen={isPostModalOpen}
@@ -168,9 +170,11 @@ const DiaryCalendar = () => {
       )}
       {isModalOpen && selectedID && selectedDate && (
         <DiaryDetailModal
+          setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
           handleModalClose={handleViewModalClose}
           id={selectedID}
+          selectedDate={selectedDate}
         />
       )}
     </>
@@ -274,4 +278,9 @@ const Image = styled.img`
   &:hover {
     transform: scale(1.3);
   }
+`;
+
+const Footer = styled.div`
+  width: 100%;
+  height: 100px;
 `;

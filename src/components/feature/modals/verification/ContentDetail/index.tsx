@@ -12,6 +12,7 @@ import { VerificationData } from '@/types';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: (visible: boolean) => void;
   challengeId: number | null;
   verificationId: number;
 };
@@ -20,8 +21,11 @@ const VerificationDetailModal = ({
   handleModalClose,
   challengeId,
   verificationId,
+  setIsModalOpen,
 }: Props) => {
   const [data, setData] = useState<VerificationData | null>(null);
+  const [isdelete, setisDelete] = useState(false);
+  const [posterId, setIsposterId] = useState(Number);
 
   useEffect(() => {
     async function getContentDetails() {
@@ -31,16 +35,45 @@ const VerificationDetailModal = ({
         );
         const result = await res;
         setData(result.data);
+        setIsposterId(result.data.author.id);
       } catch (e) {
         console.log(e);
         alert('Error: 데이터를 불러올 수 없습니다.');
       }
     }
     getContentDetails();
-  }, [challengeId, setData]);
+  }, [challengeId, setData, isdelete]);
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm('정말 삭제하시겠습니까?');
+
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const res = await instance.delete(
+        `/api/challenges/${challengeId}/verifications/${verificationId}`,
+      );
+      console.log('삭제 성공:', res.data);
+      setIsModalOpen(false);
+      setisDelete(true);
+      window.location.reload();
+      setTimeout(() => {
+        window.history.go(-1);
+      }, 100);
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제하는 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
-    <CommonModal isModalOpen={isModalOpen} handleModalClose={handleModalClose}>
+    <CommonModal
+      posterId={posterId}
+      isModalOpen={isModalOpen}
+      handleModalClose={handleModalClose}
+      handleDeletClick={handleDeleteClick}
+    >
       {data ? (
         <>
           <Left>

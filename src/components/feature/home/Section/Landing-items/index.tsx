@@ -3,6 +3,10 @@ import CommonGrid from '@/components/common/Grid';
 import CommonCard from '@/components/feature/home/Card';
 import { ChallengeData, FeedData } from '@/types';
 import { useNavigate } from 'react-router-dom';
+import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail';
+import FavBookDetailModal from '@/components/feature/modals/favbooks/ContentDetail';
+import { useState } from 'react';
+import { useAuth } from '@/provider/Auth';
 
 type Props = {
   data: (ChallengeData | FeedData)[];
@@ -11,14 +15,33 @@ type Props = {
 const LandingItems = ({ data = [] }: Props) => {
   const navigate = useNavigate();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'S' | 'FB' | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { isLogin } = useAuth();
+
   const handleCardClick = (data: ChallengeData | FeedData) => {
-    if ('challengeStartDate' in data) {
-      navigate(`/challenge`);
-    } else {
-      navigate(`/feed`);
+    if (!isLogin) {
+      navigate('/login');
+      return;
     }
+
+    if (data.type === 'S') {
+      setModalType('S');
+      setSelectedId(data.id);
+    } else if (data.type === 'FB') {
+      setModalType('FB');
+      setSelectedId(data.id);
+    } else {
+      navigate(`/challenge/detail?id=${data.id}`);
+    }
+    setIsModalOpen(true);
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setModalType(null);
+  };
   return (
     <>
       <CommonContainer
@@ -64,6 +87,22 @@ const LandingItems = ({ data = [] }: Props) => {
           ))}
         </CommonGrid>
       </CommonContainer>
+      {isModalOpen && modalType === 'S' && selectedId != null && (
+        <StoryDetailModal
+          setIsModalOpen={setIsModalOpen}
+          handleModalClose={handleModalClose}
+          isModalOpen={isModalOpen}
+          id={selectedId}
+        />
+      )}
+      {isModalOpen && modalType === 'FB' && selectedId != null && (
+        <FavBookDetailModal
+          handleModalClose={handleModalClose}
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+          id={selectedId}
+        />
+      )}
     </>
   );
 };

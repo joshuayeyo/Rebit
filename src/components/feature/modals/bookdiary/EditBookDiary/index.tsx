@@ -4,14 +4,19 @@ import { useEffect, useState } from 'react';
 import UploadBook from '../../favbooks/UploadBook';
 import { Button } from '@/components/common/Button';
 import instance from '@/api/instance';
+import { DiaryData } from '@/types';
 
 type Props = {
+  data: DiaryData;
   isModalOpen: boolean;
   handleModalClose: () => void;
   selectedDate: string | null;
+  id: number;
 };
 
-const PostBookDiaryModal = ({
+const EditBookDiaryModal = ({
+  id,
+  data,
   isModalOpen,
   handleModalClose,
   selectedDate,
@@ -23,11 +28,7 @@ const PostBookDiaryModal = ({
     date: date.getDate(),
   };
 
-  const [Content, setContent] = useState('');
-  const [contentPlaceholder, setContentPlaceholder] =
-    useState('오늘의 일기를 작성하세요');
-  const [isPlaceholderRed, setIsPlaceholderRed] = useState(false);
-
+  const [Content, setContent] = useState(data.content);
   const [selectedBook, setSelectedBook] = useState(() => {
     const savedBook = localStorage.getItem('selectedBook');
     return savedBook ? JSON.parse(savedBook) : null;
@@ -45,16 +46,10 @@ const PostBookDiaryModal = ({
     };
     async function postFeedData() {
       try {
-        await instance
-          .get(`api/diaries`, {
-            params: {
-              date: selectedDate,
-            },
-          })
-          .then((response) => {
-            console.log('다이어리 조회', response);
-            window.location.reload();
-          });
+        await instance.put(`api/diaries/${id}`).then((response) => {
+          console.log('다이어리 조회', response);
+          window.location.reload();
+        });
       } catch (error) {
         console.log(error);
       }
@@ -65,23 +60,17 @@ const PostBookDiaryModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!Content) {
-      setContentPlaceholder('일기의 내용을 입력해야합니다!');
-      setIsPlaceholderRed(true);
-      return;
-    }
-
     async function postFeedData() {
       try {
         await instance
-          .post('api/diaries', {
+          .put(`api/diaries/${id}`, {
             content: Content,
             isbn: selectedBook?.isbn,
             date: selectedDate,
           })
           .then((response) => {
             console.log('다이어리 조회', response);
-            window.location.reload();
+            handleModalClose();
           });
       } catch (error) {
         console.log(error);
@@ -92,10 +81,6 @@ const PostBookDiaryModal = ({
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
-    if (e.target.value) {
-      setContentPlaceholder('오늘의 일기를 작성하세요');
-      setIsPlaceholderRed(false);
-    }
   };
 
   return (
@@ -112,12 +97,7 @@ const PostBookDiaryModal = ({
           </Left>
           <Right>
             <FormContainer>
-              <TextForm
-                value={Content}
-                onChange={handleContentChange}
-                placeholder={contentPlaceholder}
-                isPlaceholderRed={isPlaceholderRed}
-              />
+              <TextForm value={Content} onChange={handleContentChange} />
             </FormContainer>
             <SubmitButton>
               <Button
@@ -126,7 +106,7 @@ const PostBookDiaryModal = ({
                 style={{ justifyContent: 'flex-end' }}
                 type="submit"
               >
-                POST!
+                Edit!
               </Button>
             </SubmitButton>
           </Right>
@@ -136,7 +116,7 @@ const PostBookDiaryModal = ({
   );
 };
 
-export default PostBookDiaryModal;
+export default EditBookDiaryModal;
 
 const HeaderBox = styled.section`
   height: auto;
@@ -190,7 +170,7 @@ const FormContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
+const TextForm = styled.textarea`
   width: 90%;
   height: 70%;
   padding: 1rem;
@@ -198,13 +178,10 @@ const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
   border-radius: 8px;
   font-size: 1rem;
   resize: none;
-  color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : 'inherit')};
+  color: inherit;
   &:focus {
     outline: none;
     border-color: #a451f7;
-  }
-  ::placeholder {
-    color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : '#999')};
   }
 `;
 

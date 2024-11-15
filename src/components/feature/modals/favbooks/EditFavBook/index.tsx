@@ -4,34 +4,17 @@ import { useEffect, useState } from 'react';
 import UploadBook from '../UploadBook';
 import { Button } from '@/components/common/Button';
 import instance from '@/api/instance';
+import { FeedData } from '@/types';
 
 type Props = {
+  data: FeedData;
   isModalOpen: boolean;
   handleModalClose: () => void;
 };
 
-const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
-  const today = new Date();
-  const time = {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    date: today.getDate(),
-  };
-
-  const [briefReview, setBriefReview] = useState(() => {
-    const savedBriefReview = localStorage.getItem('briefReview');
-    return savedBriefReview ? JSON.parse(savedBriefReview) : '';
-  });
-  const [fullReview, setFullReview] = useState(() => {
-    const savedFullReview = localStorage.getItem('fullReview');
-    return savedFullReview ? JSON.parse(savedFullReview) : '';
-  });
-  const [briefPlaceholder, setBriefPlaceholder] =
-    useState('한줄평을 작성하세요...');
-  const [fullPlaceholder, setFullPlaceholder] =
-    useState('서평을 작성하세요...');
-  const [isBriefPlaceholderRed, setIsBriefPlaceholderRed] = useState(false);
-  const [isFullPlaceholderRed, setIsFullPlaceholderRed] = useState(false);
+const EditFavbookModal = ({ data, isModalOpen, handleModalClose }: Props) => {
+  const [briefReview, setBriefReview] = useState(data?.briefReview);
+  const [fullReview, setFullReview] = useState(data?.fullReview);
 
   const [selectedBook, setSelectedBook] = useState(() => {
     const savedBook = localStorage.getItem('selectedBook');
@@ -39,18 +22,7 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('briefReview', JSON.stringify(briefReview));
-    localStorage.setItem('fullReview', JSON.stringify(fullReview));
-  }, [briefReview, fullReview]);
-
-  useEffect(() => {
     const handleStorageChange = () => {
-      const updatedBriefReview = localStorage.getItem('briefReview');
-      setBriefReview(
-        updatedBriefReview ? JSON.parse(updatedBriefReview) : null,
-      );
-      const updatedFullReview = localStorage.getItem('fullReview');
-      setBriefReview(updatedFullReview ? JSON.parse(updatedFullReview) : null);
       const updatedBook = localStorage.getItem('selectedBook');
       setSelectedBook(updatedBook ? JSON.parse(updatedBook) : null);
     };
@@ -64,42 +36,23 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    // 유효성 검사
-    if (!briefReview) {
-      setBriefPlaceholder('한줄평을 입력해야 합니다!');
-      setIsBriefPlaceholderRed(true);
-      return;
-    }
-
-    if (!fullReview) {
-      setFullPlaceholder('서평을 입력해야 합니다!');
-      setIsFullPlaceholderRed(true);
-      return;
-    }
-
-    async function postFeedData() {
+    async function postFbData() {
       try {
         await instance
-          .post('api/feeds', {
-            type: 'FB',
+          .put(`api/feeds/favorite-books/${data.id}`, {
             bookId: selectedBook.id,
             briefReview: briefReview,
             fullReview: fullReview,
           })
           .then((response) => {
             console.log(response);
-            window.location.reload(); // Posting 후 페이지 새로고침
+            handleModalClose();
           });
       } catch (e) {
         console.log(e);
-      } finally {
-        localStorage.removeItem('selectedBook');
-        localStorage.removeItem('briefReview');
-        localStorage.removeItem('fullReview');
-        localStorage.removeItem('isPostModalOpen');
       }
     }
-    postFeedData();
+    postFbData();
   };
 
   const handleContentChange = (
@@ -108,16 +61,8 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   ) => {
     if (type === 'brief') {
       setBriefReview(e.target.value);
-      if (e.target.value) {
-        setBriefPlaceholder('한줄평을 작성하세요...');
-        setIsBriefPlaceholderRed(false);
-      }
     } else if (type === 'full') {
       setFullReview(e.target.value);
-      if (e.target.value) {
-        setFullPlaceholder('자세한 리뷰를 작성하세요...');
-        setIsFullPlaceholderRed(false);
-      }
     }
   };
 
@@ -128,11 +73,7 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
         handleModalClose={handleModalClose}
       >
         <form onSubmit={handleSubmit} style={{ width: '100%', height: '100%' }}>
-          <HeaderBox>
-            <Today>
-              {time.year}.{time.month}.{time.date}
-            </Today>
-          </HeaderBox>
+          <HeaderBox></HeaderBox>
           <FlexBox>
             <Left>
               <UploadBook />
@@ -142,14 +83,10 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
                 <TextForm
                   value={briefReview}
                   onChange={(e) => handleContentChange(e, 'brief')}
-                  placeholder={briefPlaceholder}
-                  isPlaceholderRed={isBriefPlaceholderRed}
                 />
                 <TextForm
                   value={fullReview}
                   onChange={(e) => handleContentChange(e, 'full')}
-                  placeholder={fullPlaceholder}
-                  isPlaceholderRed={isFullPlaceholderRed}
                 />
               </FormContainer>
               <SubmitButton>
@@ -159,7 +96,7 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
                   style={{ justifyContent: 'flex-end' }}
                   type="submit"
                 >
-                  POST!
+                  Edit!
                 </Button>
               </SubmitButton>
             </Right>
@@ -170,7 +107,7 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   );
 };
 
-export default PostFavbookModal;
+export default EditFavbookModal;
 
 const HeaderBox = styled.section`
   height: auto;
@@ -178,15 +115,6 @@ const HeaderBox = styled.section`
   position: absolute;
   top: 1.5rem;
   left: 1rem;
-`;
-
-const Today = styled.div`
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  font-weight: bold;
-  color: #a451f7;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
 `;
 
 const FlexBox = styled.div`
@@ -224,7 +152,7 @@ const FormContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
+const TextForm = styled.textarea`
   width: 90%;
   height: 70%; // 텍스트 영역이 전체 높이를 차지하지 않도록 조정
   padding: 1rem;
@@ -232,13 +160,10 @@ const TextForm = styled.textarea<{ isPlaceholderRed: boolean }>`
   border-radius: 8px;
   font-size: 1rem;
   resize: none;
-  color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : 'inherit')};
+  color: inherit;
   &:focus {
     outline: none;
     border-color: #a451f7;
-  }
-  ::placeholder {
-    color: ${(props) => (props.isPlaceholderRed ? '#ff0000' : '#999')};
   }
 `;
 
