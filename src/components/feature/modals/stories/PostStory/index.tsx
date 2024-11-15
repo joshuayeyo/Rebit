@@ -62,9 +62,9 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
         } catch (e) {
           console.log(e);
         } finally {
-          localStorage.removeItem('isPostModalOpen')
-          localStorage.removeItem('storyContent')
-          window.location.reload(); // Posting 후 페이지 새로고침
+          window.location.reload();
+          localStorage.removeItem("storyContent")
+          localStorage.removeItem('isPostModalOpen');
         }
       }
     }

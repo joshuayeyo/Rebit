@@ -1,36 +1,46 @@
-import CommonGrid from '@/components/common/Grid';
 import { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
 import { Skeleton } from '@chakra-ui/react';
-import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail';
+import CommonGrid from '@/components/common/Grid';
 import FeedCard from '@/components/feature/feed/post/Card';
+import StoryDetailModal from '@/components/feature/modals/stories/ContentDetail';
+import FavBookDetailModal from '@/components/feature/modals/favbooks/ContentDetail';
+import MagazineDetailModal from '@/components/feature/modals/magazine/ContentDetail';
 import PostFeedsButton from '../WriteButton';
-import useFilter from '@/util/hooks/useFilter';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { motion, AnimatePresence } from 'framer-motion';
+import styled from '@emotion/styled';
 import instance from '@/api/instance';
 import { useAuth } from '@/provider/Auth';
-import FavBookDetailModal from '@/components/feature/modals/favbooks/ContentDetail';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import MagazineDetailModal from '@/components/feature/modals/magazine/ContentDetail';
 
 type selectedType = 'S' | 'FB' | 'M' | null;
 
 const FeedItemSection = ({ filter }: { filter: string }) => {
   const { isLogin } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(
+    // localStorage.getItem('isModalOpen') === 'true'
+    false
+  );
+  const [isPostModalOpen, setIsPostModalOpen] = useState(
+    localStorage.getItem('isPostModalOpen') === 'true'
+  );
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedType, setSelectedType] = useState<selectedType>(null);
-
+  const [selectedId, setSelectedId] = useState<number | null>(
+    localStorage.getItem('selectedId') ? Number(localStorage.getItem('selectedId')) : null
+  );
+  const [selectedType, setSelectedType] = useState<selectedType>(
+    localStorage.getItem('selectedType') as selectedType
+  );
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const handleDropdownOpen = () => setIsDropdownVisible(true);
-  const handleDropdownClose = () => setIsDropdownVisible(false);
+  useEffect(() => {
+    setData([]); 
+    setPage(0); 
+    setHasMore(true); 
+  }, [filter]);
+
 
   useEffect(() => {
     const endpoint =
@@ -46,7 +56,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
       if (!hasMore) return;
       try {
         const res = await instance.get(`/api/${endpoint}`, {
-          params: { page: page },
+          params: { page: page, size: 8 },
         });
         const result = await res.data;
         if (result.content && result.content.length > 0) {
@@ -62,6 +72,7 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
         setIsLoading(false);
       }
     }
+
     if (hasMore && page >= 0) {
       getFeedData();
     }
@@ -77,7 +88,6 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     setIsModalOpen(true);
   };
 
-  // Detail Modal과 Post 모달을 분리한다.
   const handlePostModalClose = () => {
     setIsPostModalOpen(false);
     setSelectedType(null);
@@ -89,6 +99,13 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     setSelectedType(null);
   };
 
+  useEffect(() => {
+    localStorage.setItem('isPostModalOpen', JSON.stringify(isPostModalOpen));
+    localStorage.setItem('selectedId', selectedId !== null ? selectedId.toString() : '');
+    localStorage.setItem('selectedType', selectedType || '');
+  }, [isPostModalOpen, selectedId, selectedType]);
+
+
   // 모달 열려있을 때, 스크롤 금지, 닫았을 때 다시 스크롤
   if (isModalOpen || isPostModalOpen) {
     document.body.style.overflow = 'hidden';
@@ -96,12 +113,12 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
     document.body.style.overflow = 'auto';
   }
 
-  if (!data) return <></>;
-
-  const { filteredData, setFilter } = useFilter(data, 'type', filter);
-  useEffect(() => {
-    setFilter(filter);
-  }, [filter, filteredData, setFilter]);
+  const filteredData = data.filter((item) => {
+    if (filter === 'S') return item.type === 'S';
+    if (filter === 'FB') return item.type === 'FB';
+    if (filter === 'M') return item.type === 'M';
+    return true;
+  });
 
   const fetchData = () => {
     if (hasMore) {
@@ -120,37 +137,35 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
       >
         <CommonGrid columns={4} gap={50} style={{ overflow: 'hidden' }}>
           <AnimatePresence>
-            {Array.isArray(filteredData) &&
-              filteredData.map((data) => (
-                <motion.div
-                // key={data.id}
-                // initial={{ opacity: 0, y: 20 }}
-                // animate={{ opacity: 1, y: 0 }}
-                // exit={{ opacity: 0, y: -20 }}
-                // transition={{ duration: 0.3, delay: index * 0.1 }}
+            {filteredData.map((data) => (
+              <motion.div
+                key={data.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <ItemWrapper
+                  onClick={() => handleCardClick(data.id, data.type)}
                 >
-                  <ItemWrapper
-                    onClick={() => handleCardClick(data.id, data.type)}
-                  >
-                    <Skeleton isLoaded={!isLoading}>
-                      <FeedCard
-                        imageUrl={
-                          data.type === 'S' || data.type === 'M'
-                            ? data.presignedUrl
-                            : data.book?.cover
-                        }
-                        content={
-                          data.type === 'S'
-                            ? data.content
-                            : data.type === 'FB'
-                              ? data.briefReview
-                              : ''
-                        }
-                      />
-                    </Skeleton>
-                  </ItemWrapper>
-                </motion.div>
-              ))}
+                  <Skeleton isLoaded={!isLoading}>
+                    <FeedCard
+                      imageUrl={
+                        data.type === 'S' || data.type === 'M'
+                          ? data.presignedUrl
+                          : data.book?.cover
+                      }
+                      content={
+                        data.type === 'S'
+                          ? data.content
+                          : data.type === 'FB'
+                            ? data.briefReview
+                            : ''
+                      }
+                    />
+                  </Skeleton>
+                </ItemWrapper>
+              </motion.div>
+            ))}
           </AnimatePresence>
         </CommonGrid>
       </InfiniteScroll>
@@ -182,8 +197,8 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
         </>
       )}
       <ButtonWrapper
-        onMouseEnter={handleDropdownOpen}
-        onMouseLeave={handleDropdownClose}
+        onMouseEnter={() => setIsDropdownVisible(true)}
+        onMouseLeave={() => setIsDropdownVisible(false)}
       >
         <PostFeedsButton
           isDropdownVisible={isDropdownVisible}
