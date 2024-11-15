@@ -8,6 +8,7 @@ import instance from '@/api/instance';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
+  setIsModalOpen: () => void;
 };
 
 const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
@@ -18,9 +19,14 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
     date: today.getDate(),
   };
 
-  const [briefReview, setBriefReview] = useState('');
-  const [fullReview, setFullReview] = useState('');
-
+  const [briefReview, setBriefReview] = useState(() => {
+    const savedBriefReview = localStorage.getItem('briefReview');
+    return savedBriefReview ? JSON.parse(savedBriefReview) : '';
+  });
+  const [fullReview, setFullReview] = useState(() => {
+    const savedFullReview = localStorage.getItem('fullReview');
+    return savedFullReview ? JSON.parse(savedFullReview) : '';
+  });
   const [briefPlaceholder, setBriefPlaceholder] =
     useState('한줄평을 작성하세요...');
   const [fullPlaceholder, setFullPlaceholder] =
@@ -34,7 +40,16 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   });
 
   useEffect(() => {
+    localStorage.setItem('briefReview', JSON.stringify(briefReview));
+    localStorage.setItem('fullReview', JSON.stringify(fullReview));
+  }, [briefReview, fullReview]);
+
+  useEffect(() => {
     const handleStorageChange = () => {
+      const updatedBriefReview = localStorage.getItem('briefReview');
+      setBriefReview(updatedBriefReview ? JSON.parse(updatedBriefReview) : null);
+      const updatedFullReview = localStorage.getItem('fullReview');
+      setBriefReview(updatedFullReview ? JSON.parse(updatedFullReview) : null);
       const updatedBook = localStorage.getItem('selectedBook');
       setSelectedBook(updatedBook ? JSON.parse(updatedBook) : null);
     };
@@ -76,6 +91,11 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
           });
       } catch (e) {
         console.log(e);
+      } finally{
+        localStorage.removeItem('selectedBook');
+        localStorage.removeItem('briefReview');
+        localStorage.removeItem('fullReview');
+        localStorage.removeItem('isPostModalOpen');
       }
     }
     postFeedData();

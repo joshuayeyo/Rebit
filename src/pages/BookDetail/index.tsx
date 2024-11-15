@@ -95,7 +95,7 @@ const BookDetailPage = () => {
 
   const NavigateToBookStore = () => {
     if (data?.link) {
-      window.location.href = data.link;
+      window.open(`${data.link}`, '_blank');
     } else {
       console.log('서점 링크가 없습니다.');
     }
@@ -134,7 +134,14 @@ const BookDetailPage = () => {
                         서점으로 이동
                       </Button>
                     </ButtonWrapper>
-                    <IoBookmarkOutline size="2.5rem" />
+                    <Button
+                      onClick={toggleBookWishlisted}
+                    >
+                      {isWishlisted
+                      ? <IoBookmarkOutline size="2.5rem" color="red" />
+                      : <IoBookmarkOutline size="2.5rem" />
+                      }
+                    </Button>
                   </ContentWrapper>
                 </BookCoverWrapper>
                 <BookDescriptionWrapper>
@@ -151,21 +158,10 @@ const BookDetailPage = () => {
                   <TopFullReview>
                     <UnderlinedHeading2>Best 서평</UnderlinedHeading2>
                     <FullReviewContainer>
-                      <CommonAvatar size="sm" username="abc" imageURL="" />
+                      <CommonAvatar size="sm" username={data?.reviewAuthor} imageURL={data?.reviewAuthorImage} />
                       <span>{data?.topFullReview} </span>
                     </FullReviewContainer>
                   </TopFullReview>
-                  <ButtonWrapper>
-                    <Button
-                      size="medium"
-                      theme="lightgray"
-                      onClick={toggleBookWishlisted}
-                    >
-                      {isWishlisted
-                        ? '위시리스트에서 제거'
-                        : '위시리스트에 추가'}
-                    </Button>
-                  </ButtonWrapper>
                 </BookDescriptionWrapper>
               </CommonContainer>
             </DetailsWrapper>
@@ -235,7 +231,6 @@ const BookCover = styled.img`
 `;
 
 const ButtonWrapper = styled.div`
-  border: 1px solid;
   margin-right: 0.3rem;
 `;
 
@@ -282,17 +277,18 @@ const PublishInfo = styled.span`
 `;
 
 const TopFullReview = styled.div`
-  height: 100%;
   margin-top: 10%;
-  height: 50%;
+  height: 200px;
 `;
 
 const FullReviewContainer = styled.div`
+  height: 100%;
   align-items: center;
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  overflow-y: scroll;
 `;
 
 const BriefBookReviewsWrapper = styled.section`
