@@ -8,7 +8,6 @@ import instance from '@/api/instance';
 type Props = {
   isModalOpen: boolean;
   handleModalClose: () => void;
-  setIsModalOpen: () => void;
 };
 
 const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
