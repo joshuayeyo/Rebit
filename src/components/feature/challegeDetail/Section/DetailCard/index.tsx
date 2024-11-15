@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-
 import { VerificationData } from '@/types';
 
 type Props = {

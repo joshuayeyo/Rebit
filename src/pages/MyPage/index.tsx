@@ -4,20 +4,22 @@ import UserInfo from '@/components/feature/mypage/section/UserInfo';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@chakra-ui/react';
 import instance from '@/api/instance';
+import { UserData } from '@/types';
+import ContentSection from '@/components/feature/mypage/section/ContentSection';
 
-type UserData = {
-  nickname: string;
-  presignedUrl: string;
-  bio?: string;
-  point?: number;
-};
+interface ActivitySummary {
+  diaryCount: number;
+  feedCount: number;
+  challengeCount: number;
+}
 
 const Mypage = () => {
+  const [activitySummary, setActibitySummary] =
+    useState<ActivitySummary | null>(null);
   const [data, setData] = useState<UserData | null>(null);
-  const jwtToken = localStorage.getItem('jwt_token');
-  const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
-  const accessToken = parsedToken?.accessToken;
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedSection, setSelectedSection] = useState('Feed');
+  const [selectedFilter, setSelectedFilter] = useState('ALL');
 
   useEffect(() => {
     async function getUserDetails() {
@@ -32,15 +34,46 @@ const Mypage = () => {
       }
     }
     getUserDetails();
-  }, [accessToken]);
-
+  }, []);
+  useEffect(() => {
+    async function getUserActivitySummary() {
+      try {
+        const res = await instance.get(`/api/members/me/activity-summary`);
+        setActibitySummary(res.data);
+      } catch (error) {
+        console.log(error);
+        alert('Error: 데이터를 불러올 수 없습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getUserActivitySummary();
+  }, []);
   return (
     <>
       <CommonHeader />
       {data ? (
         <Skeleton isLoaded={!isLoading}>
-          <UserInfo nickname={data.nickname} imageUrl={data.presignedUrl} />
-          <Navbar />
+          <UserInfo
+            nickname={data.nickname}
+            imageUrl={data.presignedUrl}
+            coverImageUrl={data.coverPresignedUrl}
+            bio={data.bio}
+            points={data.point}
+            diaryCount={activitySummary?.diaryCount ?? 0}
+            feedCount={activitySummary?.feedCount ?? 0}
+            challengeCount={activitySummary?.challengeCount ?? 0}
+          />
+          <Navbar
+            selectedSection={selectedSection}
+            onSelectSection={setSelectedSection}
+            selectedFilter={selectedFilter}
+            onSelectFilter={setSelectedFilter}
+          />
+          <ContentSection
+            section={selectedSection}
+            selectedFilter={selectedFilter}
+          />
         </Skeleton>
       ) : (
         <></>

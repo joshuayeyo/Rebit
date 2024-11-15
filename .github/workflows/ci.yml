@@ -3,12 +3,12 @@ name: rebit_fe_ci
 on:
   push:
     branches:
-      - Weekly
+      - Weekly_11
     paths: 
       - src/**
   pull_request:
     branches:
-      - Weekly
+      - Weekly_11
     paths:
       - src/**
 

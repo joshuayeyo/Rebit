@@ -5,16 +5,20 @@ import instance from '@/api/instance';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { ChallengeData } from '@/types';
+import { useNavigate } from 'react-router-dom';
 
 const ChallengeIntro = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<ChallengeData[]>([]);
 
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/challenges`);
+        const res = await instance.get(`/api/challenges`, {
+          params: { size: 4 },
+        });
         const result = await res.data;
-        setData(result.content.slice(0, 4));
+        setData(result.content);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -27,12 +31,16 @@ const ChallengeIntro = () => {
     getFeedData();
   }, []);
 
+  const handleNavigate = () => {
+    navigate('/challenge');
+  };
+
   return (
     <Wrapper>
       <Left>
         <LandingItems data={data} />
       </Left>
-      <Right>
+      <Right onClick={handleNavigate}>
         <ChallengeSample />
       </Right>
     </Wrapper>
@@ -54,5 +62,6 @@ const Left = styled.div`
 const Right = styled.div`
   width: 50vw;
   height: 100vh;
+  cursor: pointer;
 `;
 export default ChallengeIntro;

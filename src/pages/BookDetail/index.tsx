@@ -13,6 +13,8 @@ import { useLocation } from 'react-router-dom';
 import { BookData } from '@/types';
 import { ReviewData } from '@/types';
 import axios from 'axios';
+import { IoBookmarkOutline } from 'react-icons/io5';
+import { toggleBookWishlist } from '@/util/hooks/useWishlist';
 
 const BookDetailPage = () => {
   const [data, setData] = useState<BookData | null>(null);
@@ -20,7 +22,15 @@ const BookDetailPage = () => {
   const isLandingVisible = useLandingPage(4000);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const isbn = queryParams.get('isbn'); // 쿼리에서 isbn 값 추출
+  const isbn = queryParams.get('isbn') || '';
+  const [initialWishlisted, setInitialWishlisted] = useState<boolean | null>(
+    null,
+  );
+  const { isWishlisted, toggleBookWishlisted, setIsWishlisted } =
+    toggleBookWishlist({
+      initialWishlisted,
+      isbn,
+    });
 
   useEffect(() => {
     async function getBookData() {
@@ -61,9 +71,31 @@ const BookDetailPage = () => {
     getBriefReviews();
   }, [setReviews]);
 
+  useEffect(() => {
+    async function fetchWishlistStatus() {
+      try {
+        const response = await instance.get(`api/wishes/books`);
+        const bookInWishlist = response.data.content.some(
+          (item: { isbn: string }) => item.isbn === isbn,
+        );
+        setInitialWishlisted(bookInWishlist);
+      } catch (error) {
+        console.error('위시리스트 상태 로딩 오류:', error);
+        setInitialWishlisted(false);
+      }
+    }
+    fetchWishlistStatus();
+  }, [isbn]);
+
+  useEffect(() => {
+    if (initialWishlisted !== null) {
+      setIsWishlisted(initialWishlisted);
+    }
+  }, [initialWishlisted, setIsWishlisted]);
+
   const NavigateToBookStore = () => {
     if (data?.link) {
-      window.location.href = data.link;
+      window.open(`${data.link}`, '_blank');
     } else {
       console.log('서점 링크가 없습니다.');
     }
@@ -96,9 +128,20 @@ const BookDetailPage = () => {
                   <BookCoverContainer>
                     <BookCover src={data?.cover} alt="bookCover" />
                   </BookCoverContainer>
-                  <ButtonWrapper>
-                    <Button onClick={NavigateToBookStore}>서점으로 이동</Button>
-                  </ButtonWrapper>
+                  <ContentWrapper>
+                    <ButtonWrapper>
+                      <Button onClick={NavigateToBookStore}>
+                        서점으로 이동
+                      </Button>
+                    </ButtonWrapper>
+                    <Button onClick={toggleBookWishlisted}>
+                      {isWishlisted ? (
+                        <IoBookmarkOutline size="2.5rem" color="red" />
+                      ) : (
+                        <IoBookmarkOutline size="2.5rem" />
+                      )}
+                    </Button>
+                  </ContentWrapper>
                 </BookCoverWrapper>
                 <BookDescriptionWrapper>
                   <UnderlinedHeading1>책 정보</UnderlinedHeading1>
@@ -114,7 +157,11 @@ const BookDetailPage = () => {
                   <TopFullReview>
                     <UnderlinedHeading2>Best 서평</UnderlinedHeading2>
                     <FullReviewContainer>
-                      <CommonAvatar size="sm" username="abc" imageURL="" />
+                      <CommonAvatar
+                        size="sm"
+                        username={data?.reviewAuthor}
+                        imageURL={data?.reviewAuthorImage}
+                      />
                       <span>{data?.topFullReview} </span>
                     </FullReviewContainer>
                   </TopFullReview>
@@ -187,7 +234,15 @@ const BookCover = styled.img`
 `;
 
 const ButtonWrapper = styled.div`
-  border: 1px solid;
+  margin-right: 0.3rem;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: cloum;
+  align-items: center;
+  margin-top: 1rem;
 `;
 
 const BookDescriptionWrapper = styled.section`
@@ -225,17 +280,18 @@ const PublishInfo = styled.span`
 `;
 
 const TopFullReview = styled.div`
-  height: 100%;
   margin-top: 10%;
-  height: 50%;
+  height: 200px;
 `;
 
 const FullReviewContainer = styled.div`
+  height: 100%;
   align-items: center;
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  overflow-y: scroll;
 `;
 
 const BriefBookReviewsWrapper = styled.section`

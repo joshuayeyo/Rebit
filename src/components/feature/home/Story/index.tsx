@@ -6,19 +6,24 @@ import { useEffect, useState } from 'react';
 import { FeedData } from '@/types';
 import instance from '@/api/instance';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const StoryIntro = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<FeedData[]>([]);
+
+  const handleNavigate = () => {
+    navigate('/feed');
+  };
 
   useEffect(() => {
     async function getFeedData() {
       try {
-        const res = await instance.get(`/api/feeds`);
+        const res = await instance.get(`/api/feeds/stories`, {
+          params: { size: 4 },
+        });
         const result = await res.data;
-        const filteredData = result.content
-          .filter((item: FeedData) => item.type === 'S')
-          .slice(0, 4);
-        setData(filteredData);
+        setData(result.content);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const errorMessage =
@@ -33,7 +38,7 @@ const StoryIntro = () => {
 
   return (
     <Wrapper>
-      <Left>
+      <Left onClick={handleNavigate}>
         <StorySample />
       </Left>
       <Right>
@@ -50,6 +55,7 @@ const Wrapper = styled.section`
 `;
 const Left = styled.div`
   width: 50vw;
+  point: cursor;
 `;
 const Right = styled.div`
   width: 50vw;
