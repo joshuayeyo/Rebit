@@ -19,6 +19,7 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [bio, setBio] = useState('');
   const [nickname, setNickname] = useState('');
+  const [coverImageKey, setCoverImageKey] = useState('');
 
   const { uploadImage2S3 } = useStoreImage({ type: 'MEMBER' });
 
@@ -26,9 +27,17 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
     const fetchProfileData = async () => {
       try {
         const response = await instance.get('/api/members/me');
-        const { presignedUrl, imageKey, nickname, bio } = response.data;
-        setPreview(presignedUrl);
+        const {
+          presignedUrl,
+          imageKey,
+          nickname,
+          bio,
+          coverPresignedUrl,
+          coverImageKey,
+        } = response.data;
+        setPreview(presignedUrl || coverPresignedUrl);
         setImageKey(imageKey || null);
+        setCoverImageKey(coverImageKey || null);
         setNickname(nickname || null);
         setBio(bio || null);
       } catch (error) {
@@ -46,6 +55,7 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
     e.preventDefault();
 
     let updatedImageKey = imageKey;
+    const updatedCoverImageKey = coverImageKey;
 
     if (file) {
       updatedImageKey = await uploadImage2S3(file);
@@ -53,6 +63,7 @@ const EditProfileModal = ({ isModalOpen, handleModalClose }: Props) => {
 
     const updatedData = {
       imageKey: updatedImageKey,
+      coverImageKey: updatedCoverImageKey,
       nickname: nickname,
       bio: bio,
     };
