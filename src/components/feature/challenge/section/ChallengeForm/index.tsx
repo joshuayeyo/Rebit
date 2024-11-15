@@ -85,7 +85,14 @@ const ChallengeForm = ({ file, setIsModalOpen }: Props) => {
         "yyyy-MM-dd'T'23:59:59",
       ),
     };
-  
+
+    if (formData.minimumEntryFee <= 0) {
+      alert(
+        `최소 입장료는 0원 이상입니다.`,
+      );
+      return;
+    }
+
     console.log('Formatted Data:', formattedData);
   
     try {
