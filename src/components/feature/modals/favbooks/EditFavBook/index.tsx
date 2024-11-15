@@ -7,13 +7,12 @@ import instance from '@/api/instance';
 import { FeedData } from '@/types';
 
 type Props = {
-  data : FeedData
+  data: FeedData;
   isModalOpen: boolean;
   handleModalClose: () => void;
 };
 
-const EditFavbookModal = ({data, isModalOpen, handleModalClose }: Props) => {
-
+const EditFavbookModal = ({ data, isModalOpen, handleModalClose }: Props) => {
   const [briefReview, setBriefReview] = useState(data?.briefReview);
   const [fullReview, setFullReview] = useState(data?.fullReview);
 
@@ -74,22 +73,21 @@ const EditFavbookModal = ({data, isModalOpen, handleModalClose }: Props) => {
         handleModalClose={handleModalClose}
       >
         <form onSubmit={handleSubmit} style={{ width: '100%', height: '100%' }}>
-          <HeaderBox>
-          </HeaderBox>
+          <HeaderBox></HeaderBox>
           <FlexBox>
             <Left>
               <UploadBook />
             </Left>
             <Right>
               <FormContainer>
-              <TextForm
-                value={briefReview}
-                onChange={(e) => handleContentChange(e, 'brief')}
-              />
-              <TextForm
-                value={fullReview}
-                onChange={(e) => handleContentChange(e, 'full')}
-              />
+                <TextForm
+                  value={briefReview}
+                  onChange={(e) => handleContentChange(e, 'brief')}
+                />
+                <TextForm
+                  value={fullReview}
+                  onChange={(e) => handleContentChange(e, 'full')}
+                />
               </FormContainer>
               <SubmitButton>
                 <Button

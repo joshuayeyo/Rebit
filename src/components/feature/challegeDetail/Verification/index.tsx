@@ -51,7 +51,10 @@ const Verification = ({
   );
   const [filteredDataCount, setFilteredDataCount] = useState(0);
 
-  function formatDate(date: string | null | undefined, addOneDay: boolean = false): string {
+  function formatDate(
+    date: string | null | undefined,
+    addOneDay: boolean = false,
+  ): string {
     if (!date) return '';
     let dateObject = new Date(date);
     if (addOneDay) {

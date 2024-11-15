@@ -27,7 +27,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   const [placeholder, setPlaceholder] = useState(
     '당신의 Story를 작성하세요...',
   );
-  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false); 
+  const [isPlaceholoerRed, setIsPlaceholderRed] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>('');
   const { imageKey, uploadImage2S3 } = useStoreImage({ type: 'FEED' });
@@ -63,7 +63,7 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           console.log(e);
         } finally {
           window.location.reload();
-          localStorage.removeItem("storyContent")
+          localStorage.removeItem('storyContent');
           localStorage.removeItem('isPostModalOpen');
         }
       }
@@ -82,7 +82,6 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
   useEffect(() => {
     localStorage.setItem('storyContent', JSON.stringify(storyContent));
   }, [storyContent]);
-
 
   return (
     <>

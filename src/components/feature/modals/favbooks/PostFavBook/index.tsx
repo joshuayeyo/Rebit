@@ -46,7 +46,9 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedBriefReview = localStorage.getItem('briefReview');
-      setBriefReview(updatedBriefReview ? JSON.parse(updatedBriefReview) : null);
+      setBriefReview(
+        updatedBriefReview ? JSON.parse(updatedBriefReview) : null,
+      );
       const updatedFullReview = localStorage.getItem('fullReview');
       setBriefReview(updatedFullReview ? JSON.parse(updatedFullReview) : null);
       const updatedBook = localStorage.getItem('selectedBook');
@@ -90,7 +92,7 @@ const PostFavbookModal = ({ isModalOpen, handleModalClose }: Props) => {
           });
       } catch (e) {
         console.log(e);
-      } finally{
+      } finally {
         localStorage.removeItem('selectedBook');
         localStorage.removeItem('briefReview');
         localStorage.removeItem('fullReview');

@@ -8,21 +8,19 @@ import { useStoreImage } from '@/util/hooks/useStoreImage';
 import { FeedData } from '@/types';
 
 type Props = {
-  data : FeedData
+  data: FeedData;
   isModalOpen: boolean;
   handleModalClose: () => void;
 };
 
-const EditStoryModal = ({ data,isModalOpen,handleModalClose}: Props) => {
-
+const EditStoryModal = ({ data, isModalOpen, handleModalClose }: Props) => {
   const [storyContent, setStoryContent] = useState(data?.content);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(data?.presignedUrl);
   const { uploadImage2S3 } = useStoreImage({ type: 'FEED' });
   const [imageKey, setImageKey] = useState(data.imageKey);
 
-
-  const handleSubmit = async (e: React.FormEvent)  => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     let updatedImageKey = imageKey;
@@ -34,25 +32,24 @@ const EditStoryModal = ({ data,isModalOpen,handleModalClose}: Props) => {
     if (imageKey == '') {
       alert('이미지가 없습니다!');
       return;
-    };
-
+    }
 
     async function postFeedData() {
-        try {
-          console.log(imageKey);
-          await instance
-            .put(`api/feeds/stories/${data.id}`, {
-              imageKey: updatedImageKey,
-                content: storyContent,
-                bookId: 1,
-            })
-            .then((response) => {
-              console.log(response);
-              handleModalClose();
-            });
-        } catch (e) {
-          console.log(e);
-        }
+      try {
+        console.log(imageKey);
+        await instance
+          .put(`api/feeds/stories/${data.id}`, {
+            imageKey: updatedImageKey,
+            content: storyContent,
+            bookId: 1,
+          })
+          .then((response) => {
+            console.log(response);
+            handleModalClose();
+          });
+      } catch (e) {
+        console.log(e);
+      }
     }
     postFeedData();
   };
@@ -80,10 +77,7 @@ const EditStoryModal = ({ data,isModalOpen,handleModalClose}: Props) => {
             </Left>
             <Right>
               <FormContainer>
-                <TextForm
-                  value={storyContent}
-                  onChange={handleContentChange}
-                />{' '}
+                <TextForm value={storyContent} onChange={handleContentChange} />{' '}
               </FormContainer>
             </Right>
           </FlexContainer>

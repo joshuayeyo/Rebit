@@ -17,22 +17,22 @@ const UserPostedChallenges = () => {
   useEffect(() => {
     async function getUserPosts() {
       try {
-        const res = await instance.get(`/api/members/challenges`, 
-          {params: {page: page}}
-        );
-        const result = res.data
+        const res = await instance.get(`/api/members/challenges`, {
+          params: { page: page },
+        });
+        const result = res.data;
         if (result.content && result.content.length > 0) {
           setData((prevData) => [...prevData, ...result.content]);
           setHasMore(result.content.length > 0);
         } else {
           setHasMore(false);
-        }      
+        }
       } catch (e) {
         console.log(e);
       } finally {
         setIsLoading(false);
       }
-    }  
+    }
     if (hasMore && page >= 0) {
       getUserPosts();
     }

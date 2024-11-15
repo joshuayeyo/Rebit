@@ -18,29 +18,30 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
   const { isLogin } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(
     // localStorage.getItem('isModalOpen') === 'true'
-    false
+    false,
   );
   const [isPostModalOpen, setIsPostModalOpen] = useState(
-    localStorage.getItem('isPostModalOpen') === 'true'
+    localStorage.getItem('isPostModalOpen') === 'true',
   );
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<number | null>(
-    localStorage.getItem('selectedId') ? Number(localStorage.getItem('selectedId')) : null
+    localStorage.getItem('selectedId')
+      ? Number(localStorage.getItem('selectedId'))
+      : null,
   );
   const [selectedType, setSelectedType] = useState<selectedType>(
-    localStorage.getItem('selectedType') as selectedType
+    localStorage.getItem('selectedType') as selectedType,
   );
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    setData([]); 
-    setPage(0); 
-    setHasMore(true); 
+    setData([]);
+    setPage(0);
+    setHasMore(true);
   }, [filter]);
-
 
   useEffect(() => {
     const endpoint =
@@ -101,10 +102,12 @@ const FeedItemSection = ({ filter }: { filter: string }) => {
 
   useEffect(() => {
     localStorage.setItem('isPostModalOpen', JSON.stringify(isPostModalOpen));
-    localStorage.setItem('selectedId', selectedId !== null ? selectedId.toString() : '');
+    localStorage.setItem(
+      'selectedId',
+      selectedId !== null ? selectedId.toString() : '',
+    );
     localStorage.setItem('selectedType', selectedType || '');
   }, [isPostModalOpen, selectedId, selectedType]);
-
 
   // 모달 열려있을 때, 스크롤 금지, 닫았을 때 다시 스크롤
   if (isModalOpen || isPostModalOpen) {

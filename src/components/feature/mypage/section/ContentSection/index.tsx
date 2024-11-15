@@ -15,7 +15,7 @@ const ContentSection = ({ section, selectedFilter }: Props) => {
       return <UserWishes filter={selectedFilter} />;
     case 'Challenge':
       return <UserPostedChallenges />;
-   default:
+    default:
       return null;
   }
 };

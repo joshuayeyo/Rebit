@@ -17,9 +17,9 @@ const UserPostedFeeds = ({ filter }: { filter: string }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    setData([]); 
-    setPage(0); 
-    setHasMore(true); 
+    setData([]);
+    setPage(0);
+    setHasMore(true);
   }, [filter]);
 
   useEffect(() => {

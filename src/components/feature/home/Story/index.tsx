@@ -13,8 +13,8 @@ const StoryIntro = () => {
   const [data, setData] = useState<FeedData[]>([]);
 
   const handleNavigate = () => {
-    navigate('/feed')
-  }
+    navigate('/feed');
+  };
 
   useEffect(() => {
     async function getFeedData() {
