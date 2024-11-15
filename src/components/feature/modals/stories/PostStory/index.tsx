@@ -59,6 +59,8 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
           console.log(e);
         } finally {
           window.location.reload();
+          localStorage.removeItem("storyContent")
+          localStorage.removeItem('isPostModalOpen');
         }
       }
     }
