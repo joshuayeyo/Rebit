@@ -20,6 +20,7 @@ export type ReviewData = {
 };
 
 export type FeedData = {
+  id: number;
   presignedUrl: string;
   author: AuthorData;
   content: string;
@@ -29,9 +30,11 @@ export type FeedData = {
   likes: number;
   isLiked: boolean;
   type: string;
+  imageKey: string;
 };
 export type DiaryData = {
   id: number;
+  memberId: number,
   content: string;
   book: BookData;
   date: string;
