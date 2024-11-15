@@ -16,7 +16,6 @@ instance.interceptors.request.use(
     const jwtToken = localStorage.getItem('jwt_token');
     const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
     const accessToken = parsedToken?.accessToken;
-
     const noAuthUrl = ['/api/feeds/stories', '/api/feeds/favorite-books', '/api/feeds/magazines', '/api/feeds', '/api/challenges/'];
 
     if (accessToken && config.url && !noAuthUrl.includes(config.url)) {
