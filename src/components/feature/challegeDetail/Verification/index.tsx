@@ -6,6 +6,7 @@ import {
   eachDayOfInterval,
   isWithinInterval,
   differenceInDays,
+  addDays,
 } from 'date-fns';
 import styled from '@emotion/styled';
 import { ChallengeData, UserData, VerificationData } from '@/types';
@@ -50,16 +51,19 @@ const Verification = ({
   );
   const [filteredDataCount, setFilteredDataCount] = useState(0);
 
-  function formatDate(date: string | null | undefined): string {
+  function formatDate(date: string | null | undefined, addOneDay: boolean = false): string {
     if (!date) return '';
-    const dateObject = new Date(date);
+    let dateObject = new Date(date);
+    if (addOneDay) {
+      dateObject = addDays(dateObject, 1);
+    }
     return dateObject.toISOString().split('T')[0].replace(/-/g, '/');
   }
   const handlePostModalClose = () => {
     setIsPostModalOpen(false);
   };
 
-  const challengeStartDate = formatDate(data?.challengeStartDate);
+  const challengeStartDate = formatDate(data?.challengeStartDate, true);
   const challengeEndDate = formatDate(data?.challengeEndDate);
   const totalDays = differenceInDays(challengeEndDate, challengeStartDate) + 1;
   const todayIndex = differenceInDays(new Date(), challengeStartDate) + 1;

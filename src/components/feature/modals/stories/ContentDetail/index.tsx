@@ -68,8 +68,8 @@ const StoryDetailModal = ({ isModalOpen, handleModalClose, id,setIsModalOpen}: P
     try {
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
-      setIsModalOpen(false);
-      setisDelete(true);
+      handleModalClose();
+      window.location.reload();
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제하는 중 오류가 발생했습니다.');

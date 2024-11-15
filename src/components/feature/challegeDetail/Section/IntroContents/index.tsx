@@ -3,6 +3,7 @@ import { ChallengeData, UserData } from '@/types';
 import { useAuth } from '@/provider/Auth';
 import instance from '@/api/instance';
 import { useEffect, useState } from 'react';
+import { addDays} from 'date-fns';
 import axios from 'axios';
 import { IoIosHeartEmpty } from 'react-icons/io';
 import { toggleChallengeWishlist } from '@/util/hooks/useWishlist';
@@ -26,15 +27,19 @@ const Contents = ({ challengeData, filter, userData }: ChallengeProps) => {
       initialWishlisted,
       challengeId,
     });
-  function formatDate(date: string | null | undefined): string {
+    
+  function formatDate(date: string | null | undefined, addOneDay: boolean = false): string {
     if (!date) return '';
-
-    const dateObject = new Date(date);
+    let dateObject = new Date(date);
+    if (addOneDay) {
+      dateObject = addDays(dateObject, 1);
+    }
     return dateObject.toISOString().split('T')[0].replace(/-/g, '/');
   }
-  const recruitmentStartDate = formatDate(challengeData?.recruitmentStartDate);
+
+  const recruitmentStartDate = formatDate(challengeData?.recruitmentStartDate, true);
   const recruitmentEndDate = formatDate(challengeData?.recruitmentEndDate);
-  const challengeStartDate = formatDate(challengeData?.challengeStartDate);
+  const challengeStartDate = formatDate(challengeData?.challengeStartDate, true);
   const challengeEndDate = formatDate(challengeData?.challengeEndDate);
 
   const isValidEntryFee = (fee: number): boolean => {
