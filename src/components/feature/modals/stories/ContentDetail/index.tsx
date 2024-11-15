@@ -163,6 +163,8 @@ const ContentSection = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  white-space: pre-wrap;
+  font-size: 1rem;
 `;
 
 const ReactSection = styled.div`
