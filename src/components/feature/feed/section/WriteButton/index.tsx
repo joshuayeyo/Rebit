@@ -91,6 +91,7 @@ const PostFeedsButton = ({
           handleModalClose={() => {
             handleModalClose();
             setSelectedType(null);
+            localStorage.removeItem('storyContent');
           }}
         />
       )}
@@ -100,6 +101,9 @@ const PostFeedsButton = ({
           handleModalClose={() => {
             handleModalClose();
             setSelectedType(null);
+            localStorage.removeItem('selectedBook');
+            localStorage.removeItem('fullReview');
+            localStorage.removeItem('briefReview')
           }}
         />
       )}

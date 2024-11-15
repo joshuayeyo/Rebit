@@ -2,7 +2,7 @@ import CommonModal from '@/components/common/Modal';
 import styled from '@emotion/styled';
 import UploadImage from '@/components/feature/images/UploadImage';
 import { Button } from '@/components/common/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import instance from '@/api/instance';
 import { useStoreImage } from '@/util/hooks/useStoreImage';
 
@@ -19,7 +19,11 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
     date: today.getDate(),
   };
 
-  const [storyContent, setStoryContent] = useState('');
+  const [storyContent, setStoryContent] = useState(() => {
+    const savedStoryContent = localStorage.getItem('storyContent');
+    return savedStoryContent ? JSON.parse(savedStoryContent) : '';
+  });
+
   const [placeholder, setPlaceholder] = useState(
     '당신의 Story를 작성하세요...',
   ); // placeholder를 동적으로 사용
@@ -58,6 +62,8 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
         } catch (e) {
           console.log(e);
         } finally {
+          localStorage.removeItem('isPostModalOpen')
+          localStorage.removeItem('storyContent')
           window.location.reload(); // Posting 후 페이지 새로고침
         }
       }
@@ -72,6 +78,11 @@ const PostStoryModal = ({ isModalOpen, handleModalClose }: Props) => {
       setIsPlaceholderRed(false);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem('storyContent', JSON.stringify(storyContent));
+  }, [storyContent]);
+
 
   return (
     <>
