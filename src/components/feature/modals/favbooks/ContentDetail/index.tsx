@@ -227,6 +227,8 @@ const ContentWrapper = styled.div`
 
 const BriefReviewWrapper = styled.span`
   font-weight: bold;
+  white-space: pre-wrap;
+  font-size: 1rem;
 `;
 
 const FullReviewWrapper = styled.div`
@@ -235,6 +237,8 @@ const FullReviewWrapper = styled.div`
   overflow-y: scroll;
   text-align: left;
   padding: 1rem;
+  white-space: pre-wrap;
+  font-size: 1rem;
 `;
 
 const ReactSection = styled.div`
