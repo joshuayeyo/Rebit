@@ -1,14 +1,20 @@
 import styled from '@emotion/styled';
-
-import StorySample from '@/assets/Main/Story.svg?react';
+import StorySample from '@/assets/Main/Favorite.svg?react';
 import LandingItems from '../Section/Landing-items';
 import { useEffect, useState } from 'react';
 import { FeedData } from '@/types';
 import instance from '@/api/instance';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const StoryIntro = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState<FeedData[]>([]);
+
+  const handleNavigate = () => {
+    navigate('/feed')
+  }
+
 
   useEffect(() => {
     async function getFeedData() {
@@ -32,7 +38,7 @@ const StoryIntro = () => {
 
   return (
     <Wrapper>
-      <Left>
+      <Left onClick={handleNavigate}>
         <StorySample />
       </Left>
       <Right>
@@ -49,6 +55,7 @@ const Wrapper = styled.section`
 `;
 const Left = styled.div`
   width: 50vw;
+  pointer: cursor;
 `;
 const Right = styled.div`
   width: 50vw;
