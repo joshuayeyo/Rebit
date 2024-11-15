@@ -43,6 +43,7 @@ const DiaryDetailModal = ({ isModalOpen, handleModalClose, id, setIsModalOpen, s
   };
 
   const handleEditModalClose = () => {
+    
     setIsEditModalOpen(false);
   };
 

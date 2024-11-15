@@ -9,6 +9,8 @@ export type BookData = {
   pubDate: string;
   link: string;
   topFullReview: string;
+  reviewAuthor: string;
+  reviewAuthorImage: string;
 };
 
 export type ReviewData = {
@@ -18,6 +20,7 @@ export type ReviewData = {
 };
 
 export type FeedData = {
+  id: number;
   presignedUrl: string;
   author: AuthorData;
   content: string;
@@ -26,6 +29,16 @@ export type FeedData = {
   fullReview: string;
   likes: number;
   isLiked: boolean;
+  type: string;
+  imageKey: string;
+};
+export type DiaryData = {
+  id: number;
+  memberId: number,
+  content: string;
+  book: BookData;
+  date: string;
+  isbn: string;
 };
 
 export type AuthorData = {
@@ -42,6 +55,8 @@ export type UserData = {
   email: string;
   role: 'ROLE_USER';
   point: number;
+  coverPresignedUrl: string;
+  coverImageKey: string;
 };
 
 export type ChallengeData = {
@@ -65,6 +80,34 @@ export type ChallengeData = {
   minHeadcount: number;
   maxHeadcount: number;
   createdAt: string;
+  currentHeadcount: number;
+  totalEntryFee: number;
+};
+
+export type VerificationData = {
+  id: number;
+  participationId: number;
+  author: {
+    id: number;
+    nickname: string;
+    imageKey: string;
+    presignedUrl: string;
+  };
+  title: string;
+  imageKey: string;
+  presignedUrl: string;
+  content: string;
+  createdAt: string;
+};
+
+export type Participant = {
+  participationId: number;
+  memberId: number;
+  nickname: string;
+  imageKey: string;
+  presignedUrl: string;
+  participatedAt: string;
+  entryFee: number;
 };
 
 export type FilterType =
@@ -73,3 +116,19 @@ export type FilterType =
   | 'COMPLETED'
   | 'UPCOMING'
   | 'ALL';
+
+export interface ChallengeFormData {
+  title: string;
+  content: string;
+  imageKey: string;
+  type: string;
+  minimumEntryFee: number;
+  maxHeadcount: number;
+  minHeadcount: number;
+  challengeStartDate: Date;
+  challengeEndDate: Date;
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date;
+  currentHeadCount: number;
+  totalEntryFee: number;
+}
