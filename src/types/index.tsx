@@ -20,6 +20,7 @@ export type ReviewData = {
 };
 
 export type FeedData = {
+  id: number;
   presignedUrl: string;
   author: AuthorData;
   content: string;
