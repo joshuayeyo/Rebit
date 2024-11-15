@@ -135,6 +135,7 @@ const UserPostedFeeds = ({ filter }: { filter: string }) => {
           {selectedType === 'S' && (
             <StoryDetailModal
               isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
             />
@@ -144,6 +145,7 @@ const UserPostedFeeds = ({ filter }: { filter: string }) => {
               isModalOpen={isModalOpen}
               handleModalClose={handleModalClose}
               id={selectedId}
+              setIsModalOpen={setIsModalOpen}
             />
           )}
         </>

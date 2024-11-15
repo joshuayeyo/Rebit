@@ -14,8 +14,8 @@ import EditStoryModal from '../EditStory';
 
 type Props = {
   isModalOpen: boolean;
-  handleModalClose: () => void;
   setIsModalOpen: (visible: boolean) => void;
+  handleModalClose: () => void;
   id: number;
 };
 
@@ -23,7 +23,6 @@ const StoryDetailModal = ({
   isModalOpen,
   handleModalClose,
   id,
-  setIsModalOpen,
 }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,6 +72,7 @@ const StoryDetailModal = ({
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
       handleModalClose();
+      setisDelete(true);
       window.location.reload();
     } catch (error) {
       console.error('삭제 실패:', error);
@@ -135,7 +135,7 @@ const StoryDetailModal = ({
       </CommonModal>
       {isEditModalOpen && (
         <EditStoryModal
-          data={data!!}
+          data={data!}
           isModalOpen={isEditModalOpen}
           handleModalClose={handleEditModalClose}
         />

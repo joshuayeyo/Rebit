@@ -19,7 +19,6 @@ const DiaryDetailModal = ({
   isModalOpen,
   handleModalClose,
   id,
-  setIsModalOpen,
   selectedDate,
 }: Props) => {
   const [data, setData] = useState<DiaryData | null>(null);
@@ -60,6 +59,7 @@ const DiaryDetailModal = ({
       const res = await instance.delete(`/api/diaries/${id}`);
       console.log('삭제 성공:', res.data);
       handleModalClose();
+      setIsDelete(true)
       window.location.reload();
       setTimeout(() => {
         window.history.go(-1);
@@ -103,7 +103,7 @@ const DiaryDetailModal = ({
       {isEditModalOpen && (
         <EditBookDiaryModal
           id={id}
-          data={data!!}
+          data={data!}
           isModalOpen={isEditModalOpen}
           handleModalClose={handleEditModalClose}
           selectedDate={selectedDate}

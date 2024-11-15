@@ -87,16 +87,18 @@ const LandingItems = ({ data = [] }: Props) => {
           ))}
         </CommonGrid>
       </CommonContainer>
-      {isModalOpen && modalType === 'S' && (
+      {isModalOpen && modalType === 'S' && selectedId != null && (
         <StoryDetailModal
+          setIsModalOpen={setIsModalOpen}
           handleModalClose={handleModalClose}
           isModalOpen={isModalOpen}
           id={selectedId}
         />
       )}
-      {isModalOpen && modalType === 'FB' && (
+      {isModalOpen && modalType === 'FB' && selectedId != null && (
         <FavBookDetailModal
           handleModalClose={handleModalClose}
+          setIsModalOpen={setIsModalOpen}
           isModalOpen={isModalOpen}
           id={selectedId}
         />

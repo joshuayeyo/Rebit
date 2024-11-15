@@ -21,7 +21,6 @@ const FavBookDetailModal = ({
   isModalOpen,
   handleModalClose,
   id,
-  setIsModalOpen,
 }: Props) => {
   const [data, setData] = useState<FeedData | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -75,6 +74,7 @@ const FavBookDetailModal = ({
       const res = await instance.delete(`/api/feeds/${id}`);
       console.log('삭제 성공:', res.data);
       handleModalClose();
+      setIsDelete(true)
       window.location.reload();
       setTimeout(() => {
         window.history.go(-1);
@@ -147,7 +147,7 @@ const FavBookDetailModal = ({
       </CommonModal>
       {isEditModalOpen && (
         <EditFavbookModal
-          data={data!!}
+          data={data!}
           isModalOpen={isEditModalOpen}
           handleModalClose={handleEditModalClose}
         />

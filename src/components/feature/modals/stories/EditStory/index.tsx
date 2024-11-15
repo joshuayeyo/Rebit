@@ -18,7 +18,7 @@ const EditStoryModal = ({ data, isModalOpen, handleModalClose }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(data?.presignedUrl);
   const { uploadImage2S3 } = useStoreImage({ type: 'FEED' });
-  const [imageKey, setImageKey] = useState(data.imageKey);
+  const [imageKey] = useState(data.imageKey);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,23 +98,6 @@ const EditStoryModal = ({ data, isModalOpen, handleModalClose }: Props) => {
 };
 
 export default EditStoryModal;
-
-const HeaderBox = styled.section`
-  height: auto;
-  width: auto;
-  position: absolute;
-  top: 1.5rem;
-  left: 1rem;
-`;
-
-const Today = styled.div`
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  font-weight: bold;
-  color: #a451f7;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-`;
 
 const FlexContainer = styled.div`
   display: flex;

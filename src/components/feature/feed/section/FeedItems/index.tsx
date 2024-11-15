@@ -16,10 +16,7 @@ type selectedType = 'S' | 'FB' | 'M' | null;
 
 const FeedItemSection = ({ filter }: { filter: string }) => {
   const { isLogin } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(
-    // localStorage.getItem('isModalOpen') === 'true'
-    false,
-  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(
     localStorage.getItem('isPostModalOpen') === 'true',
   );

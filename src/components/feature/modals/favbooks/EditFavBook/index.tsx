@@ -117,15 +117,6 @@ const HeaderBox = styled.section`
   left: 1rem;
 `;
 
-const Today = styled.div`
-  font-size: 40px;
-  font-family: 'DungGeunMo';
-  font-weight: bold;
-  color: #a451f7;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-`;
-
 const FlexBox = styled.div`
   display: flex;
   width: 100%;
