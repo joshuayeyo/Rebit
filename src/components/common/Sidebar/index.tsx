@@ -24,7 +24,7 @@ function Sidebar({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: any }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('jwt_token');
+    localStorage.clear(); // 로그아웃 시 localStrorage 모두 비우기
     setLogin(false);
     navigate('/');
   };
