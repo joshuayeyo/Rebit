@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { selectBook } from '@/store/bookSlice';
 import { Box, Image, Text, Button } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type BookProps = {
   id: number;
@@ -17,12 +18,12 @@ type BookProps = {
 const BookCard = forwardRef<HTMLDivElement, BookProps>(
   ({ id, isbn, cover, title, author, pubDate, link }, ref) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSelectBook = () => {
       const selectedBook = { id, isbn, cover, title, author, pubDate, link };
       dispatch(selectBook(selectedBook));
-      console.log('선택한 책:', selectedBook);
-
+      navigate(-1);
       setTimeout(() => {
         console.log('Redux 상태:', selectedBook);
       }, 1000);

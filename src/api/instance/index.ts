@@ -17,7 +17,7 @@ instance.interceptors.request.use(
     const parsedToken = jwtToken ? JSON.parse(jwtToken) : null;
     const accessToken = parsedToken?.accessToken;
 
-    const noAuthUrl = ['/api/feeds'];
+    const noAuthUrl = ['/api/feeds/stories', '/api/feeds/favorite-books', '/api/feeds/magazines', '/api/feeds', '/api/challenges'];
 
     if (accessToken && config.url && !noAuthUrl.includes(config.url)) {
       config.headers.Authorization = `Bearer ${accessToken}`;
