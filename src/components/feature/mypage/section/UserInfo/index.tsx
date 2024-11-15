@@ -22,7 +22,7 @@ const UserInfo = ({
   imageUrl,
   bio,
   points,
-  // coverImageUrl,
+  coverImageUrl,
   challengeCount,
   diaryCount,
   feedCount,
@@ -53,11 +53,11 @@ const UserInfo = ({
     }
     try {
       // 포인트 충전 API 요청
-      const response = await instance.post('/api/members/points', {
+      await instance.post('/api/members/points', {
         points: amount,
       });
       alert(`${amount} 원이 충전되었습니다!`);
-      console.log(response);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +71,7 @@ const UserInfo = ({
   };
 
   return (
-    <Wrapper>
+    <Wrapper coverImageUrl={coverImageUrl}>
       <CommonContainer
         flexDirection="row"
         justifyContent="space-between"
@@ -141,23 +141,12 @@ const UserInfo = ({
 
 export default UserInfo;
 
-// const Wrapper = styled.section<{ coverImageUrl: string }>`
-//   width: 100%;
-//   margin-top: 2rem;
-//   height: 30vh;
-//   min-height: 10vh;
-//   background-image: url(${props => props.coverImageUrl});
-//   background-size: cover;
-//   background-position: center;
-//   background-repeat: no-repeat;
-// `;
-
-const Wrapper = styled.section`
+const Wrapper = styled.section<{ coverImageUrl: string }>`
   width: 100%;
   margin-top: 2rem;
   height: 30vh;
   min-height: 10vh;
-  background-color: black;
+  background-image: url(${(props) => props.coverImageUrl});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
